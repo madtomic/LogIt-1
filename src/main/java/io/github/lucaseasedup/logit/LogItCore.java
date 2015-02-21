@@ -307,19 +307,19 @@ public final class LogItCore
         logger = new LogItCoreLogger(this);
         logger.open();
         
-		if (getConfig("config.yml")
-				.getBoolean("logging.protectPlayerPasswords"))
+		if (!getConfig("config.yml").getBoolean(
+				"logging.protectPlayerPasswords"))
 		{
-			commandSilencer = new CommandSilencer(Arrays.asList(
-					getPlugin().getCommand("login"),
-					getPlugin().getCommand("logout"),
-					getPlugin().getCommand("register"),
-					getPlugin().getCommand("unregister"), getPlugin()
-							.getCommand("changepass"),
-					getPlugin().getCommand("changeemail"), getPlugin()
-							.getCommand("recoverpass")));
-			commandSilencer.registerFilters();
+			return;
 		}
+		commandSilencer = new CommandSilencer(Arrays.asList(getPlugin()
+				.getCommand("login"), getPlugin().getCommand("logout"),
+				getPlugin().getCommand("register"),
+				getPlugin().getCommand("unregister"),
+				getPlugin().getCommand("changepass"),
+				getPlugin().getCommand("changeemail"),
+				getPlugin().getCommand("recoverpass")));
+		commandSilencer.registerFilters();
     }
     
     private void doFirstRunStuff()
