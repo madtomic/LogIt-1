@@ -44,6 +44,6 @@ public final class AutoInHook
         if (!Bukkit.getPluginManager().isPluginEnabled("AutoIn"))
             return false;
         
-        throw new UnsupportedOperationException("This option currently isn't supported.");
+        return false; // TODO
     }
 }
