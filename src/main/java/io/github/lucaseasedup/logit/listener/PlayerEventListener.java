@@ -24,7 +24,7 @@ import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.config.TimeUnit;
-import io.github.lucaseasedup.logit.hooks.BukkitSmerfHook;
+import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.hooks.VanishNoPacketHook;
 import io.github.lucaseasedup.logit.message.JoinMessageGenerator;
 import io.github.lucaseasedup.logit.message.QuitMessageGenerator;
@@ -297,7 +297,7 @@ public final class PlayerEventListener extends LogItCoreObject implements Listen
                         .replace("{0}", displayName), 4L);
             }
             
-            boolean isPremium = BukkitSmerfHook.isPremium(player);
+            boolean isPremium = AutoInHook.isPremium(player);
             boolean premiumTakeoverEnabled = getConfig("config.yml")
                     .getBoolean("premiumTakeover.enabled");
             String promptOn = getConfig("config.yml")

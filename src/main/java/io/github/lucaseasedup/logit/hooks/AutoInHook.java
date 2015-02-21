@@ -18,14 +18,12 @@
  */
 package io.github.lucaseasedup.logit.hooks;
 
-import com.gmail.bukkitsmerf.check.Check;
-import com.gmail.bukkitsmerf.check.IPlayersStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-public final class BukkitSmerfHook
+public final class AutoInHook
 {
-    private BukkitSmerfHook()
+    private AutoInHook()
     {
     }
     
@@ -43,12 +41,9 @@ public final class BukkitSmerfHook
         if (player == null)
             throw new IllegalArgumentException();
         
-        if (!Bukkit.getPluginManager().isPluginEnabled("BukkitSmerf"))
+        if (!Bukkit.getPluginManager().isPluginEnabled("AutoIn"))
             return false;
         
-        IPlayersStorage storage = Check.getStorage();
-        Boolean isPremium = storage.isPremium(player.getName());
-        
-        return isPremium != null && isPremium == Boolean.TRUE;
+        throw new UnsupportedOperationException("This option currently isn't supported.");
     }
 }

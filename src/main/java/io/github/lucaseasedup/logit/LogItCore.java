@@ -183,22 +183,7 @@ public final class LogItCore
         cooldownManager = new CooldownManager();
         accountWatcher = new AccountWatcher();
         
-        tabApiWrapper = new Wrapper<>();
-        tabListUpdater = new TabListUpdater(tabApiWrapper, craftReflect);
-        
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
-                {
-                    tabApiWrapper.set(new TabAPI());
-                    tabApiWrapper.get().onEnable();
-                }
-            }
-        }.runTaskLater(getPlugin(), 1L);
-        
+        setupTabApi();
         startTasks();
         enableCommands();
         registerEventListeners();
@@ -512,6 +497,29 @@ public final class LogItCore
                 getConfig("config.yml").getBoolean("forceLogin.obfuscate.hunger"));
     }
     
+    private void setupTabApi()
+    {
+    	if(!getConfig("config.yml").getBoolean("forceLogin.hideFromTabList"))
+    	{
+    		return;
+    	}
+        tabApiWrapper = new Wrapper<>();
+        tabListUpdater = new TabListUpdater(tabApiWrapper, craftReflect);
+        
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
+                {
+                    tabApiWrapper.set(new TabAPI());
+                    tabApiWrapper.get().onEnable();
+                }
+            }
+        }.runTaskLater(getPlugin(), 1L);
+    }
+    
     private void setSerializerEnabled(Class<? extends PersistenceSerializer> clazz, boolean status)
             throws FatalReportedException
     {
@@ -581,6 +589,10 @@ public final class LogItCore
         accountWatcherTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
                 getAccountWatcher(), 0L,
                 AccountWatcher.TASK_PERIOD);
+        if(tabListUpdaterTask == null)
+        {
+        	return;
+        }
         tabListUpdaterTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
                 tabListUpdater, 20L,
                 TabListUpdater.TASK_PERIOD);

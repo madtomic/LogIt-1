@@ -26,7 +26,7 @@ import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
-import io.github.lucaseasedup.logit.hooks.BukkitSmerfHook;
+import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.storage.Infix;
 import io.github.lucaseasedup.logit.storage.SelectorCondition;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
@@ -230,7 +230,7 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
             
             boolean takeoverEnabled = getConfig("config.yml")
                     .getBoolean("premiumTakeover.enabled");
-            boolean isPremium = BukkitSmerfHook.isPremium(player);
+            boolean isPremium = AutoInHook.isPremium(player);
             boolean canTakeOver = takeoverEnabled && isPremium;
             boolean isRegistered = getAccountManager().isRegistered(player.getName());
             boolean isTakingOver = canTakeOver && isRegistered;

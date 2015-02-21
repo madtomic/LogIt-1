@@ -125,11 +125,11 @@
             <version>3.4.0</version>
         </dependency>
         <dependency>
-            <groupId>com.gmail.bukkitsmerf</groupId>
-            <artifactId>BukkitSmerf</artifactId>
+            <groupId>com.gmail.bartlomiejkmazur</groupId>
+            <artifactId>autoin</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/BukkitSmerf.jar</systemPath>
+            <systemPath>${basedir}/lib/AutoIn.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>

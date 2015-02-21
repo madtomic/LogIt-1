@@ -26,7 +26,7 @@ import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.common.PlayerCollections;
 import io.github.lucaseasedup.logit.config.TimeUnit;
-import io.github.lucaseasedup.logit.hooks.BukkitSmerfHook;
+import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.locale.Locale;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -248,7 +248,7 @@ public final class LoginCommand extends LogItCoreObject implements CommandExecut
                         account.recordLogin(currentTimeSecs, playerIp, Account.LOGIN_FAIL);
                     }
                     
-                    boolean isPremium = BukkitSmerfHook.isPremium(player);
+                    boolean isPremium = AutoInHook.isPremium(player);
                     boolean premiumTakeoverEnabled = getConfig("config.yml")
                             .getBoolean("premiumTakeover.enabled");
                     String promptOn = getConfig("config.yml")
