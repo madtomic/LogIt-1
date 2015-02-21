@@ -643,13 +643,13 @@ public final class LogItCore
         
         registerEventListener(getMessageDispatcher());
         registerEventListener(getCooldownManager());
-        if(getTabListUpdater() != null) registerEventListener(getTabListUpdater());
         registerEventListener(new ServerEventListener());
         registerEventListener(new BlockEventListener());
         registerEventListener(new EntityEventListener());
         registerEventListener(new PlayerEventListener());
         registerEventListener(new InventoryEventListener());
         registerEventListener(new SessionEventListener());
+        if(getTabListUpdater() != null) registerEventListener(getTabListUpdater());
     }
     
     private <T extends Listener> void registerEventListener(T listener)
@@ -843,7 +843,7 @@ public final class LogItCore
             accountWatcher = null;
         }
         
-        if (tabApiWrapper.get() != null)
+        if (tabApiWrapper != null && tabApiWrapper.get() != null)
         {
             tabApiWrapper.get().onDisable();
             tabApiWrapper.set(null);
