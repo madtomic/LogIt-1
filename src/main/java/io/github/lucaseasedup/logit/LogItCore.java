@@ -643,7 +643,7 @@ public final class LogItCore
         
         registerEventListener(getMessageDispatcher());
         registerEventListener(getCooldownManager());
-        registerEventListener(getTabListUpdater());
+        if(getTabListUpdater() != null) registerEventListener(getTabListUpdater());
         registerEventListener(new ServerEventListener());
         registerEventListener(new BlockEventListener());
         registerEventListener(new EntityEventListener());
