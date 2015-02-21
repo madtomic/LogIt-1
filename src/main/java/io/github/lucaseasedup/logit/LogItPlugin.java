@@ -38,7 +38,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.mcstats.MetricsLite;
 
 public final class LogItPlugin extends JavaPlugin
 {
@@ -48,15 +47,8 @@ public final class LogItPlugin extends JavaPlugin
     @Override
     public void onEnable()
     {
-        try
-        {
-            MetricsLite metrics = new MetricsLite(this);
-            metrics.start();
-        }
-        catch (IOException ex)
-        {
-        }
-        
+    	instance = this;
+    	
         try
         {
             loadMessages(getConfig().getString("locale", "en"));
@@ -103,6 +95,7 @@ public final class LogItPlugin extends JavaPlugin
         messages = null;
         customGlobalMessages = null;
         customLocalMessages = null;
+        instance = null;
     }
     
     private void enable()
@@ -263,7 +256,7 @@ public final class LogItPlugin extends JavaPlugin
     
     /* package */ static LogItPlugin getInstance()
     {
-        return (LogItPlugin) Bukkit.getPluginManager().getPlugin("LogIt");
+        return instance;
     }
     
     static
@@ -274,5 +267,6 @@ public final class LogItPlugin extends JavaPlugin
     private PropertyResourceBundle messages;
     private PropertyResourceBundle customGlobalMessages;
     private PropertyResourceBundle customLocalMessages;
+    private static LogItPlugin instance;
     private LogItCore core;
 }

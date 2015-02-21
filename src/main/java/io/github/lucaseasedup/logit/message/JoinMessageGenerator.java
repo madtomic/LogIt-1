@@ -19,12 +19,8 @@
 package io.github.lucaseasedup.logit.message;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import com.onarandombox.MultiverseCore.MultiverseCore;
 import io.github.lucaseasedup.logit.LogItCore;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public final class JoinMessageGenerator
 {
@@ -62,9 +58,7 @@ public final class JoinMessageGenerator
         
         if (revealSpawnWorld)
         {
-            String worldAlias = getWorldAlias(player.getWorld());
-            
-            message = message.replace("{1}", inWorld.replace("{0}", worldAlias));
+            message = message.replace("{1}", inWorld.replace("{0}", player.getWorld().getName()));
         }
         else
         {
@@ -74,7 +68,7 @@ public final class JoinMessageGenerator
         return message.replace("{0}", player.getName());
     }
     
-    public static String getWorldAlias(World world)
+   /* public static String getWorldAlias(World world)
     {
         LogItCore core = LogItCore.getInstance();
         
@@ -92,5 +86,5 @@ public final class JoinMessageGenerator
             return world.getName();
         
         return ((MultiverseCore) plugin).getMVWorldManager().getMVWorld(world).getAlias();
-    }
+    }*/
 }
