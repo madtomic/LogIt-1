@@ -28,13 +28,13 @@ public final class AutoInHook
     }
     
     /**
-     * Uses BukkitSmerf to check if a player is premium.
+     * Uses AutoIn to check if a player is premium.
      * 
      * @param player the player.
      * 
      * @return {@code true} if the player is premium;
      *         {@code false} if the player is non-premium
-     *         or BukkitSmerf hasn't been found.
+     *         or AutoIn hasn't been found.
      */
     public static boolean isPremium(Player player)
     {
