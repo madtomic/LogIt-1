@@ -307,16 +307,19 @@ public final class LogItCore
         logger = new LogItCoreLogger(this);
         logger.open();
         
-        commandSilencer = new CommandSilencer(Arrays.asList(
-                getPlugin().getCommand("login"),
-                getPlugin().getCommand("logout"),
-                getPlugin().getCommand("register"),
-                getPlugin().getCommand("unregister"),
-                getPlugin().getCommand("changepass"),
-                getPlugin().getCommand("changeemail"),
-                getPlugin().getCommand("recoverpass")
-        ));
-        commandSilencer.registerFilters();
+		if (getConfig("config.yml")
+				.getBoolean("logging.protectPlayerPasswords"))
+		{
+			commandSilencer = new CommandSilencer(Arrays.asList(
+					getPlugin().getCommand("login"),
+					getPlugin().getCommand("logout"),
+					getPlugin().getCommand("register"),
+					getPlugin().getCommand("unregister"), getPlugin()
+							.getCommand("changepass"),
+					getPlugin().getCommand("changeemail"), getPlugin()
+							.getCommand("recoverpass")));
+			commandSilencer.registerFilters();
+		}
     }
     
     private void doFirstRunStuff()
@@ -413,7 +416,6 @@ public final class LogItCore
                 getConfig("config.yml").getString("storage.accounts.leading.cache")
         );
         
-        @SuppressWarnings("resource")
         WrapperStorage accountStorage = new WrapperStorage.Builder()
                 .leading(leadingAccountStorage)
                 .cacheType(accountCacheType)

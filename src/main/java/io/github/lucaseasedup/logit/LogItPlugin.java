@@ -132,7 +132,7 @@ public final class LogItPlugin extends JavaPlugin
     private void loadMessages(String prefix) throws IOException
     {
         if (prefix == null)
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Prefix cannot be null");
         
         messages = null;
         

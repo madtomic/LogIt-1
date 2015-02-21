@@ -385,7 +385,7 @@ public class BCrypt {
     private static String encode_base64(byte d[], int len)
         throws IllegalArgumentException {
         int off = 0;
-        StringBuffer rs = new StringBuffer();
+        StringBuilder rs = new StringBuilder();
         int c1, c2;
 
         if (len <= 0 || len > d.length)
