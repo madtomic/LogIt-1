@@ -7,7 +7,7 @@
     <groupId>io.github.lucaseasedup.logit</groupId>
     <artifactId>logit</artifactId>
     <packaging>jar</packaging>
-    <version>SNAPSHOT-b{$build.number}</version>
+    <version>SNAPSHOT-b${build.number}</version>
     <name>LogIt</name>
     <url>http://ci.northpl.tk/job/LogIt/</url>
     
