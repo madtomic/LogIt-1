@@ -7,7 +7,7 @@
     <groupId>io.github.lucaseasedup.logit</groupId>
     <artifactId>logit</artifactId>
     <packaging>jar</packaging>
-    <version>SNAPSHOT</version>
+    <version>SNAPSHOT-b{$build.number}</version>
     <name>LogIt</name>
     <url>http://ci.northpl.tk/job/LogIt/</url>
     
@@ -183,5 +183,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
+        <build.number>0</build.number>
     </properties>
 </project>
