@@ -29,6 +29,7 @@ import io.github.lucaseasedup.logit.storage.SqliteStorage;
 import io.github.lucaseasedup.logit.storage.Storage;
 import io.github.lucaseasedup.logit.storage.Storage.DataType;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -65,27 +67,13 @@ public final class SessionManager extends LogItCoreObject implements Runnable
      */
     @Override
     public void run()
-    {
-        boolean timeoutEnabled = getConfig("config.yml")
-                .getBoolean("forceLogin.timeout.enabled");
-        
-        long timeoutValue = getConfig("config.yml")
-                .getTime("forceLogin.timeout.value", TimeUnit.TICKS);
-        
-        List<String> disableTimeoutForPlayers = getConfig("config.yml")
-                .getStringList("forceLogin.timeout.disableForPlayers");
-        
-        boolean automaticLogoutEnabled = getConfig("config.yml")
-                .getBoolean("automaticLogout.enabled");
-        
-        long inactivityTimeToLogOut = getConfig("config.yml")
-                .getTime("automaticLogout.inactivityTime", TimeUnit.TICKS);
-        
+    {        
         for (Map.Entry<String, Session> entry : sessions.entrySet())
         {
             String username = entry.getKey();
             Session session = entry.getValue();
-            Player player = Bukkit.getPlayerExact(username);
+            @SuppressWarnings("deprecation")
+			Player player = Bukkit.getPlayerExact(username);
             
             // Player is logged in, either online or offline.
             if (session.getStatus() >= 0L)
@@ -146,6 +134,27 @@ public final class SessionManager extends LogItCoreObject implements Runnable
     }
     
     /**
+     * Internal method. Do not use!
+     */
+    public void updateAutologoutSettings()
+    {
+		timeoutEnabled = getConfig("config.yml").getBoolean(
+				"forceLogin.timeout.enabled");
+
+		timeoutValue = getConfig("config.yml").getTime(
+				"forceLogin.timeout.value", TimeUnit.TICKS);
+
+		disableTimeoutForPlayers = getConfig("config.yml").getStringList(
+				"forceLogin.timeout.disableForPlayers");
+
+		automaticLogoutEnabled = getConfig("config.yml").getBoolean(
+				"automaticLogout.enabled");
+
+		inactivityTimeToLogOut = getConfig("config.yml").getTime(
+				"automaticLogout.inactivityTime", TimeUnit.TICKS);
+    }
+    
+    /**
      * Returns a {@code Session} object associated with a specific username.
      * 
      * @param username
@@ -200,7 +209,8 @@ public final class SessionManager extends LogItCoreObject implements Runnable
         
         if (PlayerUtils.isPlayerOnline(username))
         {
-            Player player = Bukkit.getPlayerExact(username);
+            @SuppressWarnings("deprecation")
+			Player player = Bukkit.getPlayerExact(username);
             String ip = getPlayerIp(player);
             
             return session.isAlive() && ip.equals(session.getIp());
@@ -667,7 +677,26 @@ public final class SessionManager extends LogItCoreObject implements Runnable
     /**
      * Recommended task period of {@code SessionManager} running as a Bukkit task.
      */
-    public static final long TASK_PERIOD = TimeUnit.TICKS.convert(1, TimeUnit.TICKS);
+    public static final long TASK_PERIOD = TimeUnit.TICKS.convert(20, TimeUnit.TICKS);
     
     private Map<String, Session> sessions = new ConcurrentHashMap<>();
+    
+    /**
+     * Autologout settings
+     * Moved from run() for performance
+     */
+	private boolean timeoutEnabled = getConfig("config.yml").getBoolean(
+			"forceLogin.timeout.enabled");
+
+	private long timeoutValue = getConfig("config.yml").getTime(
+			"forceLogin.timeout.value", TimeUnit.TICKS);
+
+	private List<String> disableTimeoutForPlayers = getConfig("config.yml")
+			.getStringList("forceLogin.timeout.disableForPlayers");
+
+	private boolean automaticLogoutEnabled = getConfig("config.yml").getBoolean(
+			"automaticLogout.enabled");
+
+	private long inactivityTimeToLogOut = getConfig("config.yml").getTime(
+			"automaticLogout.inactivityTime", TimeUnit.TICKS);
 }

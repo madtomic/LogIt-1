@@ -31,8 +31,10 @@ import io.github.lucaseasedup.logit.message.LogItMessageDispatcher;
 import io.github.lucaseasedup.logit.persistence.PersistenceManager;
 import io.github.lucaseasedup.logit.profile.ProfileManager;
 import io.github.lucaseasedup.logit.security.GlobalPasswordManager;
+import io.github.lucaseasedup.logit.security.RandomCodesManager;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.session.SessionManager;
+
 import java.io.File;
 import java.util.logging.Level;
 
@@ -160,6 +162,11 @@ public abstract class LogItCoreObject implements Disposable
     protected final ProfileManager getProfileManager()
     {
         return getCore().getProfileManager();
+    }
+    
+    protected final RandomCodesManager getRandomCodesManager()
+    {
+    	return getCore().getRandomCodesManager();
     }
     
     protected final GlobalPasswordManager getGlobalPasswordManager()

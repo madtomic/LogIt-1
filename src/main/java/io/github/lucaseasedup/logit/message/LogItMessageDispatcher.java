@@ -121,11 +121,25 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements Lis
             {
                 if (!getConfig("config.yml").getBoolean("passwords.disable"))
                 {
-                    sendMsg(player, t("pleaseRegister"));
+                	if(!getConfig("config.yml").getBoolean("forceLogin.registerCode.enabled"))
+                	{
+                        sendMsg(player, t("pleaseRegister"));
+                	}
+                	else
+                	{
+                        sendMsg(player, t("pleaseRegister_withCode").replace("{0}", getRandomCodesManager().getCode(player)));
+                	}
                 }
                 else
                 {
-                    sendMsg(player, t("pleaseRegister_noPassword"));
+                	if(!getConfig("config.yml").getBoolean("forceLogin.registerCode.enabled"))
+                	{
+                        sendMsg(player, t("pleaseRegister_noPassword"));
+                	}
+                	else
+                	{
+                        sendMsg(player, t("pleaseRegister_noPassword_withCode").replace("{0}", getRandomCodesManager().getCode(player)));
+                	}
                 }
             }
         }

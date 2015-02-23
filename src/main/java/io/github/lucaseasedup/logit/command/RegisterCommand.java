@@ -57,6 +57,7 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
         int minPasswordLength = getConfig("config.yml").getInt("passwords.minLength");
         int maxPasswordLength = getConfig("config.yml").getInt("passwords.maxLength");
         boolean disablePasswords = getConfig("config.yml").getBoolean("passwords.disable");
+        boolean codesEnabled = getConfig("config.yml").getBoolean("forceLogin.registerCode.enabled");
         
         if (args.length > 0 && args[0].equals("-x")
                 && ((args.length <= 2 && disablePasswords)
@@ -188,7 +189,10 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
                 ReportedException.decrementRequestCount();
             }
         }
-        else if ((args.length == 0 && disablePasswords) || (args.length <= 2 && !disablePasswords))
+        else if ((args.length == 0 && disablePasswords) 
+        		|| (args.length == 1 && disablePasswords && codesEnabled)
+        		|| (args.length <= 2 && !disablePasswords)
+        		|| (args.length <= 3 && !disablePasswords && codesEnabled))
         {
             if (player == null)
             {
@@ -216,6 +220,22 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
             {
                 sendMsg(player, t("paramMissing")
                         .replace("{0}", "confirmpassword"));
+                
+                return true;
+            }
+            
+            if (!disablePasswords && codesEnabled && args.length < 3)
+            {
+                sendMsg(player, t("paramMissing")
+                        .replace("{0}", "code"));
+                
+                return true;
+            }
+            
+            if(disablePasswords && codesEnabled && args.length < 1)
+            {
+                sendMsg(player, t("paramMissing")
+                        .replace("{0}", "code"));
                 
                 return true;
             }
@@ -291,6 +311,27 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
             if (!disablePasswords)
             {
                 password = args[0];
+            }
+            
+            String code = "";
+            
+            if (codesEnabled)
+            {
+            	if(!disablePasswords)
+            	{
+                    code = args[2];
+            	}
+            	else
+            	{
+                    code = args[0];
+            	}
+            	
+            	if(!getRandomCodesManager().getCode(player).equals(code))
+            	{
+            		sendMsg(player, t("invalidRegisterCode"));
+            		return true;
+            	}
+            	getRandomCodesManager().removeCode(player);
             }
             
             String username = player.getName().toLowerCase();

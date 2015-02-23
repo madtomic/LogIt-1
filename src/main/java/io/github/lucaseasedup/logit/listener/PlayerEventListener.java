@@ -362,6 +362,11 @@ public final class PlayerEventListener extends LogItCoreObject implements Listen
             long promptPeriod = getConfig("config.yml")
                     .getTime("forceLogin.periodicalPrompt.period", TimeUnit.TICKS);
             
+            if(!getAccountManager().isRegistered(player.getName()) && getConfig("config.yml").getBoolean("forceLogin.registerCode.enabled"))
+            {
+            	getRandomCodesManager().addPlayerAndGenerateCode(player);
+            }
+            
             if (getConfig("config.yml").getBoolean("forceLogin.promptOn.join"))
             {
                 if (getConfig("config.yml").getBoolean("forceLogin.periodicalPrompt.enabled"))
