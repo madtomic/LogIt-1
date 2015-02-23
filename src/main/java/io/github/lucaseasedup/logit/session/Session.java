@@ -18,6 +18,7 @@
  */
 package io.github.lucaseasedup.logit.session;
 
+import io.github.lucaseasedup.logit.security.RandomCodesManager;
 import io.github.lucaseasedup.logit.util.Validators;
 
 /**
@@ -141,7 +142,22 @@ public final class Session
         inactivityTime = 0L;
     }
     
+    /**
+     * Get player's code which must be used to registration
+     * 
+     * @return player's code used for registration
+     */
+    public String getRegisterCode()
+    {
+    	if(registerCode == null || registerCode.isEmpty())
+    	{
+    		registerCode = RandomCodesManager.generateCode();
+    	}
+    	return registerCode;
+    }
+    
     private String ip;
     private long status = -1L;
     private long inactivityTime = 0L;
+    private String registerCode;
 }

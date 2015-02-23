@@ -26,8 +26,10 @@ import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.EssentialsHook;
 import io.github.lucaseasedup.logit.hooks.VanishNoPacketHook;
 import io.github.lucaseasedup.logit.locale.Locale;
+
 import java.util.Arrays;
 import java.util.Hashtable;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,7 +60,8 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements Lis
             @Override
             public void run()
             {
-                Player player = Bukkit.getPlayerExact(username);
+                @SuppressWarnings("deprecation")
+				Player player = Bukkit.getPlayerExact(username);
                 
                 if (player != null)
                 {
@@ -127,7 +130,7 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements Lis
                 	}
                 	else
                 	{
-                        sendMsg(player, t("pleaseRegister_withCode").replace("{0}", getRandomCodesManager().getCode(player)));
+                        sendMsg(player, t("pleaseRegister_withCode").replace("{0}", getSessionManager().getSession(player).getRegisterCode()));
                 	}
                 }
                 else
@@ -138,7 +141,7 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements Lis
                 	}
                 	else
                 	{
-                        sendMsg(player, t("pleaseRegister_noPassword_withCode").replace("{0}", getRandomCodesManager().getCode(player)));
+                        sendMsg(player, t("pleaseRegister_noPassword_withCode").replace("{0}", getSessionManager().getSession(player).getRegisterCode()));
                 	}
                 }
             }
@@ -247,7 +250,8 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements Lis
         @Override
         public void run()
         {
-            Player player = Bukkit.getPlayerExact(username);
+            @SuppressWarnings("deprecation")
+			Player player = Bukkit.getPlayerExact(username);
             
             if (player == null || !isCoreStarted())
             {

@@ -20,9 +20,6 @@ package io.github.lucaseasedup.logit;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.CollectionUtils.containsIgnoreCase;
-
-import com.google.common.io.Files;
-
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
@@ -80,7 +77,6 @@ import io.github.lucaseasedup.logit.persistence.PersistenceManager;
 import io.github.lucaseasedup.logit.persistence.PersistenceSerializer;
 import io.github.lucaseasedup.logit.profile.ProfileManager;
 import io.github.lucaseasedup.logit.security.GlobalPasswordManager;
-import io.github.lucaseasedup.logit.security.RandomCodesManager;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.session.SessionManager;
 import io.github.lucaseasedup.logit.storage.CacheType;
@@ -112,6 +108,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.mcsg.double0negative.tabapi.TabAPI;
+
+import com.google.common.io.Files;
 
 /**
  * The central part of LogIt.
@@ -187,11 +185,6 @@ public final class LogItCore
         globalPasswordManager = new GlobalPasswordManager();
         cooldownManager = new CooldownManager();
         accountWatcher = new AccountWatcher();
-        
-        if (getConfig("config.yml").getBoolean("forceLogin.registerCode.enabled"))
-        {
-        	randomCodesManager = new RandomCodesManager();
-        }
         
         setupTabApi();
         startTasks();
@@ -835,12 +828,6 @@ public final class LogItCore
             profileManager = null;
         }
         
-        if(randomCodesManager != null)
-        {
-        	randomCodesManager.dispose();
-        	randomCodesManager = null;
-        }
-        
         if (globalPasswordManager != null)
         {
             globalPasswordManager.dispose();
@@ -1195,11 +1182,6 @@ public final class LogItCore
         return profileManager;
     }
     
-    public RandomCodesManager getRandomCodesManager()
-    {
-    	return randomCodesManager;
-    }
-    
     public GlobalPasswordManager getGlobalPasswordManager()
     {
         return globalPasswordManager;
@@ -1260,7 +1242,6 @@ public final class LogItCore
     private LogItMessageDispatcher messageDispatcher;
     private LogItTabCompleter tabCompleter;
     private ProfileManager profileManager;
-    private RandomCodesManager randomCodesManager;
     private GlobalPasswordManager globalPasswordManager;
     private CooldownManager cooldownManager;
     private AccountWatcher accountWatcher;

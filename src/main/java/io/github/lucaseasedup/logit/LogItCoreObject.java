@@ -164,11 +164,6 @@ public abstract class LogItCoreObject implements Disposable
         return getCore().getProfileManager();
     }
     
-    protected final RandomCodesManager getRandomCodesManager()
-    {
-    	return getCore().getRandomCodesManager();
-    }
-    
     protected final GlobalPasswordManager getGlobalPasswordManager()
     {
         return getCore().getGlobalPasswordManager();

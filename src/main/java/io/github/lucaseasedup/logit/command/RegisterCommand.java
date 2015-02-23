@@ -326,12 +326,11 @@ public final class RegisterCommand extends LogItCoreObject implements CommandExe
                     code = args[0];
             	}
             	
-            	if(!getRandomCodesManager().getCode(player).equals(code))
+            	if(!getSessionManager().getSession(player).getRegisterCode().equals(code))
             	{
             		sendMsg(player, t("invalidRegisterCode"));
             		return true;
             	}
-            	getRandomCodesManager().removeCode(player);
             }
             
             String username = player.getName().toLowerCase();
