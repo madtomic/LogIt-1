@@ -28,9 +28,11 @@ import io.github.lucaseasedup.logit.common.PlayerCollections;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.locale.Locale;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -86,6 +88,7 @@ public final class LoginCommand extends LogItCoreObject implements
 				return true;
 			}
 
+			@SuppressWarnings("deprecation")
 			Player paramPlayer = Bukkit.getPlayerExact(args[1]);
 
 			if (getSessionManager().isSessionAlive(paramPlayer))

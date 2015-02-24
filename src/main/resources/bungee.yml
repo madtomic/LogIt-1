@@ -1,0 +1,4 @@
+name: LogIt
+main: io.github.lucaseasedup.logit.bungee.BungeeLogItPlugin
+author: NorthPL
+version: ${project.version}

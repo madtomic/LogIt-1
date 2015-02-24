@@ -25,6 +25,7 @@ import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import io.github.lucaseasedup.logit.CancelledState;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
+import io.github.lucaseasedup.logit.hooks.BungeeHook;
 import io.github.lucaseasedup.logit.storage.SqliteStorage;
 import io.github.lucaseasedup.logit.storage.Storage;
 import io.github.lucaseasedup.logit.storage.Storage.DataType;
@@ -391,6 +392,11 @@ public final class SessionManager extends LogItCoreObject implements Runnable
 		session.setStatus(0L);
 
 		log(Level.FINE, t("startSession.success.log").replace("{0}", username));
+		
+		if (getConfig("config.yml").getBoolean("")) // TODO
+		{
+			BungeeHook.sendPlayerToServer(player, getConfig("config.yml").getString(""));
+		}
 
 		return CancelledState.NOT_CANCELLED;
 	}
