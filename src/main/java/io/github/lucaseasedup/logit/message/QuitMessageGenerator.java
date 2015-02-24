@@ -24,27 +24,27 @@ import org.bukkit.entity.Player;
 
 public final class QuitMessageGenerator
 {
-    private QuitMessageGenerator()
-    {
-    }
-    
-    public static String generate(Player player)
-    {
-        LogItCore core = LogItCore.getInstance();
-        
-        assert core != null;
-        
-        String message;
-        
-        if (core.getConfig("config.yml").getBoolean("messages.beautify"))
-        {
-            message = t("quit.beautified");
-        }
-        else
-        {
-            message = t("quit.native");
-        }
-        
-        return message.replace("{0}", player.getName());
-    }
+	private QuitMessageGenerator()
+	{
+	}
+
+	public static String generate(Player player)
+	{
+		LogItCore core = LogItCore.getInstance();
+
+		assert core != null;
+
+		String message;
+
+		if (core.getConfig("config.yml").getBoolean("messages.beautify"))
+		{
+			message = t("quit.beautified");
+		}
+		else
+		{
+			message = t("quit.native");
+		}
+
+		return message.replace("{0}", player.getName());
+	}
 }

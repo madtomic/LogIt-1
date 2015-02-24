@@ -27,44 +27,39 @@ import org.bukkit.command.CommandSender;
 
 public final class StartHubCommand extends HubCommand
 {
-    public StartHubCommand()
-    {
-        super("start", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.start")
-                        .playerOnly(false)
-                        .runningCoreRequired(false)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit start")
-                        .descriptionLabel("subCmdDesc.start")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        if (isCoreStarted())
-        {
-            sendMsg(sender, t("coreAlreadyStarted"));
-            
-            return;
-        }
-        
-        try
-        {
-            if (!getCore().start().isCancelled())
-            {
-                sendMsg(sender, t("startCore.success"));
-            }
-            else
-            {
-                sendMsg(sender, t("startCore.fail"));
-            }
-        }
-        catch (FatalReportedException ex)
-        {
-            sendMsg(sender, t("startCore.fail"));
-        }
-    }
+	public StartHubCommand()
+	{
+		super("start", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.start").playerOnly(false)
+				.runningCoreRequired(false).build(),
+				new CommandHelpLine.Builder().command("logit start")
+						.descriptionLabel("subCmdDesc.start").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		if (isCoreStarted())
+		{
+			sendMsg(sender, t("coreAlreadyStarted"));
+
+			return;
+		}
+
+		try
+		{
+			if (!getCore().start().isCancelled())
+			{
+				sendMsg(sender, t("startCore.success"));
+			}
+			else
+			{
+				sendMsg(sender, t("startCore.fail"));
+			}
+		}
+		catch (FatalReportedException ex)
+		{
+			sendMsg(sender, t("startCore.fail"));
+		}
+	}
 }

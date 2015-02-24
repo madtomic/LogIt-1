@@ -23,27 +23,26 @@ import org.bukkit.entity.Player;
 
 public final class AutoInHook
 {
-    private AutoInHook()
-    {
-    }
-    
-    /**
-     * Uses AutoIn to check if a player is premium.
-     * 
-     * @param player the player.
-     * 
-     * @return {@code true} if the player is premium;
-     *         {@code false} if the player is non-premium
-     *         or AutoIn hasn't been found.
-     */
-    public static boolean isPremium(Player player)
-    {
-        if (player == null)
-            throw new IllegalArgumentException();
-        
-        if (!Bukkit.getPluginManager().isPluginEnabled("AutoIn"))
-            return false;
-        
-        return false; // TODO
-    }
+	private AutoInHook()
+	{
+	}
+
+	/**
+	 * Uses AutoIn to check if a player is premium.
+	 * 
+	 * @param player
+	 *            the player.
+	 * @return {@code true} if the player is premium; {@code false} if the player is non-premium
+	 *         or AutoIn hasn't been found.
+	 */
+	public static boolean isPremium(Player player)
+	{
+		if (player == null)
+			throw new IllegalArgumentException();
+
+		if (!Bukkit.getPluginManager().isPluginEnabled("AutoIn"))
+			return false;
+
+		return false; // TODO
+	}
 }

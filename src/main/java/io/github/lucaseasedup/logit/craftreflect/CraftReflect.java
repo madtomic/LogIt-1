@@ -22,5 +22,5 @@ import org.bukkit.entity.Player;
 
 public interface CraftReflect
 {
-    public CraftPlayer getCraftPlayer(Player player);
+	public CraftPlayer getCraftPlayer(Player player);
 }

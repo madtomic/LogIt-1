@@ -25,23 +25,18 @@ import org.bukkit.entity.Player;
 
 public final class GotowrHubCommand extends HubCommand
 {
-    public GotowrHubCommand()
-    {
-        super("gotowr", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.gotowr")
-                        .playerOnly(true)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit gotowr")
-                        .descriptionLabel("subCmdDesc.gotowr")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        ((Player) sender).teleport(getCore().getWaitingRoomLocation());
-    }
+	public GotowrHubCommand()
+	{
+		super("gotowr", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.gotowr").playerOnly(true)
+				.runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit gotowr")
+						.descriptionLabel("subCmdDesc.gotowr").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		((Player) sender).teleport(getCore().getWaitingRoomLocation());
+	}
 }

@@ -28,29 +28,25 @@ import org.bukkit.entity.Player;
 
 public final class BackupForceHubCommand extends HubCommand
 {
-    public BackupForceHubCommand()
-    {
-        super("backup force", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.backup.force")
-                        .playerOnly(false)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit backup force")
-                        .descriptionLabel("subCmdDesc.backup.force")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        File backupFile = getBackupManager().createBackupAsynchronously();
-        
-        if (sender instanceof Player)
-        {
-            sendMsg(sender, t("createBackup.willBeCreated")
-                    .replace("{0}", backupFile.getName()));
-        }
-    }
+	public BackupForceHubCommand()
+	{
+		super("backup force", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.backup.force").playerOnly(false)
+				.runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit backup force")
+						.descriptionLabel("subCmdDesc.backup.force").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		File backupFile = getBackupManager().createBackupAsynchronously();
+
+		if (sender instanceof Player)
+		{
+			sendMsg(sender,
+					t("createBackup.willBeCreated").replace("{0}",
+							backupFile.getName()));
+		}
+	}
 }

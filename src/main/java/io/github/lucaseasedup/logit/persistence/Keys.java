@@ -27,5 +27,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Keys
 {
-    Key[] value();
+	Key[] value();
 }

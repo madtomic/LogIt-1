@@ -23,14 +23,14 @@ import io.github.lucaseasedup.logit.config.PropertyValidator;
 
 public final class CacheTypeValidator implements PropertyValidator
 {
-    @Override
-    public boolean validate(String path, PropertyType type, Object value)
-    {
-        if (value == null)
-            return false;
-        
-        String s = value.toString().toLowerCase();
-        
-        return s.equals("disabled") || s.equals("preloaded");
-    }
+	@Override
+	public boolean validate(String path, PropertyType type, Object value)
+	{
+		if (value == null)
+			return false;
+
+		String s = value.toString().toLowerCase();
+
+		return s.equals("disabled") || s.equals("preloaded");
+	}
 }

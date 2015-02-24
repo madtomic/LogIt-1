@@ -23,12 +23,12 @@ import io.github.lucaseasedup.logit.config.PropertyValidator;
 
 public final class TakeoverPromptOnValidator implements PropertyValidator
 {
-    @Override
-    public boolean validate(String path, PropertyType type, Object value)
-    {
-        if (value == null)
-            return false;
-        
-        return value.equals("join") || value.equals("failed-login");
-    }
+	@Override
+	public boolean validate(String path, PropertyType type, Object value)
+	{
+		if (value == null)
+			return false;
+
+		return value.equals("join") || value.equals("failed-login");
+	}
 }

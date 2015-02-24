@@ -31,39 +31,35 @@ import org.bukkit.entity.Player;
 
 public final class ConfigReloadHubCommand extends HubCommand
 {
-    public ConfigReloadHubCommand()
-    {
-        super("config reload", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.config.reload")
-                        .playerOnly(false)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit config reload")
-                        .descriptionLabel("subCmdDesc.config.reload")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        try
-        {
-            getConfigurationManager().loadAll();
-            
-            log(Level.INFO, t("reloadConfig.success"));
-            
-            if (sender instanceof Player)
-            {
-                sendMsg(sender, t("reloadConfig.success"));
-            }
-        }
-        catch (IOException | InvalidConfigurationException | InvalidPropertyValueException ex)
-        {
-            ex.printStackTrace();
-            
-            sendMsg(sender, t("reloadConfig.fail"));
-        }
-    }
+	public ConfigReloadHubCommand()
+	{
+		super("config reload", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.config.reload").playerOnly(false)
+				.runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit config reload")
+						.descriptionLabel("subCmdDesc.config.reload").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		try
+		{
+			getConfigurationManager().loadAll();
+
+			log(Level.INFO, t("reloadConfig.success"));
+
+			if (sender instanceof Player)
+			{
+				sendMsg(sender, t("reloadConfig.success"));
+			}
+		}
+		catch (IOException | InvalidConfigurationException
+				| InvalidPropertyValueException ex)
+		{
+			ex.printStackTrace();
+
+			sendMsg(sender, t("reloadConfig.fail"));
+		}
+	}
 }

@@ -27,13 +27,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Key
 {
-    String name();
-    String defaultValue() default "";
-    
-    /**
-     * Tells what values are considered null.
-     * 
-     * @return KeyConstraint the key constraint.
-     */
-    KeyConstraint constraint() default KeyConstraint.NONE;
+	String name();
+
+	String defaultValue() default "";
+
+	/**
+	 * Tells what values are considered null.
+	 * 
+	 * @return KeyConstraint the key constraint.
+	 */
+	KeyConstraint constraint() default KeyConstraint.NONE;
 }

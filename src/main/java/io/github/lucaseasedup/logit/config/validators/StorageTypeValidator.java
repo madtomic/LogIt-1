@@ -24,12 +24,12 @@ import io.github.lucaseasedup.logit.storage.StorageType;
 
 public final class StorageTypeValidator implements PropertyValidator
 {
-    @Override
-    public boolean validate(String path, PropertyType type, Object value)
-    {
-        if (value == null)
-            return false;
-        
-        return StorageType.decode(value.toString()) != StorageType.UNKNOWN;
-    }
+	@Override
+	public boolean validate(String path, PropertyType type, Object value)
+	{
+		if (value == null)
+			return false;
+
+		return StorageType.decode(value.toString()) != StorageType.UNKNOWN;
+	}
 }

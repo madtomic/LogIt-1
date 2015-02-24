@@ -28,48 +28,45 @@ import org.bukkit.command.CommandSender;
 
 public final class ConfigGetHubCommand extends HubCommand
 {
-    public ConfigGetHubCommand()
-    {
-        super("config get", new String[] {"path"},
-                new CommandAccess.Builder()
-                        .permission("logit.config.get")
-                        .playerOnly(false)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit config get")
-                        .descriptionLabel("subCmdDesc.config.get")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        String hyphenatedPath = args[0];
-        String camelCasePath = PredefinedConfiguration.getCamelCasePath(hyphenatedPath);
-        Property property;
-        
-        if (!getConfig("config.yml").contains(hyphenatedPath))
-        {
-            if (!getConfig("config.yml").contains(camelCasePath))
-            {
-                sendMsg(sender, t("config.propertyNotFound")
-                        .replace("{0}", hyphenatedPath));
-                
-                return;
-            }
-            else
-            {
-                property = getConfig("config.yml").getProperty(camelCasePath);
-            }
-        }
-        else
-        {
-            property = getConfig("config.yml").getProperty(hyphenatedPath);
-        }
-        
-        sendMsg(sender, t("config.get.property")
-                .replace("{0}", property.getPath())
-                .replace("{1}", property.getStringifiedValue()));
-    }
+	public ConfigGetHubCommand()
+	{
+		super("config get", new String[] { "path" },
+				new CommandAccess.Builder().permission("logit.config.get")
+						.playerOnly(false).runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit config get")
+						.descriptionLabel("subCmdDesc.config.get").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		String hyphenatedPath = args[0];
+		String camelCasePath = PredefinedConfiguration
+				.getCamelCasePath(hyphenatedPath);
+		Property property;
+
+		if (!getConfig("config.yml").contains(hyphenatedPath))
+		{
+			if (!getConfig("config.yml").contains(camelCasePath))
+			{
+				sendMsg(sender,
+						t("config.propertyNotFound").replace("{0}",
+								hyphenatedPath));
+
+				return;
+			}
+			else
+			{
+				property = getConfig("config.yml").getProperty(camelCasePath);
+			}
+		}
+		else
+		{
+			property = getConfig("config.yml").getProperty(hyphenatedPath);
+		}
+
+		sendMsg(sender,
+				t("config.get.property").replace("{0}", property.getPath())
+						.replace("{1}", property.getStringifiedValue()));
+	}
 }

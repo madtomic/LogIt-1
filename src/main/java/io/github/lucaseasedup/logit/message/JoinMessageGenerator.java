@@ -24,67 +24,65 @@ import org.bukkit.entity.Player;
 
 public final class JoinMessageGenerator
 {
-    private JoinMessageGenerator()
-    {
-    }
-    
-    public static String generate(Player player, boolean revealSpawnWorld)
-    {
-        LogItCore core = LogItCore.getInstance();
-        
-        assert core != null;
-        
-        String message;
-        
-        if (core.getConfig("config.yml").getBoolean("messages.beautify"))
-        {
-            message = t("join.beautified");
-        }
-        else
-        {
-            message = t("join.native");
-        }
-        
-        String inWorld;
-        
-        if (core.getConfig("config.yml").getBoolean("messages.beautify"))
-        {
-            inWorld = t("join.beautified.inWorld");
-        }
-        else
-        {
-            inWorld = t("join.native.inWorld");
-        }
-        
-        if (revealSpawnWorld)
-        {
-            message = message.replace("{1}", inWorld.replace("{0}", player.getWorld().getName()));
-        }
-        else
-        {
-            message = message.replace("{1}", "");
-        }
-        
-        return message.replace("{0}", player.getName());
-    }
-    
-   /* public static String getWorldAlias(World world)
-    {
-        LogItCore core = LogItCore.getInstance();
-        
-        assert core != null;
-        
-        if (!core.getConfig("config.yml").getBoolean("messages.multiverseHook")
-                || !Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core"))
-        {
-            return world.getName();
-        }
-        
-        Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
-        
-        if (!(plugin instanceof MultiverseCore))
-            return world.getName();
-        
-        return ((MultiverseCore) plugin).getMVWorldManager().getMVWorld(world).getAlias();
-    }*/
+	private JoinMessageGenerator()
+	{
+	}
+
+	public static String generate(Player player, boolean revealSpawnWorld)
+	{
+		LogItCore core = LogItCore.getInstance();
+
+		assert core != null;
+
+		String message;
+
+		if (core.getConfig("config.yml").getBoolean("messages.beautify"))
+		{
+			message = t("join.beautified");
+		}
+		else
+		{
+			message = t("join.native");
+		}
+
+		String inWorld;
+
+		if (core.getConfig("config.yml").getBoolean("messages.beautify"))
+		{
+			inWorld = t("join.beautified.inWorld");
+		}
+		else
+		{
+			inWorld = t("join.native.inWorld");
+		}
+
+		if (revealSpawnWorld)
+		{
+			message = message.replace("{1}",
+					inWorld.replace("{0}", player.getWorld().getName()));
+		}
+		else
+		{
+			message = message.replace("{1}", "");
+		}
+
+		return message.replace("{0}", player.getName());
+	}
+
+	/*
+	 * public static String getWorldAlias(World world)
+	 * {
+	 * LogItCore core = LogItCore.getInstance();
+	 * assert core != null;
+	 * if (!core.getConfig("config.yml").getBoolean("messages.multiverseHook")
+	 * || !Bukkit.getPluginManager().isPluginEnabled("Multiverse-Core"))
+	 * {
+	 * return world.getName();
+	 * }
+	 * Plugin plugin = Bukkit.getPluginManager().getPlugin("Multiverse-Core");
+	 * if (!(plugin instanceof MultiverseCore))
+	 * return world.getName();
+	 * return ((MultiverseCore) plugin).getMVWorldManager().getMVWorld(world).getAlias();
+	 * }
+	 */
 }

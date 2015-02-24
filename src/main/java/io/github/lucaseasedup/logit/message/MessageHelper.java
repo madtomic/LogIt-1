@@ -28,88 +28,94 @@ import org.bukkit.entity.Player;
 
 public final class MessageHelper
 {
-    private MessageHelper()
-    {
-    }
-    
-    /**
-     * Returns the translated message associated with the given label.
-     * 
-     * @param label the message label.
-     * 
-     * @return the translated message.
-     */
-    public static String t(String label)
-    {
-        return LogItPlugin.getMessage(label);
-    }
-    
-    /**
-     * Sends a message to the specified {@code CommandSender}.
-     * 
-     * <p> If the provided {@code CommandSender} is not a {@code Player},
-     * the message will be stripped of colours.
-     * 
-     * @param sender  the {@code CommandSender} who will receive the message.
-     * @param message the message to be sent.
-     */
-    public static void sendMsg(CommandSender sender, String message)
-    {
-        if (sender instanceof Player)
-        {
-            sender.sendMessage(message);
-        }
-        else
-        {
-            sender.sendMessage(ChatColor.stripColor(message));
-        }
-    }
-    
-    /**
-     * Sends a message to a player with the specified name if they are online.
-     * 
-     * @param playerName a name of the player who will receive the message.
-     * @param message    the message to be sent.
-     */
-    public static void sendMsg(String playerName, String message)
-    {
-        Player player = Bukkit.getPlayerExact(playerName);
-        
-        if (player != null)
-        {
-            sendMsg(player, message);
-        }
-    }
-    
-    /**
-     * Sends a message to all online players.
-     * 
-     * @param message the message to be sent.
-     */
-    public static void broadcastMsg(String message)
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            sendMsg(p, message);
-        }
-    }
-    
-    /**
-     * Sends a message to all online players with an exception to player names
-     * confined in {@code exceptPlayers}.
-     * 
-     * @param message       the message to be broadcasted.
-     * @param exceptPlayers the case-insensitive player names {@code Collection}
-     *                      that will omitted in the broadcasting.
-     */
-    public static void broadcastMsgExcept(String message, Collection<String> exceptPlayers)
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            if (!CollectionUtils.containsIgnoreCase(p.getName(), exceptPlayers))
-            {
-                sendMsg(p, message);
-            }
-        }
-    }
+	private MessageHelper()
+	{
+	}
+
+	/**
+	 * Returns the translated message associated with the given label.
+	 * 
+	 * @param label
+	 *            the message label.
+	 * @return the translated message.
+	 */
+	public static String t(String label)
+	{
+		return LogItPlugin.getMessage(label);
+	}
+
+	/**
+	 * Sends a message to the specified {@code CommandSender}.
+	 * <p>
+	 * If the provided {@code CommandSender} is not a {@code Player}, the message will be stripped of colours.
+	 * 
+	 * @param sender
+	 *            the {@code CommandSender} who will receive the message.
+	 * @param message
+	 *            the message to be sent.
+	 */
+	public static void sendMsg(CommandSender sender, String message)
+	{
+		if (sender instanceof Player)
+		{
+			sender.sendMessage(message);
+		}
+		else
+		{
+			sender.sendMessage(ChatColor.stripColor(message));
+		}
+	}
+
+	/**
+	 * Sends a message to a player with the specified name if they are online.
+	 * 
+	 * @param playerName
+	 *            a name of the player who will receive the message.
+	 * @param message
+	 *            the message to be sent.
+	 */
+	public static void sendMsg(String playerName, String message)
+	{
+		Player player = Bukkit.getPlayerExact(playerName);
+
+		if (player != null)
+		{
+			sendMsg(player, message);
+		}
+	}
+
+	/**
+	 * Sends a message to all online players.
+	 * 
+	 * @param message
+	 *            the message to be sent.
+	 */
+	public static void broadcastMsg(String message)
+	{
+		for (Player p : Bukkit.getOnlinePlayers())
+		{
+			sendMsg(p, message);
+		}
+	}
+
+	/**
+	 * Sends a message to all online players with an exception to player names
+	 * confined in {@code exceptPlayers}.
+	 * 
+	 * @param message
+	 *            the message to be broadcasted.
+	 * @param exceptPlayers
+	 *            the case-insensitive player names {@code Collection} that will omitted in the broadcasting.
+	 */
+	public static void broadcastMsgExcept(String message,
+			Collection<String> exceptPlayers)
+	{
+		for (Player p : Bukkit.getOnlinePlayers())
+		{
+			if (!CollectionUtils.containsIgnoreCase(p.getName(), exceptPlayers))
+			{
+				sendMsg(p, message);
+			}
+		}
+	}
 }

@@ -113,188 +113,184 @@ import com.google.common.io.Files;
 
 /**
  * The central part of LogIt.
- * 
- * <p> There is only one instance of {@code LogItCore}, obtainable using
- * {@link #getInstance()}.
+ * <p>
+ * There is only one instance of {@code LogItCore}, obtainable using {@link #getInstance()}.
  */
 public final class LogItCore
 {
-    private LogItCore(LogItPlugin plugin)
-    {
-        assert plugin != null;
-        
-        this.plugin = plugin;
-    }
-    
-    /**
-     * Starts up the LogIt core.
-     *
-     * @return A {@code CancellableState} indicating whether this operation
-     *         has been cancelled by one of the {@code LogItCoreStartEvent}
-     *         handlers.
-     *
-     * @throws FatalReportedException
-     *        If a critical error occurred and LogIt could not start.
-     *
-     * @throws IllegalStateException
-     *        If the LogIt core is already running.
-     *
-     * @see #isStarted()
-     * @see #stop()
-     */
-    public CancelledState start() throws FatalReportedException
-    {
-        if (isStarted())
-            throw new IllegalStateException("The LogIt core has already been started.");
-        
-        CancellableEvent evt = new LogItCoreStartEvent(this);
-        
-        Bukkit.getPluginManager().callEvent(evt);
-        
-        if (evt.isCancelled())
-            return CancelledState.CANCELLED;
-        
-        getDataFolder().mkdir();
-        
-        firstRun = !getDataFile("config.yml").exists();
-        
-        setUpConfiguration();
-        setUpLogger();
-        
-        if (isFirstRun())
-        {
-            doFirstRunStuff();
-        }
-        
-        setUpCraftReflect();
-        setUpLocaleManager();
-        setUpAccountManager();
-        setUpPersistenceManager();
-        
-        securityHelper = new SecurityHelper();
-        backupManager = new BackupManager(getAccountManager());
-        sessionManager = new SessionManager();
-        messageDispatcher = new LogItMessageDispatcher();
-        tabCompleter = new LogItTabCompleter();
-        
-        if (getConfig("config.yml").getBoolean("profiles.enabled"))
-        {
-            setUpProfileManager();
-        }
-        
-        globalPasswordManager = new GlobalPasswordManager();
-        cooldownManager = new CooldownManager();
-        accountWatcher = new AccountWatcher();
-        
-        setupTabApi();
-        startTasks();
-        enableCommands();
-        registerEventListeners();
-        
-        started = true;
-        
-        log(Level.FINE, t("startPlugin.success"));
-        
-        if (isFirstRun())
-        {
-            log(Level.INFO, t("firstRun"));
-        }
-        
-        PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
-        PlayerKicker playerKicker = new PlayerKicker()
-        {
-            @Override
-            public void kick(Player player, String message)
-            {
-                player.kickPlayer(message);
-            }
-        };
-        
-        for (final Player player : Bukkit.getOnlinePlayers())
-        {
-            playerEventListener.onLogin(player, playerKicker);
-            playerEventListener.onJoin(player, new JoinMessage()
-            {
-                @Override
-                public void set(String joinMessage)
-                {
-                    MessageHelper.broadcastMsgExcept(joinMessage,
-                            Arrays.asList(player.getName()));
-                }
-            });
-        }
-        
-        return CancelledState.NOT_CANCELLED;
-    }
-    
-    private void setUpConfiguration() throws FatalReportedException
-    {
-        String configHeader = "# # # # # # # # # # # # # # #\n"
-                            + " LogIt Configuration File   #\n"
-                            + "# # # # # # # # # # # # # # #\n";
-        
-        String statsHeader = "# # # # # # # # # # # # # # #\n"
-                           + "  LogIt Statistics File     #\n"
-                           + "# # # # # # # # # # # # # # #\n";
-        
-        String secretHeader = "# # # # # # # # # # # # # # # # # # # # # # # # # # # #\n"
-                            + "             LogIt Secret Settings File               #\n"
-                            + "                                                      #\n"
-                            + " Do not touch unless you are 100% what you're doing!  #\n"
-                            + "# # # # # # # # # # # # # # # # # # # # # # # # # # # #\n";
-        
-        File oldConfigDefFile = getDataFile("config-def.b64");
-        
-        if (oldConfigDefFile.exists())
-        {
-            File newConfigDefFile = getDataFile(".doNotTouch/config-def.b64");
-            
-            try
-            {
-                newConfigDefFile.getParentFile().mkdirs();
-                newConfigDefFile.createNewFile();
-                
-                Files.copy(oldConfigDefFile, newConfigDefFile);
-                
-                oldConfigDefFile.delete();
-            }
-            catch (IOException ex)
-            {
-                log(Level.WARNING, ex);
-            }
-        }
-        
-        configurationManager = new ConfigurationManager();
-        configurationManager.registerConfiguration("config.yml",
-                ".doNotTouch/config-def.b64", "config-def.ini", configHeader);
-        configurationManager.registerConfiguration("stats.yml",
-                ".doNotTouch/stats-def.b64", "stats-def.ini", statsHeader);
-        configurationManager.registerConfiguration("secret.yml",
-                ".doNotTouch/secret-def.b64", "secret-def.ini", secretHeader);
-        
-        try
-        {
-            configurationManager.loadAll();
-        }
-        catch (IOException | InvalidConfigurationException ex)
-        {
-            log(Level.SEVERE, "Could not load a configuration file.", ex);
-            
-            FatalReportedException.throwNew(ex);
-        }
-        catch (InvalidPropertyValueException ex)
-        {
-            log(Level.SEVERE, ex.getMessage());
-            
-            FatalReportedException.throwNew(ex);
-        }
-    }
-    
-    private void setUpLogger()
-    {
-        logger = new LogItCoreLogger(this);
-        logger.open();
-        
+	private LogItCore(LogItPlugin plugin)
+	{
+		assert plugin != null;
+
+		this.plugin = plugin;
+	}
+
+	/**
+	 * Starts up the LogIt core.
+	 *
+	 * @return A {@code CancellableState} indicating whether this operation
+	 *         has been cancelled by one of the {@code LogItCoreStartEvent} handlers.
+	 * @throws FatalReportedException
+	 *             If a critical error occurred and LogIt could not start.
+	 * @throws IllegalStateException
+	 *             If the LogIt core is already running.
+	 * @see #isStarted()
+	 * @see #stop()
+	 */
+	public CancelledState start() throws FatalReportedException
+	{
+		if (isStarted())
+			throw new IllegalStateException(
+					"The LogIt core has already been started.");
+
+		CancellableEvent evt = new LogItCoreStartEvent(this);
+
+		Bukkit.getPluginManager().callEvent(evt);
+
+		if (evt.isCancelled())
+			return CancelledState.CANCELLED;
+
+		getDataFolder().mkdir();
+
+		firstRun = !getDataFile("config.yml").exists();
+
+		setUpConfiguration();
+		setUpLogger();
+
+		if (isFirstRun())
+		{
+			doFirstRunStuff();
+		}
+
+		setUpCraftReflect();
+		setUpLocaleManager();
+		setUpAccountManager();
+		setUpPersistenceManager();
+
+		securityHelper = new SecurityHelper();
+		backupManager = new BackupManager(getAccountManager());
+		sessionManager = new SessionManager();
+		messageDispatcher = new LogItMessageDispatcher();
+		tabCompleter = new LogItTabCompleter();
+
+		if (getConfig("config.yml").getBoolean("profiles.enabled"))
+		{
+			setUpProfileManager();
+		}
+
+		globalPasswordManager = new GlobalPasswordManager();
+		cooldownManager = new CooldownManager();
+		accountWatcher = new AccountWatcher();
+
+		setupTabApi();
+		startTasks();
+		enableCommands();
+		registerEventListeners();
+
+		started = true;
+
+		log(Level.FINE, t("startPlugin.success"));
+
+		if (isFirstRun())
+		{
+			log(Level.INFO, t("firstRun"));
+		}
+
+		PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
+		PlayerKicker playerKicker = new PlayerKicker()
+		{
+			@Override
+			public void kick(Player player, String message)
+			{
+				player.kickPlayer(message);
+			}
+		};
+
+		for (final Player player : Bukkit.getOnlinePlayers())
+		{
+			playerEventListener.onLogin(player, playerKicker);
+			playerEventListener.onJoin(player, new JoinMessage()
+			{
+				@Override
+				public void set(String joinMessage)
+				{
+					MessageHelper.broadcastMsgExcept(joinMessage,
+							Arrays.asList(player.getName()));
+				}
+			});
+		}
+
+		return CancelledState.NOT_CANCELLED;
+	}
+
+	private void setUpConfiguration() throws FatalReportedException
+	{
+		String configHeader = "# # # # # # # # # # # # # # #\n"
+				+ " LogIt Configuration File   #\n"
+				+ "# # # # # # # # # # # # # # #\n";
+
+		String statsHeader = "# # # # # # # # # # # # # # #\n"
+				+ "  LogIt Statistics File     #\n"
+				+ "# # # # # # # # # # # # # # #\n";
+
+		String secretHeader = "# # # # # # # # # # # # # # # # # # # # # # # # # # # #\n"
+				+ "             LogIt Secret Settings File               #\n"
+				+ "                                                      #\n"
+				+ " Do not touch unless you are 100% what you're doing!  #\n"
+				+ "# # # # # # # # # # # # # # # # # # # # # # # # # # # #\n";
+
+		File oldConfigDefFile = getDataFile("config-def.b64");
+
+		if (oldConfigDefFile.exists())
+		{
+			File newConfigDefFile = getDataFile(".doNotTouch/config-def.b64");
+
+			try
+			{
+				newConfigDefFile.getParentFile().mkdirs();
+				newConfigDefFile.createNewFile();
+
+				Files.copy(oldConfigDefFile, newConfigDefFile);
+
+				oldConfigDefFile.delete();
+			}
+			catch (IOException ex)
+			{
+				log(Level.WARNING, ex);
+			}
+		}
+
+		configurationManager = new ConfigurationManager();
+		configurationManager.registerConfiguration("config.yml",
+				".doNotTouch/config-def.b64", "config-def.ini", configHeader);
+		configurationManager.registerConfiguration("stats.yml",
+				".doNotTouch/stats-def.b64", "stats-def.ini", statsHeader);
+		configurationManager.registerConfiguration("secret.yml",
+				".doNotTouch/secret-def.b64", "secret-def.ini", secretHeader);
+
+		try
+		{
+			configurationManager.loadAll();
+		}
+		catch (IOException | InvalidConfigurationException ex)
+		{
+			log(Level.SEVERE, "Could not load a configuration file.", ex);
+
+			FatalReportedException.throwNew(ex);
+		}
+		catch (InvalidPropertyValueException ex)
+		{
+			log(Level.SEVERE, ex.getMessage());
+
+			FatalReportedException.throwNew(ex);
+		}
+	}
+
+	private void setUpLogger()
+	{
+		logger = new LogItCoreLogger(this);
+		logger.open();
+
 		if (!getConfig("config.yml").getBoolean(
 				"logging.protectPlayerPasswords"))
 		{
@@ -308,952 +304,961 @@ public final class LogItCore
 				getPlugin().getCommand("changeemail"),
 				getPlugin().getCommand("recoverpass")));
 		commandSilencer.registerFilters();
-    }
-    
-    private void doFirstRunStuff()
-    {
-        getDataFile("backup").mkdir();
-        getDataFile("mail").mkdir();
-        getDataFile("lang").mkdir();
-        
-        File passwordRecoveryTemplateFile = getDataFile("mail/password-recovery.html");
-        
-        if (!passwordRecoveryTemplateFile.exists())
-        {
-            try
-            {
-                IoUtils.extractResource("password-recovery.html",
-                        passwordRecoveryTemplateFile);
-            }
-            catch (IOException ex)
-            {
-                log(Level.WARNING, "Could not copy resource: password-recovery.html", ex);
-            }
-        }
-    }
-    
-    private void setUpCraftReflect()
-    {
-        try
-        {
-            String version = LogItPlugin.getCraftBukkitVersion();
-            String craftClassName =
-                    "io.github.lucaseasedup.logit.craftreflect." + version + ".CraftReflect";
-            Class<?> craftClass = Class.forName(craftClassName);
-            
-            craftReflect = (CraftReflect) craftClass.getConstructor().newInstance();
-        }
-        catch (ClassNotFoundException ex)
-        {
-            log(Level.WARNING, "LogIt does not support this version of Bukkit."
-                    + " Some features may not work.");
-        }
-        catch (ReflectiveOperationException ex)
-        {
-            log(Level.WARNING, "Could not set up CraftBukkit reflection."
-                    + " Some features may not work.", ex);
-        }
-    }
-    
-    private void setUpLocaleManager()
-    {
-        localeManager = new LocaleManager();
-        localeManager.registerLocale(EnglishLocale.getInstance());
-        localeManager.registerLocale(PolishLocale.getInstance());
-        localeManager.registerLocale(GermanLocale.getInstance());
-        localeManager.setFallbackLocale(EnglishLocale.class);
-        localeManager.switchActiveLocale(getConfig("config.yml").getString("locale"));
-    }
-    
-    private void setUpAccountManager() throws FatalReportedException
-    {
-        StorageType leadingStorageType = StorageType.decode(
-                getConfig("config.yml").getString("storage.accounts.leading.storageType")
-        );
-        StorageType mirrorStorageType = StorageType.decode(
-                getConfig("config.yml").getString("storage.accounts.mirror.storageType")
-        );
-        
-        String accountsUnit = getConfig("config.yml").getString("storage.accounts.leading.unit");
-        AccountKeys accountKeys = new AccountKeys(
-            getConfig("config.yml").getString("storage.accounts.keys.username"),
-            getConfig("config.yml").getString("storage.accounts.keys.uuid"),
-            getConfig("config.yml").getString("storage.accounts.keys.salt"),
-            getConfig("config.yml").getString("storage.accounts.keys.password"),
-            getConfig("config.yml").getString("storage.accounts.keys.hashing_algorithm"),
-            getConfig("config.yml").getString("storage.accounts.keys.ip"),
-            getConfig("config.yml").getString("storage.accounts.keys.login_session"),
-            getConfig("config.yml").getString("storage.accounts.keys.email"),
-            getConfig("config.yml").getString("storage.accounts.keys.last_active_date"),
-            getConfig("config.yml").getString("storage.accounts.keys.reg_date"),
-            getConfig("config.yml").getString("storage.accounts.keys.is_locked"),
-            getConfig("config.yml").getString("storage.accounts.keys.login_history"),
-            getConfig("config.yml").getString("storage.accounts.keys.display_name"),
-            getConfig("config.yml").getString("storage.accounts.keys.persistence")
-        );
-        
-        Storage leadingAccountStorage =
-                new StorageFactory(getConfig("config.yml"), "storage.accounts.leading")
-                        .produceStorage(leadingStorageType);
-        
-        Storage mirrorAccountStorage =
-                new StorageFactory(getConfig("config.yml"), "storage.accounts.mirror")
-                        .produceStorage(mirrorStorageType);
-        
-        CacheType accountCacheType = CacheType.decode(
-                getConfig("config.yml").getString("storage.accounts.leading.cache")
-        );
-        
-        WrapperStorage accountStorage = new WrapperStorage.Builder()
-                .leading(leadingAccountStorage)
-                .cacheType(accountCacheType)
-                .build();
-        accountStorage.mirrorStorage(mirrorAccountStorage,
-                new Hashtable<String, String>()
-                {
-                    private static final long serialVersionUID = 1L;
-                    
-                    {
-                        put(getConfig("config.yml").getString("storage.accounts.leading.unit"),
-                            getConfig("config.yml").getString("storage.accounts.mirror.unit"));
-                    }
-                }
-        );
-        
-        try
-        {
-            accountStorage.connect();
-        }
-        catch (IOException ex)
-        {
-            log(Level.SEVERE, "Could not establish database connection.", ex);
-            
-            FatalReportedException.throwNew(ex);
-        }
-        
-        try
-        {
-            accountStorage.createUnit(accountsUnit, accountKeys, accountKeys.username());
-        }
-        catch (IOException ex)
-        {
-            log(Level.SEVERE, "Could not create accounts table.", ex);
-            
-            FatalReportedException.throwNew(ex);
-        }
-        
-        try
-        {
-            accountStorage.setAutobatchEnabled(true);
-            
-            Hashtable<String, DataType> existingKeys = accountStorage.getKeys(accountsUnit);
-            
-            for (Map.Entry<String, DataType> e : accountKeys.entrySet())
-            {
-                if (!existingKeys.containsKey(e.getKey()))
-                {
-                    accountStorage.addKey(accountsUnit, e.getKey(), e.getValue());
-                }
-            }
-            
-            accountStorage.executeBatch();
-            accountStorage.clearBatch();
-            accountStorage.setAutobatchEnabled(false);
-        }
-        catch (IOException ex)
-        {
-            log(Level.SEVERE, "Could not update accounts table columns.", ex);
-            
-            FatalReportedException.throwNew(ex);
-        }
-        
-        if (accountCacheType == CacheType.PRELOADED)
-        {
-            try
-            {
-                accountStorage.selectEntries(
-                        getConfig("config.yml").getString("storage.accounts.leading.unit")
-                );
-            }
-            catch (IOException ex)
-            {
-                log(Level.SEVERE, "Could not preload accounts.", ex);
-            }
-        }
-        
-        accountManager = new AccountManager(accountStorage, accountsUnit, accountKeys);
-    }
-    
-    private void setUpPersistenceManager() throws FatalReportedException
-    {
-        persistenceManager = new PersistenceManager();
-        
-        setSerializerEnabled(LocationSerializer.class,
-                getConfig("config.yml").getBoolean("waitingRoom.enabled"));
-        setSerializerEnabled(AirBarSerializer.class,
-                getConfig("config.yml").getBoolean("forceLogin.obfuscate.air"));
-        setSerializerEnabled(HealthBarSerializer.class,
-                getConfig("config.yml").getBoolean("forceLogin.obfuscate.health"));
-        setSerializerEnabled(ExperienceSerializer.class,
-                getConfig("config.yml").getBoolean("forceLogin.obfuscate.experience"));
-        setSerializerEnabled(HungerBarSerializer.class,
-                getConfig("config.yml").getBoolean("forceLogin.obfuscate.hunger"));
-    }
-    
-    private void setupTabApi()
-    {
-    	if(!getConfig("config.yml").getBoolean("forceLogin.hideFromTabList"))
-    	{
-    		return;
-    	}
-        tabApiWrapper = new Wrapper<>();
-        tabListUpdater = new TabListUpdater(tabApiWrapper, craftReflect);
-        
-        new BukkitRunnable()
-        {
-            @Override
-            public void run()
-            {
-                if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
-                {
-                    tabApiWrapper.set(new TabAPI());
-                    tabApiWrapper.get().onEnable();
-                }
-            }
-        }.runTaskLater(getPlugin(), 1L);
-    }
-    
-    private void setSerializerEnabled(Class<? extends PersistenceSerializer> clazz, boolean status)
-            throws FatalReportedException
-    {
-        if (status)
-        {
-            try
-            {
-                getPersistenceManager().registerSerializer(clazz);
-            }
-            catch (ReflectiveOperationException ex)
-            {
-                log(Level.SEVERE,
-                        "Could not register persistence serializer: " + clazz.getSimpleName());
-                
-                FatalReportedException.throwNew(ex);
-            }
-        }
-        else
-        {
-            AccountKeys keys = getAccountManager().getKeys();
-            
-            for (Player player : Bukkit.getOnlinePlayers())
-            {
-                Account account = getAccountManager().selectAccount(player.getName(),
-                        Arrays.asList(
-                                keys.username(),
-                                keys.persistence()
-                        )
-                );
-                
-                if (account != null)
-                {
-                    getPersistenceManager().unserializeUsing(account, player, clazz);
-                }
-            }
-        }
-    }
-    
-    private void setUpProfileManager()
-    {
-        File profilesPath = getDataFile(getConfig("config.yml").getString("profiles.path"));
-        
-        if (!profilesPath.exists())
-        {
-            profilesPath.getParentFile().mkdirs();
-            profilesPath.mkdir();
-        }
-        
-        profileManager = new ProfileManager(profilesPath,
-                getConfig("config.yml").getValues("profiles.fields"));
-    }
-    
-    private void startTasks()
-    {
-        accountManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                getAccountManager(), 0L,
-                getConfig("secret.yml").getTime("bufferFlushInterval", TimeUnit.TICKS));
-        backupManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                getBackupManager(), 0L,
-                BackupManager.TASK_PERIOD);
-        sessionManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                getSessionManager(), 0L,
-                SessionManager.TASK_PERIOD);
-        globalPasswordManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                getGlobalPasswordManager(), 0L,
-                GlobalPasswordManager.TASK_PERIOD);
-        accountWatcherTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                getAccountWatcher(), 0L,
-                AccountWatcher.TASK_PERIOD);
-        if(tabListUpdaterTask == null)
-        {
-        	return;
-        }
-        tabListUpdaterTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-                tabListUpdater, 20L,
-                TabListUpdater.TASK_PERIOD);
-    }
-    
-    private void enableCommands()
-    {
-        enableCommand("login", new LoginCommand());
-        enableCommand("logout", new LogoutCommand());
-        enableCommand("remember", new RememberCommand(),
-                getConfig("config.yml").getBoolean("loginSessions.enabled"));
-        enableCommand("register", new RegisterCommand());
-        enableCommand("unregister", new UnregisterCommand());
-        enableCommand("changepass", new ChangePassCommand(),
-                !getConfig("config.yml").getBoolean("passwords.disable"));
-        enableCommand("changeemail", new ChangeEmailCommand());
-        enableCommand("recoverpass", new RecoverPassCommand(),
-                getConfig("config.yml").getBoolean("passwordRecovery.enabled"));
-        enableCommand("profile", new ProfileCommand(),
-                getConfig("config.yml").getBoolean("profiles.enabled"));
-        enableCommand("acclock", new AcclockCommand());
-        enableCommand("accunlock", new AccunlockCommand());
-        enableCommand("loginhistory", new LoginHistoryCommand(),
-                getConfig("config.yml").getBoolean("loginHistory.enabled"));
-        enableCommand("$logit-nop-command", new NopCommandExecutor());
-    }
-    
-    private void enableCommand(String command, CommandExecutor executor, boolean enabled)
-    {
-        if (enabled)
-        {
-            getPlugin().getCommand(command).setExecutor(executor);
-        }
-        else
-        {
-            disableCommand(command);
-        }
-    }
-    
-    private void enableCommand(String command, CommandExecutor executor)
-    {
-        enableCommand(command, executor, true);
-    }
-    
-    private void registerEventListeners()
-    {
-        PlayerCollections.registerListener(getPlugin());
-        
-        registerEventListener(getMessageDispatcher());
-        registerEventListener(getCooldownManager());
-        registerEventListener(new ServerEventListener());
-        registerEventListener(new BlockEventListener());
-        registerEventListener(new EntityEventListener());
-        registerEventListener(new PlayerEventListener());
-        registerEventListener(new InventoryEventListener());
-        registerEventListener(new SessionEventListener());
-        if(getTabListUpdater() != null) registerEventListener(getTabListUpdater());
-    }
-    
-    private <T extends Listener> void registerEventListener(T listener)
-    {
-        if (listener == null)
-            throw new IllegalArgumentException();
-        
-        Bukkit.getPluginManager().registerEvents(listener, getPlugin());
-        
-        if (eventListeners == null)
-        {
-            eventListeners = new HashMap<>();
-        }
-        
-        eventListeners.put(listener.getClass(), listener);
-    }
-    
-    /**
-     * Stops the LogIt core.
-     * 
-     * @throws IllegalStateException
-     *        If the LogIt core is not running.
-     * 
-     * @see #isStarted()
-     * @see #start()
-     */
-    public void stop()
-    {
-        if (!isStarted())
-            throw new IllegalStateException("The LogIt core is not started.");
-        
-        PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
-        
-        for (final Player player : Bukkit.getOnlinePlayers())
-        {
-            playerEventListener.onQuit(player, new QuitMessage()
-            {
-                @Override
-                public void set(String quitMessage)
-                {
-                    MessageHelper.broadcastMsgExcept(quitMessage,
-                            Arrays.asList(player.getName()));
-                }
-            });
-        }
-        
-        disableCommands();
-        
-        getPersistenceManager().unregisterSerializer(LocationSerializer.class);
-        getPersistenceManager().unregisterSerializer(AirBarSerializer.class);
-        getPersistenceManager().unregisterSerializer(HealthBarSerializer.class);
-        getPersistenceManager().unregisterSerializer(ExperienceSerializer.class);
-        getPersistenceManager().unregisterSerializer(HungerBarSerializer.class);
-        
-        try
-        {
-            getAccountManager().getStorage().close();
-        }
-        catch (IOException ex)
-        {
-            log(Level.WARNING, "Could not close database connection.", ex);
-        }
-        
-        Bukkit.getScheduler().cancelTasks(getPlugin());
-        
-        // Unregister all event listeners.
-        HandlerList.unregisterAll(getPlugin());
-        
-        started = false;
-        
-        dispose();
-        
-        log(Level.FINE, t("stopPlugin.success"));
-        
-        if (logger != null)
-        {
-            logger.close();
-            logger = null;
-        }
-    }
-    
-    private void disableCommands()
-    {
-        disableCommand("login");
-        disableCommand("logout");
-        disableCommand("remember");
-        disableCommand("register");
-        disableCommand("unregister");
-        disableCommand("changepass");
-        disableCommand("changeemail");
-        disableCommand("recoverpass");
-        disableCommand("profile");
-        disableCommand("acclock");
-        disableCommand("accunlock");
-        disableCommand("loginhistory");
-        disableCommand("$logit-nop-command");
-    }
-    
-    private void disableCommand(String command)
-    {
-        getPlugin().getCommand(command).setExecutor(new DisabledCommandExecutor());
-    }
-    
-    /**
-     * Disposes the LogIt core.
-     * 
-     * @throws IllegalStateException if the LogIt core is running.
-     */
-    private void dispose()
-    {
-        if (isStarted())
-            throw new IllegalStateException("Cannot dispose the LogIt core while it's running.");
-        
-        if (configurationManager != null)
-        {
-            configurationManager.dispose();
-            configurationManager = null;
-        }
-        
-        if (commandSilencer != null)
-        {
-            commandSilencer.dispose();
-            commandSilencer = null;
-        }
-        
-        if (localeManager != null)
-        {
-            localeManager.dispose();
-            localeManager = null;
-        }
-        
-        if (accountManager != null)
-        {
-            accountManager.dispose();
-            accountManager = null;
-        }
-        
-        if (persistenceManager != null)
-        {
-            persistenceManager.dispose();
-            persistenceManager = null;
-        }
-        
-        securityHelper = null;
-        
-        if (backupManager != null)
-        {
-            backupManager.dispose();
-            backupManager = null;
-        }
-        
-        if (sessionManager != null)
-        {
-            sessionManager.dispose();
-            sessionManager = null;
-        }
-        
-        if (messageDispatcher != null)
-        {
-            messageDispatcher.dispose();
-            messageDispatcher = null;
-        }
-        
-        if (tabCompleter != null)
-        {
-            tabCompleter.dispose();
-            tabCompleter = null;
-        }
-        
-        if (profileManager != null)
-        {
-            profileManager.dispose();
-            profileManager = null;
-        }
-        
-        if (globalPasswordManager != null)
-        {
-            globalPasswordManager.dispose();
-            globalPasswordManager = null;
-        }
-        
-        if (cooldownManager != null)
-        {
-            cooldownManager.dispose();
-            cooldownManager = null;
-        }
-        
-        if (accountWatcher != null)
-        {
-            accountWatcher.dispose();
-            accountWatcher = null;
-        }
-        
-        if (tabApiWrapper != null && tabApiWrapper.get() != null)
-        {
-            tabApiWrapper.get().onDisable();
-            tabApiWrapper.set(null);
-            tabApiWrapper = null;
-        }
-        
-        tabListUpdater = null;
-    }
-    
-    /**
-     * Restarts the LogIt core.
-     *
-     * @throws FatalReportedException
-     *        If the LogIt core could not be started again.
-     *
-     * @throws IllegalStateException
-     *        If the LogIt core is not running.
-     *
-     * @see #isStarted()
-     * @see #start()
-     */
-    public void restart() throws FatalReportedException
-    {
-        if (!isStarted())
-            throw new IllegalStateException("The LogIt core is not started.");
-        
-        File sessionsFile =
-                getDataFile(getConfig("config.yml").getString("storage.sessions.filename"));
-        
-        try
-        {
-            sessionManager.exportSessions(sessionsFile);
-        }
-        catch (IOException ex)
-        {
-            log(Level.WARNING, "Could not export sessions.", ex);
-        }
-        
-        stop();
-        
-        if (!start().isCancelled())
-        {
-            try
-            {
-                getPlugin().reloadMessages(getConfig("config.yml").getString("locale"));
-            }
-            catch (IOException ex)
-            {
-                log(Level.WARNING, "Could not load messages.", ex);
-            }
-            
-            if (sessionsFile.exists())
-            {
-                try
-                {
-                    sessionManager.importSessions(sessionsFile);
-                }
-                catch (IOException ex)
-                {
-                    log(Level.WARNING, "Could not import sessions.", ex);
-                }
-                
-                sessionsFile.delete();
-            }
-            
-            log(Level.INFO, t("reloadPlugin.success"));
-        }
-        else
-        {
-            log(Level.INFO, t("reloadPlugin.fail"));
-        }
-    }
-    
-    /**
-     * Checks if a player is forced to log in.
-     * 
-     * <p> Returns {@code true} if the <i>forceLogin.global</i> config setting
-     * is set to <i>true</i>, or the player is in a world with forced login.
-     * 
-     * <p> If the player name is contained in the
-     * <i>forceLogin.exemptPlayers</i> config property, it always returns
-     * {@code false} regardless of the above conditions.
-     * 
-     * <p> Note that this method does not check if the player is logged in.
-     * For that purpose, use {@link SessionManager#isSessionAlive(Player)}
-     * or {@link SessionManager#isSessionAlive(String)}.
-     * 
-     * @param player
-     *       The player whom this check will be ran on.
-     * 
-     * @return {@code true} if the player is forced to log in;
-     *         {@code false} otherwise.
-     */
-    public boolean isPlayerForcedToLogIn(Player player)
-    {
-        String playerWorldName = player.getWorld().getName();
-        
-        boolean forcedLoginGlobal =
-                getConfig("config.yml").getBoolean("forceLogin.global");
-        List<String> exemptedWorlds =
-                getConfig("config.yml").getStringList("forceLogin.inWorlds");
-        List<String> exemptedPlayers =
-                getConfig("config.yml").getStringList("forceLogin.exemptPlayers");
-        
-        return (forcedLoginGlobal || exemptedWorlds.contains(playerWorldName))
-                && !containsIgnoreCase(player.getName(), exemptedPlayers);
-    }
-    
-    /**
-     * Updates permission groups for a player only if LogIt is linked to Vault.
-     *
-     * <p> If Vault is not enabled, no action will be taken.
-     *
-     * <p> Permission groups currently supported: <ul>
-     *  <li>Registered</li>
-     *  <li>Not registered</li>
-     *  <li>Logged in</li>
-     *  <li>Logged out</li>
-     * </ul>
-     *
-     * <p> Exact group names will be read from the configuration file.
-     *
-     * @param player
-     *       The player whose permission groups should be updated.
-     *
-     * @throws IllegalArgumentException
-     *        If {@code player} is {@code null}.
-     */
-    public void updatePlayerGroup(Player player)
-    {
-        if (player == null)
-            throw new IllegalArgumentException();
-        
-        if (!VaultHook.isVaultEnabled())
-            return;
-        
-        if (getAccountManager().isRegistered(player.getName()))
-        {
-            VaultHook.playerRemoveGroup(player,
-                    getConfig("config.yml").getString("groups.unregistered"));
-            VaultHook.playerAddGroup(player,
-                    getConfig("config.yml").getString("groups.registered"));
-        }
-        else
-        {
-            VaultHook.playerRemoveGroup(player,
-                    getConfig("config.yml").getString("groups.registered"));
-            VaultHook.playerAddGroup(player,
-                    getConfig("config.yml").getString("groups.unregistered"));
-        }
-        
-        if (getSessionManager().isSessionAlive(player))
-        {
-            VaultHook.playerRemoveGroup(player,
-                    getConfig("config.yml").getString("groups.loggedOut"));
-            VaultHook.playerAddGroup(player,
-                    getConfig("config.yml").getString("groups.loggedIn"));
-        }
-        else
-        {
-            VaultHook.playerRemoveGroup(player,
-                    getConfig("config.yml").getString("groups.loggedIn"));
-            VaultHook.playerAddGroup(player,
-                    getConfig("config.yml").getString("groups.loggedOut"));
-        }
-    }
-    
-    public void log(Level level, String msg)
-    {
-        if (getLogger() == null)
-        {
-            getPlugin().getLogger().log(level, ChatColor.stripColor(msg));
-        }
-        else
-        {
-            getLogger().log(level, msg);
-        }
-    }
-    
-    public void log(Level level, String msg, Throwable throwable)
-    {
-        if (getLogger() == null)
-        {
-            getPlugin().getLogger().log(level, ChatColor.stripColor(msg), throwable);
-        }
-        else
-        {
-            getLogger().log(level, msg, throwable);
-        }
-    }
-    
-    public void log(Level level, Throwable throwable)
-    {
-        if (getLogger() == null)
-        {
-            getPlugin().getLogger().log(level, null, throwable);
-        }
-        else
-        {
-            getLogger().log(level, throwable);
-        }
-    }
-    
-    /**
-     * Returns the {@code LogItPlugin} object.
-     * 
-     * <p> Most of times, all the work will be done with the LogIt core,
-     * but the {@code LogItPlugin} may come useful if you want to,
-     * for example, reload the message files.
-     * 
-     * @return The {@code LogItPlugin} object.
-     */
-    public LogItPlugin getPlugin()
-    {
-        return plugin;
-    }
-    
-    /**
-     * Returns the LogIt data folder as a {@code File} object
-     * (<i>/plugins/LogIt/</i>).
-     * 
-     * @return The data folder.
-     */
-    public File getDataFolder()
-    {
-        return getPlugin().getDataFolder();
-    }
-    
-    /**
-     * Returns a file, as a {@code File} object,
-     * relative to the LogIt data folder (<i>/plugins/LogIt/</i>).
-     * 
-     * @param path
-     *       The relative path.
-     * 
-     * @return The data file.
-     */
-    public File getDataFile(String path)
-    {
-        return new File(getDataFolder(), path);
-    }
-    
-    /**
-     * Checks if this is the first time LogIt is running on this server.
-     * 
-     * @return {@code true} if LogIt is running for the first time;
-     *         {@code false} otherwise.
-     */
-    public boolean isFirstRun()
-    {
-        return firstRun;
-    }
-    
-    /**
-     * Checks if the LogIt core has been successfully started and is running.
-     * 
-     * @return {@code true} if the LogIt core is started;
-     *         {@code false} otherwise.
-     */
-    public boolean isStarted()
-    {
-        return started;
-    }
-    
-    public ConfigurationManager getConfigurationManager()
-    {
-        return configurationManager;
-    }
-    
-    public PredefinedConfiguration getConfig(String filename)
-    {
-        if (filename == null)
-            throw new IllegalArgumentException();
-        
-        if (getConfigurationManager() == null)
-            return null;
-        
-        return getConfigurationManager().getConfiguration(filename);
-    }
-    
-    public Location getWaitingRoomLocation()
-    {
-        return getConfig("config.yml").getLocation("waitingRoom.location").toBukkitLocation();
-    }
-    
-    private LogItCoreLogger getLogger()
-    {
-        return logger;
-    }
-    
-    public LocaleManager getLocaleManager()
-    {
-        return localeManager;
-    }
-    
-    public AccountManager getAccountManager()
-    {
-        return accountManager;
-    }
-    
-    public PersistenceManager getPersistenceManager()
-    {
-        return persistenceManager;
-    }
-    
-    public SecurityHelper getSecurityHelper()
-    {
-        return securityHelper;
-    }
-    
-    public BackupManager getBackupManager()
-    {
-        return backupManager;
-    }
-    
-    public SessionManager getSessionManager()
-    {
-        return sessionManager;
-    }
-    
-    public LogItMessageDispatcher getMessageDispatcher()
-    {
-        return messageDispatcher;
-    }
-    
-    public LogItTabCompleter getTabCompleter()
-    {
-        return tabCompleter;
-    }
-    
-    public ProfileManager getProfileManager()
-    {
-        return profileManager;
-    }
-    
-    public GlobalPasswordManager getGlobalPasswordManager()
-    {
-        return globalPasswordManager;
-    }
-    
-    public CooldownManager getCooldownManager()
-    {
-        return cooldownManager;
-    }
-    
-    private AccountWatcher getAccountWatcher()
-    {
-        return accountWatcher;
-    }
-    
-    public TabListUpdater getTabListUpdater()
-    {
-        return tabListUpdater;
-    }
-    
-    @SuppressWarnings("unchecked")
-    public <T extends Listener> T getEventListener(Class<T> listenerClass)
-    {
-        return (T) eventListeners.get(listenerClass);
-    }
-    
-    /**
-     * The preferred way to obtain the instance of {@code LogItCore}.
-     * 
-     * @return The instance of {@code LogItCore}.
-     */
-    public static LogItCore getInstance()
-    {
-        if (instance == null)
-        {
-            instance = new LogItCore(LogItPlugin.getInstance());
-        }
-        
-        return instance;
-    }
-    
-    private static volatile LogItCore instance = null;
-    
-    private final LogItPlugin plugin;
-    private boolean firstRun;
-    private boolean started = false;
-    
-    private ConfigurationManager configurationManager;
-    private LogItCoreLogger logger;
-    private CommandSilencer commandSilencer;
-    private CraftReflect craftReflect;
-    private LocaleManager localeManager;
-    private AccountManager accountManager;
-    private PersistenceManager persistenceManager;
-    private SecurityHelper securityHelper;
-    private BackupManager backupManager;
-    private SessionManager sessionManager;
-    private LogItMessageDispatcher messageDispatcher;
-    private LogItTabCompleter tabCompleter;
-    private ProfileManager profileManager;
-    private GlobalPasswordManager globalPasswordManager;
-    private CooldownManager cooldownManager;
-    private AccountWatcher accountWatcher;
-    private Wrapper<TabAPI> tabApiWrapper;
-    private TabListUpdater tabListUpdater;
-    
-    private BukkitTask tabListUpdaterTask;
-    private BukkitTask accountManagerTask;
-    private BukkitTask backupManagerTask;
-    private BukkitTask sessionManagerTask;
-    private BukkitTask globalPasswordManagerTask;
-    private BukkitTask accountWatcherTask;
-    
-    private Map<Class<? extends Listener>, Listener> eventListeners;
+	}
+
+	private void doFirstRunStuff()
+	{
+		getDataFile("backup").mkdir();
+		getDataFile("mail").mkdir();
+		getDataFile("lang").mkdir();
+
+		File passwordRecoveryTemplateFile = getDataFile("mail/password-recovery.html");
+
+		if (!passwordRecoveryTemplateFile.exists())
+		{
+			try
+			{
+				IoUtils.extractResource("password-recovery.html",
+						passwordRecoveryTemplateFile);
+			}
+			catch (IOException ex)
+			{
+				log(Level.WARNING,
+						"Could not copy resource: password-recovery.html", ex);
+			}
+		}
+	}
+
+	private void setUpCraftReflect()
+	{
+		try
+		{
+			String version = LogItPlugin.getCraftBukkitVersion();
+			String craftClassName = "io.github.lucaseasedup.logit.craftreflect."
+					+ version + ".CraftReflect";
+			Class<?> craftClass = Class.forName(craftClassName);
+
+			craftReflect = (CraftReflect) craftClass.getConstructor()
+					.newInstance();
+		}
+		catch (ClassNotFoundException ex)
+		{
+			log(Level.WARNING, "LogIt does not support this version of Bukkit."
+					+ " Some features may not work.");
+		}
+		catch (ReflectiveOperationException ex)
+		{
+			log(Level.WARNING, "Could not set up CraftBukkit reflection."
+					+ " Some features may not work.", ex);
+		}
+	}
+
+	private void setUpLocaleManager()
+	{
+		localeManager = new LocaleManager();
+		localeManager.registerLocale(EnglishLocale.getInstance());
+		localeManager.registerLocale(PolishLocale.getInstance());
+		localeManager.registerLocale(GermanLocale.getInstance());
+		localeManager.setFallbackLocale(EnglishLocale.class);
+		localeManager.switchActiveLocale(getConfig("config.yml").getString(
+				"locale"));
+	}
+
+	private void setUpAccountManager() throws FatalReportedException
+	{
+		StorageType leadingStorageType = StorageType
+				.decode(getConfig("config.yml").getString(
+						"storage.accounts.leading.storageType"));
+		StorageType mirrorStorageType = StorageType.decode(getConfig(
+				"config.yml").getString("storage.accounts.mirror.storageType"));
+
+		String accountsUnit = getConfig("config.yml").getString(
+				"storage.accounts.leading.unit");
+		AccountKeys accountKeys = new AccountKeys(
+				getConfig("config.yml").getString(
+						"storage.accounts.keys.username"),
+				getConfig("config.yml").getString("storage.accounts.keys.uuid"),
+				getConfig("config.yml").getString("storage.accounts.keys.salt"),
+				getConfig("config.yml").getString(
+						"storage.accounts.keys.password"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.hashing_algorithm"), getConfig(
+						"config.yml").getString("storage.accounts.keys.ip"),
+				getConfig("config.yml").getString(
+						"storage.accounts.keys.login_session"), getConfig(
+						"config.yml").getString("storage.accounts.keys.email"),
+				getConfig("config.yml").getString(
+						"storage.accounts.keys.last_active_date"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.reg_date"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.is_locked"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.login_history"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.display_name"), getConfig(
+						"config.yml").getString(
+						"storage.accounts.keys.persistence"));
+
+		Storage leadingAccountStorage = new StorageFactory(
+				getConfig("config.yml"), "storage.accounts.leading")
+				.produceStorage(leadingStorageType);
+
+		Storage mirrorAccountStorage = new StorageFactory(
+				getConfig("config.yml"), "storage.accounts.mirror")
+				.produceStorage(mirrorStorageType);
+
+		CacheType accountCacheType = CacheType.decode(getConfig("config.yml")
+				.getString("storage.accounts.leading.cache"));
+
+		WrapperStorage accountStorage = new WrapperStorage.Builder()
+				.leading(leadingAccountStorage).cacheType(accountCacheType)
+				.build();
+		accountStorage.mirrorStorage(mirrorAccountStorage,
+				new Hashtable<String, String>()
+				{
+					private static final long serialVersionUID = 1L;
+
+					{
+						put(getConfig("config.yml").getString(
+								"storage.accounts.leading.unit"),
+								getConfig("config.yml").getString(
+										"storage.accounts.mirror.unit"));
+					}
+				});
+
+		try
+		{
+			accountStorage.connect();
+		}
+		catch (IOException ex)
+		{
+			log(Level.SEVERE, "Could not establish database connection.", ex);
+
+			FatalReportedException.throwNew(ex);
+		}
+
+		try
+		{
+			accountStorage.createUnit(accountsUnit, accountKeys,
+					accountKeys.username());
+		}
+		catch (IOException ex)
+		{
+			log(Level.SEVERE, "Could not create accounts table.", ex);
+
+			FatalReportedException.throwNew(ex);
+		}
+
+		try
+		{
+			accountStorage.setAutobatchEnabled(true);
+
+			Hashtable<String, DataType> existingKeys = accountStorage
+					.getKeys(accountsUnit);
+
+			for (Map.Entry<String, DataType> e : accountKeys.entrySet())
+			{
+				if (!existingKeys.containsKey(e.getKey()))
+				{
+					accountStorage.addKey(accountsUnit, e.getKey(),
+							e.getValue());
+				}
+			}
+
+			accountStorage.executeBatch();
+			accountStorage.clearBatch();
+			accountStorage.setAutobatchEnabled(false);
+		}
+		catch (IOException ex)
+		{
+			log(Level.SEVERE, "Could not update accounts table columns.", ex);
+
+			FatalReportedException.throwNew(ex);
+		}
+
+		if (accountCacheType == CacheType.PRELOADED)
+		{
+			try
+			{
+				accountStorage.selectEntries(getConfig("config.yml").getString(
+						"storage.accounts.leading.unit"));
+			}
+			catch (IOException ex)
+			{
+				log(Level.SEVERE, "Could not preload accounts.", ex);
+			}
+		}
+
+		accountManager = new AccountManager(accountStorage, accountsUnit,
+				accountKeys);
+	}
+
+	private void setUpPersistenceManager() throws FatalReportedException
+	{
+		persistenceManager = new PersistenceManager();
+
+		setSerializerEnabled(LocationSerializer.class, getConfig("config.yml")
+				.getBoolean("waitingRoom.enabled"));
+		setSerializerEnabled(AirBarSerializer.class, getConfig("config.yml")
+				.getBoolean("forceLogin.obfuscate.air"));
+		setSerializerEnabled(HealthBarSerializer.class, getConfig("config.yml")
+				.getBoolean("forceLogin.obfuscate.health"));
+		setSerializerEnabled(
+				ExperienceSerializer.class,
+				getConfig("config.yml").getBoolean(
+						"forceLogin.obfuscate.experience"));
+		setSerializerEnabled(HungerBarSerializer.class, getConfig("config.yml")
+				.getBoolean("forceLogin.obfuscate.hunger"));
+	}
+
+	private void setupTabApi()
+	{
+		if (!getConfig("config.yml").getBoolean("forceLogin.hideFromTabList"))
+		{
+			return;
+		}
+		tabApiWrapper = new Wrapper<>();
+		tabListUpdater = new TabListUpdater(tabApiWrapper, craftReflect);
+
+		new BukkitRunnable()
+		{
+			@Override
+			public void run()
+			{
+				if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
+				{
+					tabApiWrapper.set(new TabAPI());
+					tabApiWrapper.get().onEnable();
+				}
+			}
+		}.runTaskLater(getPlugin(), 1L);
+	}
+
+	private void setSerializerEnabled(
+			Class<? extends PersistenceSerializer> clazz, boolean status)
+			throws FatalReportedException
+	{
+		if (status)
+		{
+			try
+			{
+				getPersistenceManager().registerSerializer(clazz);
+			}
+			catch (ReflectiveOperationException ex)
+			{
+				log(Level.SEVERE, "Could not register persistence serializer: "
+						+ clazz.getSimpleName());
+
+				FatalReportedException.throwNew(ex);
+			}
+		}
+		else
+		{
+			AccountKeys keys = getAccountManager().getKeys();
+
+			for (Player player : Bukkit.getOnlinePlayers())
+			{
+				Account account = getAccountManager().selectAccount(
+						player.getName(),
+						Arrays.asList(keys.username(), keys.persistence()));
+
+				if (account != null)
+				{
+					getPersistenceManager().unserializeUsing(account, player,
+							clazz);
+				}
+			}
+		}
+	}
+
+	private void setUpProfileManager()
+	{
+		File profilesPath = getDataFile(getConfig("config.yml").getString(
+				"profiles.path"));
+
+		if (!profilesPath.exists())
+		{
+			profilesPath.getParentFile().mkdirs();
+			profilesPath.mkdir();
+		}
+
+		profileManager = new ProfileManager(profilesPath, getConfig(
+				"config.yml").getValues("profiles.fields"));
+	}
+
+	private void startTasks()
+	{
+		accountManagerTask = Bukkit.getScheduler().runTaskTimer(
+				getPlugin(),
+				getAccountManager(),
+				0L,
+				getConfig("secret.yml").getTime("bufferFlushInterval",
+						TimeUnit.TICKS));
+		backupManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
+				getBackupManager(), 0L, BackupManager.TASK_PERIOD);
+		sessionManagerTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
+				getSessionManager(), 0L, SessionManager.TASK_PERIOD);
+		globalPasswordManagerTask = Bukkit.getScheduler().runTaskTimer(
+				getPlugin(), getGlobalPasswordManager(), 0L,
+				GlobalPasswordManager.TASK_PERIOD);
+		accountWatcherTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
+				getAccountWatcher(), 0L, AccountWatcher.TASK_PERIOD);
+		if (tabListUpdaterTask == null)
+		{
+			return;
+		}
+		tabListUpdaterTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
+				tabListUpdater, 20L, TabListUpdater.TASK_PERIOD);
+	}
+
+	private void enableCommands()
+	{
+		enableCommand("login", new LoginCommand());
+		enableCommand("logout", new LogoutCommand());
+		enableCommand("remember", new RememberCommand(),
+				getConfig("config.yml").getBoolean("loginSessions.enabled"));
+		enableCommand("register", new RegisterCommand());
+		enableCommand("unregister", new UnregisterCommand());
+		enableCommand("changepass", new ChangePassCommand(),
+				!getConfig("config.yml").getBoolean("passwords.disable"));
+		enableCommand("changeemail", new ChangeEmailCommand());
+		enableCommand("recoverpass", new RecoverPassCommand(),
+				getConfig("config.yml").getBoolean("passwordRecovery.enabled"));
+		enableCommand("profile", new ProfileCommand(), getConfig("config.yml")
+				.getBoolean("profiles.enabled"));
+		enableCommand("acclock", new AcclockCommand());
+		enableCommand("accunlock", new AccunlockCommand());
+		enableCommand("loginhistory", new LoginHistoryCommand(),
+				getConfig("config.yml").getBoolean("loginHistory.enabled"));
+		enableCommand("$logit-nop-command", new NopCommandExecutor());
+	}
+
+	private void enableCommand(String command, CommandExecutor executor,
+			boolean enabled)
+	{
+		if (enabled)
+		{
+			getPlugin().getCommand(command).setExecutor(executor);
+		}
+		else
+		{
+			disableCommand(command);
+		}
+	}
+
+	private void enableCommand(String command, CommandExecutor executor)
+	{
+		enableCommand(command, executor, true);
+	}
+
+	private void registerEventListeners()
+	{
+		PlayerCollections.registerListener(getPlugin());
+
+		registerEventListener(getMessageDispatcher());
+		registerEventListener(getCooldownManager());
+		registerEventListener(new ServerEventListener());
+		registerEventListener(new BlockEventListener());
+		registerEventListener(new EntityEventListener());
+		registerEventListener(new PlayerEventListener());
+		registerEventListener(new InventoryEventListener());
+		registerEventListener(new SessionEventListener());
+		if (getTabListUpdater() != null)
+			registerEventListener(getTabListUpdater());
+	}
+
+	private <T extends Listener> void registerEventListener(T listener)
+	{
+		if (listener == null)
+			throw new IllegalArgumentException();
+
+		Bukkit.getPluginManager().registerEvents(listener, getPlugin());
+
+		if (eventListeners == null)
+		{
+			eventListeners = new HashMap<>();
+		}
+
+		eventListeners.put(listener.getClass(), listener);
+	}
+
+	/**
+	 * Stops the LogIt core.
+	 * 
+	 * @throws IllegalStateException
+	 *             If the LogIt core is not running.
+	 * @see #isStarted()
+	 * @see #start()
+	 */
+	public void stop()
+	{
+		if (!isStarted())
+			throw new IllegalStateException("The LogIt core is not started.");
+
+		PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
+
+		for (final Player player : Bukkit.getOnlinePlayers())
+		{
+			playerEventListener.onQuit(player, new QuitMessage()
+			{
+				@Override
+				public void set(String quitMessage)
+				{
+					MessageHelper.broadcastMsgExcept(quitMessage,
+							Arrays.asList(player.getName()));
+				}
+			});
+		}
+
+		disableCommands();
+
+		getPersistenceManager().unregisterSerializer(LocationSerializer.class);
+		getPersistenceManager().unregisterSerializer(AirBarSerializer.class);
+		getPersistenceManager().unregisterSerializer(HealthBarSerializer.class);
+		getPersistenceManager()
+				.unregisterSerializer(ExperienceSerializer.class);
+		getPersistenceManager().unregisterSerializer(HungerBarSerializer.class);
+
+		try
+		{
+			getAccountManager().getStorage().close();
+		}
+		catch (IOException ex)
+		{
+			log(Level.WARNING, "Could not close database connection.", ex);
+		}
+
+		Bukkit.getScheduler().cancelTasks(getPlugin());
+
+		// Unregister all event listeners.
+		HandlerList.unregisterAll(getPlugin());
+
+		started = false;
+
+		dispose();
+
+		log(Level.FINE, t("stopPlugin.success"));
+
+		if (logger != null)
+		{
+			logger.close();
+			logger = null;
+		}
+	}
+
+	private void disableCommands()
+	{
+		disableCommand("login");
+		disableCommand("logout");
+		disableCommand("remember");
+		disableCommand("register");
+		disableCommand("unregister");
+		disableCommand("changepass");
+		disableCommand("changeemail");
+		disableCommand("recoverpass");
+		disableCommand("profile");
+		disableCommand("acclock");
+		disableCommand("accunlock");
+		disableCommand("loginhistory");
+		disableCommand("$logit-nop-command");
+	}
+
+	private void disableCommand(String command)
+	{
+		getPlugin().getCommand(command).setExecutor(
+				new DisabledCommandExecutor());
+	}
+
+	/**
+	 * Disposes the LogIt core.
+	 * 
+	 * @throws IllegalStateException
+	 *             if the LogIt core is running.
+	 */
+	private void dispose()
+	{
+		if (isStarted())
+			throw new IllegalStateException(
+					"Cannot dispose the LogIt core while it's running.");
+
+		if (configurationManager != null)
+		{
+			configurationManager.dispose();
+			configurationManager = null;
+		}
+
+		if (commandSilencer != null)
+		{
+			commandSilencer.dispose();
+			commandSilencer = null;
+		}
+
+		if (localeManager != null)
+		{
+			localeManager.dispose();
+			localeManager = null;
+		}
+
+		if (accountManager != null)
+		{
+			accountManager.dispose();
+			accountManager = null;
+		}
+
+		if (persistenceManager != null)
+		{
+			persistenceManager.dispose();
+			persistenceManager = null;
+		}
+
+		securityHelper = null;
+
+		if (backupManager != null)
+		{
+			backupManager.dispose();
+			backupManager = null;
+		}
+
+		if (sessionManager != null)
+		{
+			sessionManager.dispose();
+			sessionManager = null;
+		}
+
+		if (messageDispatcher != null)
+		{
+			messageDispatcher.dispose();
+			messageDispatcher = null;
+		}
+
+		if (tabCompleter != null)
+		{
+			tabCompleter.dispose();
+			tabCompleter = null;
+		}
+
+		if (profileManager != null)
+		{
+			profileManager.dispose();
+			profileManager = null;
+		}
+
+		if (globalPasswordManager != null)
+		{
+			globalPasswordManager.dispose();
+			globalPasswordManager = null;
+		}
+
+		if (cooldownManager != null)
+		{
+			cooldownManager.dispose();
+			cooldownManager = null;
+		}
+
+		if (accountWatcher != null)
+		{
+			accountWatcher.dispose();
+			accountWatcher = null;
+		}
+
+		if (tabApiWrapper != null && tabApiWrapper.get() != null)
+		{
+			tabApiWrapper.get().onDisable();
+			tabApiWrapper.set(null);
+			tabApiWrapper = null;
+		}
+
+		tabListUpdater = null;
+	}
+
+	/**
+	 * Restarts the LogIt core.
+	 *
+	 * @throws FatalReportedException
+	 *             If the LogIt core could not be started again.
+	 * @throws IllegalStateException
+	 *             If the LogIt core is not running.
+	 * @see #isStarted()
+	 * @see #start()
+	 */
+	public void restart() throws FatalReportedException
+	{
+		if (!isStarted())
+			throw new IllegalStateException("The LogIt core is not started.");
+
+		File sessionsFile = getDataFile(getConfig("config.yml").getString(
+				"storage.sessions.filename"));
+
+		try
+		{
+			sessionManager.exportSessions(sessionsFile);
+		}
+		catch (IOException ex)
+		{
+			log(Level.WARNING, "Could not export sessions.", ex);
+		}
+
+		stop();
+
+		if (!start().isCancelled())
+		{
+			try
+			{
+				getPlugin().reloadMessages(
+						getConfig("config.yml").getString("locale"));
+			}
+			catch (IOException ex)
+			{
+				log(Level.WARNING, "Could not load messages.", ex);
+			}
+
+			if (sessionsFile.exists())
+			{
+				try
+				{
+					sessionManager.importSessions(sessionsFile);
+				}
+				catch (IOException ex)
+				{
+					log(Level.WARNING, "Could not import sessions.", ex);
+				}
+
+				sessionsFile.delete();
+			}
+
+			log(Level.INFO, t("reloadPlugin.success"));
+		}
+		else
+		{
+			log(Level.INFO, t("reloadPlugin.fail"));
+		}
+	}
+
+	/**
+	 * Checks if a player is forced to log in.
+	 * <p>
+	 * Returns {@code true} if the <i>forceLogin.global</i> config setting is set to <i>true</i>, or the player is in a world with forced login.
+	 * <p>
+	 * If the player name is contained in the <i>forceLogin.exemptPlayers</i> config property, it always returns {@code false} regardless of the above conditions.
+	 * <p>
+	 * Note that this method does not check if the player is logged in. For that purpose, use {@link SessionManager#isSessionAlive(Player)} or {@link SessionManager#isSessionAlive(String)}.
+	 * 
+	 * @param player
+	 *            The player whom this check will be ran on.
+	 * @return {@code true} if the player is forced to log in; {@code false} otherwise.
+	 */
+	public boolean isPlayerForcedToLogIn(Player player)
+	{
+		String playerWorldName = player.getWorld().getName();
+
+		boolean forcedLoginGlobal = getConfig("config.yml").getBoolean(
+				"forceLogin.global");
+		List<String> exemptedWorlds = getConfig("config.yml").getStringList(
+				"forceLogin.inWorlds");
+		List<String> exemptedPlayers = getConfig("config.yml").getStringList(
+				"forceLogin.exemptPlayers");
+
+		return (forcedLoginGlobal || exemptedWorlds.contains(playerWorldName))
+				&& !containsIgnoreCase(player.getName(), exemptedPlayers);
+	}
+
+	/**
+	 * Updates permission groups for a player only if LogIt is linked to Vault.
+	 * <p>
+	 * If Vault is not enabled, no action will be taken.
+	 * <p>
+	 * Permission groups currently supported:
+	 * <ul>
+	 * <li>Registered</li>
+	 * <li>Not registered</li>
+	 * <li>Logged in</li>
+	 * <li>Logged out</li>
+	 * </ul>
+	 * <p>
+	 * Exact group names will be read from the configuration file.
+	 *
+	 * @param player
+	 *            The player whose permission groups should be updated.
+	 * @throws IllegalArgumentException
+	 *             If {@code player} is {@code null}.
+	 */
+	public void updatePlayerGroup(Player player)
+	{
+		if (player == null)
+			throw new IllegalArgumentException();
+
+		if (!VaultHook.isVaultEnabled())
+			return;
+
+		if (getAccountManager().isRegistered(player.getName()))
+		{
+			VaultHook.playerRemoveGroup(player, getConfig("config.yml")
+					.getString("groups.unregistered"));
+			VaultHook.playerAddGroup(player,
+					getConfig("config.yml").getString("groups.registered"));
+		}
+		else
+		{
+			VaultHook.playerRemoveGroup(player, getConfig("config.yml")
+					.getString("groups.registered"));
+			VaultHook.playerAddGroup(player,
+					getConfig("config.yml").getString("groups.unregistered"));
+		}
+
+		if (getSessionManager().isSessionAlive(player))
+		{
+			VaultHook.playerRemoveGroup(player, getConfig("config.yml")
+					.getString("groups.loggedOut"));
+			VaultHook.playerAddGroup(player,
+					getConfig("config.yml").getString("groups.loggedIn"));
+		}
+		else
+		{
+			VaultHook.playerRemoveGroup(player, getConfig("config.yml")
+					.getString("groups.loggedIn"));
+			VaultHook.playerAddGroup(player,
+					getConfig("config.yml").getString("groups.loggedOut"));
+		}
+	}
+
+	public void log(Level level, String msg)
+	{
+		if (getLogger() == null)
+		{
+			getPlugin().getLogger().log(level, ChatColor.stripColor(msg));
+		}
+		else
+		{
+			getLogger().log(level, msg);
+		}
+	}
+
+	public void log(Level level, String msg, Throwable throwable)
+	{
+		if (getLogger() == null)
+		{
+			getPlugin().getLogger().log(level, ChatColor.stripColor(msg),
+					throwable);
+		}
+		else
+		{
+			getLogger().log(level, msg, throwable);
+		}
+	}
+
+	public void log(Level level, Throwable throwable)
+	{
+		if (getLogger() == null)
+		{
+			getPlugin().getLogger().log(level, null, throwable);
+		}
+		else
+		{
+			getLogger().log(level, throwable);
+		}
+	}
+
+	/**
+	 * Returns the {@code LogItPlugin} object.
+	 * <p>
+	 * Most of times, all the work will be done with the LogIt core, but the {@code LogItPlugin} may come useful if you want to, for example, reload the message files.
+	 * 
+	 * @return The {@code LogItPlugin} object.
+	 */
+	public LogItPlugin getPlugin()
+	{
+		return plugin;
+	}
+
+	/**
+	 * Returns the LogIt data folder as a {@code File} object
+	 * (<i>/plugins/LogIt/</i>).
+	 * 
+	 * @return The data folder.
+	 */
+	public File getDataFolder()
+	{
+		return getPlugin().getDataFolder();
+	}
+
+	/**
+	 * Returns a file, as a {@code File} object,
+	 * relative to the LogIt data folder (<i>/plugins/LogIt/</i>).
+	 * 
+	 * @param path
+	 *            The relative path.
+	 * @return The data file.
+	 */
+	public File getDataFile(String path)
+	{
+		return new File(getDataFolder(), path);
+	}
+
+	/**
+	 * Checks if this is the first time LogIt is running on this server.
+	 * 
+	 * @return {@code true} if LogIt is running for the first time; {@code false} otherwise.
+	 */
+	public boolean isFirstRun()
+	{
+		return firstRun;
+	}
+
+	/**
+	 * Checks if the LogIt core has been successfully started and is running.
+	 * 
+	 * @return {@code true} if the LogIt core is started; {@code false} otherwise.
+	 */
+	public boolean isStarted()
+	{
+		return started;
+	}
+
+	public ConfigurationManager getConfigurationManager()
+	{
+		return configurationManager;
+	}
+
+	public PredefinedConfiguration getConfig(String filename)
+	{
+		if (filename == null)
+			throw new IllegalArgumentException();
+
+		if (getConfigurationManager() == null)
+			return null;
+
+		return getConfigurationManager().getConfiguration(filename);
+	}
+
+	public Location getWaitingRoomLocation()
+	{
+		return getConfig("config.yml").getLocation("waitingRoom.location")
+				.toBukkitLocation();
+	}
+
+	private LogItCoreLogger getLogger()
+	{
+		return logger;
+	}
+
+	public LocaleManager getLocaleManager()
+	{
+		return localeManager;
+	}
+
+	public AccountManager getAccountManager()
+	{
+		return accountManager;
+	}
+
+	public PersistenceManager getPersistenceManager()
+	{
+		return persistenceManager;
+	}
+
+	public SecurityHelper getSecurityHelper()
+	{
+		return securityHelper;
+	}
+
+	public BackupManager getBackupManager()
+	{
+		return backupManager;
+	}
+
+	public SessionManager getSessionManager()
+	{
+		return sessionManager;
+	}
+
+	public LogItMessageDispatcher getMessageDispatcher()
+	{
+		return messageDispatcher;
+	}
+
+	public LogItTabCompleter getTabCompleter()
+	{
+		return tabCompleter;
+	}
+
+	public ProfileManager getProfileManager()
+	{
+		return profileManager;
+	}
+
+	public GlobalPasswordManager getGlobalPasswordManager()
+	{
+		return globalPasswordManager;
+	}
+
+	public CooldownManager getCooldownManager()
+	{
+		return cooldownManager;
+	}
+
+	private AccountWatcher getAccountWatcher()
+	{
+		return accountWatcher;
+	}
+
+	public TabListUpdater getTabListUpdater()
+	{
+		return tabListUpdater;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Listener> T getEventListener(Class<T> listenerClass)
+	{
+		return (T) eventListeners.get(listenerClass);
+	}
+
+	/**
+	 * The preferred way to obtain the instance of {@code LogItCore}.
+	 * 
+	 * @return The instance of {@code LogItCore}.
+	 */
+	public static LogItCore getInstance()
+	{
+		if (instance == null)
+		{
+			instance = new LogItCore(LogItPlugin.getInstance());
+		}
+
+		return instance;
+	}
+
+	private static volatile LogItCore instance = null;
+
+	private final LogItPlugin plugin;
+	private boolean firstRun;
+	private boolean started = false;
+
+	private ConfigurationManager configurationManager;
+	private LogItCoreLogger logger;
+	private CommandSilencer commandSilencer;
+	private CraftReflect craftReflect;
+	private LocaleManager localeManager;
+	private AccountManager accountManager;
+	private PersistenceManager persistenceManager;
+	private SecurityHelper securityHelper;
+	private BackupManager backupManager;
+	private SessionManager sessionManager;
+	private LogItMessageDispatcher messageDispatcher;
+	private LogItTabCompleter tabCompleter;
+	private ProfileManager profileManager;
+	private GlobalPasswordManager globalPasswordManager;
+	private CooldownManager cooldownManager;
+	private AccountWatcher accountWatcher;
+	private Wrapper<TabAPI> tabApiWrapper;
+	private TabListUpdater tabListUpdater;
+
+	private BukkitTask tabListUpdaterTask;
+	private BukkitTask accountManagerTask;
+	private BukkitTask backupManagerTask;
+	private BukkitTask sessionManagerTask;
+	private BukkitTask globalPasswordManagerTask;
+	private BukkitTask accountWatcherTask;
+
+	private Map<Class<? extends Listener>, Listener> eventListeners;
 }

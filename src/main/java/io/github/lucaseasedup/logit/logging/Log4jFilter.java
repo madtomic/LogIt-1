@@ -29,92 +29,82 @@ import org.apache.logging.log4j.message.Message;
 
 public final class Log4jFilter
 {
-    public Log4jFilter(CommandSilencer commandSilencer)
-    {
-        if (commandSilencer == null)
-            throw new IllegalArgumentException();
-        
-        this.commandSilencer = commandSilencer;
-    }
-    
-    public void register()
-    {
-        Logger rootLogger = (Logger) LogManager.getRootLogger();
-        
-        rootLogger.addFilter(new Filter()
-        {
-            @Override
-            public Result filter(LogEvent event)
-            {
-                if (commandSilencer.isDisposed())
-                    return Result.NEUTRAL;
-                
-                if (event.getMessage().getFormattedMessage() == null)
-                    return Result.NEUTRAL;
-                
-                if (!event.getLoggerName().endsWith(".PlayerConnection"))
-                    return Result.NEUTRAL;
-                
-                Matcher matcher = commandSilencer.getMatcherForMsg(
-                        event.getMessage().getFormattedMessage()
-                );
-                
-                if (matcher.find())
-                {
-                    String label = matcher.group(1);
-                    
-                    if (commandSilencer.isCommandSilenced(label))
-                    {
-                        return Result.DENY;
-                    }
-                }
-                
-                return Result.NEUTRAL;
-            }
-            
-            @Override
-            public Result filter(Logger logger,
-                                 Level level,
-                                 Marker marker,
-                                 Message msg,
-                                 Throwable t)
-            {
-                return Result.NEUTRAL;
-            }
-            
-            @Override
-            public Result filter(Logger logger,
-                                 Level level,
-                                 Marker marker,
-                                 Object msg,
-                                 Throwable t)
-            {
-                return Result.NEUTRAL;
-            }
-            
-            @Override
-            public Result filter(Logger logger,
-                                 Level level,
-                                 Marker marker,
-                                 String msg,
-                                 Object... params)
-            {
-                return Result.NEUTRAL;
-            }
-            
-            @Override
-            public Result getOnMismatch()
-            {
-                return Result.NEUTRAL;
-            }
-            
-            @Override
-            public Result getOnMatch()
-            {
-                return Result.NEUTRAL;
-            }
-        });
-    }
-    
-    private final CommandSilencer commandSilencer;
+	public Log4jFilter(CommandSilencer commandSilencer)
+	{
+		if (commandSilencer == null)
+			throw new IllegalArgumentException();
+
+		this.commandSilencer = commandSilencer;
+	}
+
+	public void register()
+	{
+		Logger rootLogger = (Logger) LogManager.getRootLogger();
+
+		rootLogger.addFilter(new Filter()
+		{
+			@Override
+			public Result filter(LogEvent event)
+			{
+				if (commandSilencer.isDisposed())
+					return Result.NEUTRAL;
+
+				if (event.getMessage().getFormattedMessage() == null)
+					return Result.NEUTRAL;
+
+				if (!event.getLoggerName().endsWith(".PlayerConnection"))
+					return Result.NEUTRAL;
+
+				Matcher matcher = commandSilencer.getMatcherForMsg(event
+						.getMessage().getFormattedMessage());
+
+				if (matcher.find())
+				{
+					String label = matcher.group(1);
+
+					if (commandSilencer.isCommandSilenced(label))
+					{
+						return Result.DENY;
+					}
+				}
+
+				return Result.NEUTRAL;
+			}
+
+			@Override
+			public Result filter(Logger logger, Level level, Marker marker,
+					Message msg, Throwable t)
+			{
+				return Result.NEUTRAL;
+			}
+
+			@Override
+			public Result filter(Logger logger, Level level, Marker marker,
+					Object msg, Throwable t)
+			{
+				return Result.NEUTRAL;
+			}
+
+			@Override
+			public Result filter(Logger logger, Level level, Marker marker,
+					String msg, Object... params)
+			{
+				return Result.NEUTRAL;
+			}
+
+			@Override
+			public Result getOnMismatch()
+			{
+				return Result.NEUTRAL;
+			}
+
+			@Override
+			public Result getOnMatch()
+			{
+				return Result.NEUTRAL;
+			}
+		});
+	}
+
+	private final CommandSilencer commandSilencer;
 }

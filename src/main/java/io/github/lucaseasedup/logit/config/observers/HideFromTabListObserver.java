@@ -23,9 +23,9 @@ import io.github.lucaseasedup.logit.config.PropertyObserver;
 
 public final class HideFromTabListObserver extends PropertyObserver
 {
-    @Override
-    public void update(Property p)
-    {
-        getCore().getTabListUpdater().updateAllTabLists();
-    }
+	@Override
+	public void update(Property p)
+	{
+		getCore().getTabListUpdater().updateAllTabLists();
+	}
 }

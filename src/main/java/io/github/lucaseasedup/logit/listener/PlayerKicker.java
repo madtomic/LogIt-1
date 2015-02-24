@@ -22,5 +22,5 @@ import org.bukkit.entity.Player;
 
 public interface PlayerKicker
 {
-    public void kick(Player player, String message);
+	public void kick(Player player, String message);
 }

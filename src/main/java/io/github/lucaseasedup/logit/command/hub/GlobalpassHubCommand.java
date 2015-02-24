@@ -28,31 +28,26 @@ import org.bukkit.command.CommandSender;
 
 public final class GlobalpassHubCommand extends HubCommand
 {
-    public GlobalpassHubCommand()
-    {
-        super("globalpass", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.globalpass.generate")
-                        .playerOnly(false)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit globalpass")
-                        .descriptionLabel("subCmdDesc.globalpass")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        String password = getGlobalPasswordManager().generatePassword();
-        Locale activeLocale = getLocaleManager().getActiveLocale();
-        long lifetimeSecs = getConfig("config.yml")
-                .getTime("globalPassword.invalidateAfter", TimeUnit.SECONDS);
-        
-        sendMsg(sender, t("globalpass.generated")
-                .replace("{0}", password));
-        sendMsg(sender, t("globalpass.invalidationInfo")
-                .replace("{0}", activeLocale.stringifySeconds((int) lifetimeSecs)));
-    }
+	public GlobalpassHubCommand()
+	{
+		super("globalpass", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.globalpass.generate").playerOnly(false)
+				.runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit globalpass")
+						.descriptionLabel("subCmdDesc.globalpass").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		String password = getGlobalPasswordManager().generatePassword();
+		Locale activeLocale = getLocaleManager().getActiveLocale();
+		long lifetimeSecs = getConfig("config.yml").getTime(
+				"globalPassword.invalidateAfter", TimeUnit.SECONDS);
+
+		sendMsg(sender, t("globalpass.generated").replace("{0}", password));
+		sendMsg(sender,
+				t("globalpass.invalidationInfo").replace("{0}",
+						activeLocale.stringifySeconds((int) lifetimeSecs)));
+	}
 }

@@ -30,72 +30,66 @@ import org.bukkit.entity.Player;
 
 public final class AccountDatumHubCommand extends HubCommand
 {
-    public AccountDatumHubCommand()
-    {
-        super("account datum", new String[] {"username", "key"},
-                new CommandAccess.Builder()
-                        .permission("logit.account.datum")
-                        .playerOnly(false)
-                        .runningCoreRequired(true)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit account datum")
-                        .descriptionLabel("subCmdDesc.account.datum")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        List<String> queryKeys = new ArrayList<>();
-        
-        if (!args[1].equals(keys().username()))
-        {
-            queryKeys.add(keys().username());
-        }
-        
-        queryKeys.add(args[1]);
-        
-        Account account = getAccountManager().selectAccount(args[0], queryKeys);
-        
-        if (account == null)
-        {
-            sendMsg(sender, t("notRegistered.others")
-                    .replace("{0}", args[0]));
-            
-            return;
-        }
-        
-        if (!account.getEntry().containsKey(args[1]))
-        {
-            sendMsg(sender, t("accountDatum.keyNotFound")
-                    .replace("{0}", args[1]));
-            
-            return;
-        }
-        
-        if (sender instanceof Player)
-        {
-            sendMsg(sender, "");
-        }
-        
-        sendMsg(sender, t("accountDatum.result")
-                .replace("{0}", args[0].toLowerCase())
-                .replace("{1}", args[1])
-                .replace("{2}", account.getEntry().get(args[1])));
-    }
-    
-    @Override
-    public List<String> complete(CommandSender sender, String[] args)
-    {
-        if (!getConfig("secret.yml").getBoolean("tabCompletion"))
-            return null;
-        
-        if (args.length == 1)
-        {
-            return getTabCompleter().completeUsername(args[0]);
-        }
-        
-        return null;
-    }
+	public AccountDatumHubCommand()
+	{
+		super("account datum", new String[] { "username", "key" },
+				new CommandAccess.Builder().permission("logit.account.datum")
+						.playerOnly(false).runningCoreRequired(true).build(),
+				new CommandHelpLine.Builder().command("logit account datum")
+						.descriptionLabel("subCmdDesc.account.datum").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		List<String> queryKeys = new ArrayList<>();
+
+		if (!args[1].equals(keys().username()))
+		{
+			queryKeys.add(keys().username());
+		}
+
+		queryKeys.add(args[1]);
+
+		Account account = getAccountManager().selectAccount(args[0], queryKeys);
+
+		if (account == null)
+		{
+			sendMsg(sender, t("notRegistered.others").replace("{0}", args[0]));
+
+			return;
+		}
+
+		if (!account.getEntry().containsKey(args[1]))
+		{
+			sendMsg(sender,
+					t("accountDatum.keyNotFound").replace("{0}", args[1]));
+
+			return;
+		}
+
+		if (sender instanceof Player)
+		{
+			sendMsg(sender, "");
+		}
+
+		sendMsg(sender,
+				t("accountDatum.result").replace("{0}", args[0].toLowerCase())
+						.replace("{1}", args[1])
+						.replace("{2}", account.getEntry().get(args[1])));
+	}
+
+	@Override
+	public List<String> complete(CommandSender sender, String[] args)
+	{
+		if (!getConfig("secret.yml").getBoolean("tabCompletion"))
+			return null;
+
+		if (args.length == 1)
+		{
+			return getTabCompleter().completeUsername(args[0]);
+		}
+
+		return null;
+	}
 }

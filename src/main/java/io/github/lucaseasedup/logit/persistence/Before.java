@@ -27,5 +27,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Before
 {
-    Class<? extends PersistenceSerializer> value();
+	Class<? extends PersistenceSerializer> value();
 }

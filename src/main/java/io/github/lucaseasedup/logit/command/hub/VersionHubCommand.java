@@ -27,31 +27,27 @@ import org.bukkit.entity.Player;
 
 public final class VersionHubCommand extends HubCommand
 {
-    public VersionHubCommand()
-    {
-        super("version", new String[] {},
-                new CommandAccess.Builder()
-                        .permission("logit.version")
-                        .playerOnly(false)
-                        .runningCoreRequired(false)
-                        .build(),
-                new CommandHelpLine.Builder()
-                        .command("logit version")
-                        .descriptionLabel("subCmdDesc.version")
-                        .build());
-    }
-    
-    @Override
-    public void execute(CommandSender sender, String[] args)
-    {
-        if (sender instanceof Player)
-        {
-            sendMsg(sender, "");
-        }
-        
-        sendMsg(sender, t("aboutPlugin.header"));
-        sendMsg(sender, t("aboutPlugin.version")
-                .replace("{0}", getPlugin().getDescription().getVersion()));
-        sendMsg(sender, t("aboutPlugin.author"));
-    }
+	public VersionHubCommand()
+	{
+		super("version", new String[] {}, new CommandAccess.Builder()
+				.permission("logit.version").playerOnly(false)
+				.runningCoreRequired(false).build(),
+				new CommandHelpLine.Builder().command("logit version")
+						.descriptionLabel("subCmdDesc.version").build());
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args)
+	{
+		if (sender instanceof Player)
+		{
+			sendMsg(sender, "");
+		}
+
+		sendMsg(sender, t("aboutPlugin.header"));
+		sendMsg(sender,
+				t("aboutPlugin.version").replace("{0}",
+						getPlugin().getDescription().getVersion()));
+		sendMsg(sender, t("aboutPlugin.author"));
+	}
 }

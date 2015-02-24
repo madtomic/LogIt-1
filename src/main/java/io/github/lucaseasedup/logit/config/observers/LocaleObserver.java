@@ -25,17 +25,17 @@ import java.util.logging.Level;
 
 public final class LocaleObserver extends PropertyObserver
 {
-    @Override
-    public void update(Property p)
-    {
-        try
-        {
-            getPlugin().reloadMessages(p.getString());
-            getLocaleManager().switchActiveLocale(p.getString());
-        }
-        catch (IOException ex)
-        {
-            log(Level.WARNING, "Could not load messages.", ex);
-        }
-    }
+	@Override
+	public void update(Property p)
+	{
+		try
+		{
+			getPlugin().reloadMessages(p.getString());
+			getLocaleManager().switchActiveLocale(p.getString());
+		}
+		catch (IOException ex)
+		{
+			log(Level.WARNING, "Could not load messages.", ex);
+		}
+	}
 }

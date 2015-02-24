@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 
 public interface PersistenceSerializer
 {
-    public void serialize(Map<String, String> data, Player player);
-    public void unserialize(Map<String, String> data, Player player);
+	public void serialize(Map<String, String> data, Player player);
+
+	public void unserialize(Map<String, String> data, Player player);
 }
