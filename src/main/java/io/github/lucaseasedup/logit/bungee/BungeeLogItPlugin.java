@@ -1,5 +1,6 @@
 package io.github.lucaseasedup.logit.bungee;
 
+import io.github.lucaseasedup.logit.common.FatalReportedException;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeLogItPlugin extends Plugin
@@ -10,12 +11,20 @@ public class BungeeLogItPlugin extends Plugin
 		instance = this;
 		
 		core = BungeeLogItCore.getInstance();
+		
+		try
+		{
+			core.start();
+		}
+		catch (FatalReportedException e)
+		{
+		}
 	}
 	
 	@Override
 	public void onDisable()
 	{
-		
+		core.stop();
 	}
 	
 	public static BungeeLogItPlugin getInstance()
