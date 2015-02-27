@@ -29,9 +29,9 @@
             <url>http://repo.kitteh.org/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>comphenix-rep</id>
+            <id>shadowvolt-repo</id>
             <name>Comphenix Repository</name>
-            <url>http://repo.comphenix.net/content/groups/public</url>
+            <url>http://ci.shadowvolt.com/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>ess-repo</id>
@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>3.4.0</version>
+            <version>3.6.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.gmail.bartlomiejkmazur</groupId>
