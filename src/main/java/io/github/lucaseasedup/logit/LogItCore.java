@@ -25,6 +25,7 @@ import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
 import io.github.lucaseasedup.logit.account.AccountWatcher;
 import io.github.lucaseasedup.logit.backup.BackupManager;
+import io.github.lucaseasedup.logit.channels.ChannelClient;
 import io.github.lucaseasedup.logit.command.AcclockCommand;
 import io.github.lucaseasedup.logit.command.AccunlockCommand;
 import io.github.lucaseasedup.logit.command.ChangeEmailCommand;
@@ -218,6 +219,11 @@ public final class LogItCore
 							Arrays.asList(player.getName()));
 				}
 			});
+		}
+		
+		if(getConfig("config.yml").getBoolean("bungeecord.syncSessionsWithBungee"))
+		{
+			channelManager = new ChannelClient();
 		}
 
 		return CancelledState.NOT_CANCELLED;
@@ -695,7 +701,12 @@ public final class LogItCore
 	{
 		if (!isStarted())
 			throw new IllegalStateException("The LogIt core is not started.");
-
+		
+		if(channelManager != null)
+		{
+			channelManager.stop();
+		}
+		
 		PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
 
 		for (final Player player : Bukkit.getOnlinePlayers())
@@ -860,6 +871,11 @@ public final class LogItCore
 		{
 			accountWatcher.dispose();
 			accountWatcher = null;
+		}
+		
+		if(channelManager != null)
+		{
+			channelManager = null;
 		}
 
 		if (tabApiWrapper != null && tabApiWrapper.get() != null)
@@ -1181,6 +1197,11 @@ public final class LogItCore
 	{
 		return tabCompleter;
 	}
+	
+	public ChannelClient getChannelManager()
+	{
+		return channelManager;
+	}
 
 	public ProfileManager getProfileManager()
 	{
@@ -1250,6 +1271,7 @@ public final class LogItCore
 	private GlobalPasswordManager globalPasswordManager;
 	private CooldownManager cooldownManager;
 	private AccountWatcher accountWatcher;
+	private ChannelClient channelManager;
 	private Wrapper<TabAPI> tabApiWrapper;
 	private TabListUpdater tabListUpdater;
 

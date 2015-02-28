@@ -393,9 +393,9 @@ public final class SessionManager extends LogItCoreObject implements Runnable
 
 		log(Level.FINE, t("startSession.success.log").replace("{0}", username));
 		
-		if (getConfig("config.yml").getBoolean("")) // TODO
+		if (getConfig("config.yml").getBoolean("bungeecord.redirAfterLogin.enabled"))
 		{
-			BungeeHook.sendPlayerToServer(player, getConfig("config.yml").getString(""));
+			BungeeHook.sendPlayerToServer(player, getConfig("config.yml").getString("bungeecord.redirAfterLogin.server"));
 		}
 
 		return CancelledState.NOT_CANCELLED;

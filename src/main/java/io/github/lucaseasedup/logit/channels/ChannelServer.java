@@ -28,6 +28,7 @@ public class ChannelServer extends BungeeLogItCoreObject
 		getPlugin().getProxy().unregisterChannel("LogIt");
 		getPlugin().getProxy().getPluginManager().unregisterListener(listener);
 		logInfo("Channel closed");
+		listener = null;
 	}
 	
 	private void registerPackets()
@@ -35,11 +36,12 @@ public class ChannelServer extends BungeeLogItCoreObject
 		
 	}
 	
-	private final class CustomChannelListener implements Listener
+	public final class CustomChannelListener implements Listener
 	{
 		@EventHandler
 		public void onMessageReceive(PluginMessageEvent e)
 		{
+			System.out.println(e.getTag());
 			if(!e.getTag().equals("LogIt"))
 			{
 				return;

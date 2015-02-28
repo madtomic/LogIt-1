@@ -2,6 +2,9 @@ package io.github.lucaseasedup.logit.channels;
 
 import io.github.lucaseasedup.logit.channels.packets.IPacket;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +52,25 @@ public class ChannelCodec
 				return;
 			}
 		}
+	}
+	
+	public byte[] encodePacket(IPacket packet)
+	{
+		List<String> message = packet.encode();
+		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		DataOutputStream datastream = new DataOutputStream(bytes);
+		try
+		{
+			for(String entry : message)
+			{
+				datastream.writeUTF(entry);
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		return bytes.toByteArray();
 	}
 	
 	private class PacketInfo

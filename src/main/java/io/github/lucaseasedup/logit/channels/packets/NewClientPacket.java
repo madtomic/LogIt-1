@@ -1,5 +1,6 @@
 package io.github.lucaseasedup.logit.channels.packets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewClientPacket implements IPacket
@@ -21,7 +22,8 @@ public class NewClientPacket implements IPacket
 	@Override
 	public List<String> encode()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<String> temp = new ArrayList<String>(1);
+		temp.add(logItVersion);
+		return temp;
 	}
 }
