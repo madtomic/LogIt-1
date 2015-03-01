@@ -15,7 +15,7 @@ public abstract class BungeeLogItCoreObject
 	}
 	
 	@SuppressWarnings("static-access")
-	protected final BungeeLogItCore getInstance()
+	protected final BungeeLogItCore getCore()
 	{
 		return core.getInstance();
 	}

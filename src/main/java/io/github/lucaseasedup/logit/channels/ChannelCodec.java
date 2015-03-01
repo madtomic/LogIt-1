@@ -32,22 +32,25 @@ public class ChannelCodec
 	
 	public void handlePacket(List<String> messages)
 	{
+		handlePacket(messages, null);
+	}
+	
+	public void handlePacket(List<String> messages, String server)
+	{
 		if(messages == null || messages.size() < 1)
 		{
 			throw new IllegalArgumentException();
 		}
 		
 		String packetName = messages.get(0);
-		System.out.println("Otrzymano pakiet "+packetName); // DEBUG
 		for(PacketInfo packet : registeredPackets)
 		{
-			if(packet.getInstance().getClass().getName().equals(packetName))
+			if(packet.getInstance().getClass().getSimpleName().equals(packetName))
 			{
 				if(packet.hasListener())
 				{
-					System.out.println("Listener pakietu "+packetName); // DEBUG
 					messages.remove(0);
-					packet.getPacketListener().onPacketReceiving(packet.getInstance().decode(messages));
+					packet.getPacketListener().onPacketReceiving(packet.getInstance().decode(messages), server);
 				}
 				return;
 			}

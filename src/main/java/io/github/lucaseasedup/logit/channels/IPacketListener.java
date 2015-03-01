@@ -4,5 +4,5 @@ import io.github.lucaseasedup.logit.channels.packets.IPacket;
 
 public interface IPacketListener
 {
-	public void onPacketReceiving(IPacket packet);
+	public void onPacketReceiving(IPacket packet, String server);
 }

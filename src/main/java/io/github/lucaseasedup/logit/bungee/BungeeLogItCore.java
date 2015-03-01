@@ -50,6 +50,11 @@ public final class BungeeLogItCore
 	{
 		return getPlugin().getDataFolder();
 	}
+	
+	public ChannelServer getChannelManager()
+	{
+		return channelManager;
+	}
 
 	public File getDataFile(String path)
 	{
