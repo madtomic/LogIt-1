@@ -37,6 +37,8 @@ public final class SerializerObserver extends PropertyObserver
 	@Override
 	public void update(Property p)
 	{
+		if (getAccountManager() == null || getPersistenceManager() == null)
+			return;
 		Class<? extends PersistenceSerializer> clazz = null;
 
 		switch (p.getPath())
