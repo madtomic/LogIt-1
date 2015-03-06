@@ -20,9 +20,12 @@ package io.github.lucaseasedup.logit.persistence;
 
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
+
 import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -83,7 +86,12 @@ public final class LocationSerializer extends LogItCoreObject implements
 	{
 		if (player.isOnline())
 		{
-			player.teleport(unserialize(data));
+			org.bukkit.Location location = unserialize(data);
+
+			if (location != null)
+			{
+				player.teleport(location);
+			}
 		}
 	}
 
@@ -100,7 +108,12 @@ public final class LocationSerializer extends LogItCoreObject implements
 
 	private static org.bukkit.Location unserialize(Map<String, String> data)
 	{
-		return new org.bukkit.Location(Bukkit.getWorld(data.get("world")),
+		World world = Bukkit.getWorld(data.get("world"));
+
+		if (world == null)
+			return null;
+
+		return new org.bukkit.Location(world,
 				Double.valueOf(data.get("x")), Double.valueOf(data.get("y")),
 				Double.valueOf(data.get("z")), Float.valueOf(data.get("yaw")),
 				Float.valueOf(data.get("pitch")));

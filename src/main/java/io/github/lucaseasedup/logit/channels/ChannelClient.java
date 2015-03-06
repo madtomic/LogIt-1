@@ -165,7 +165,6 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 		@Override
 		public void onPluginMessageReceived(String arg0, Player player, byte[] bytes)
 		{
-			System.out.println(arg0);
 			DataInputStream data = new DataInputStream(new ByteArrayInputStream(bytes));
 			try
 			{

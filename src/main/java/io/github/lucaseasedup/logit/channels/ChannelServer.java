@@ -46,8 +46,7 @@ public class ChannelServer extends BungeeLogItCoreObject implements IChannelMana
 	
 	public boolean canSendPackets()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public void sendPacket(byte[] packet, UUID serverUuid)

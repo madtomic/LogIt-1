@@ -102,9 +102,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
-
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
