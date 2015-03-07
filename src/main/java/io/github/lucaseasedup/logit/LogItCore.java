@@ -505,7 +505,7 @@ public final class LogItCore
 		}
 		else
 		{
-			log(Level.WARNING, t("minecraftEngineError"));
+			log(Level.WARNING, t("minecraftEngineError").replace("{0}", "TAB (forceLogin.hideFromTabList)"));
 		}
 	}
 
