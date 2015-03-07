@@ -112,14 +112,14 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 	
 	public boolean canSendPackets()
 	{
-		return Bukkit.getOnlinePlayers().length >= 1;
+		return Bukkit.getOnlinePlayers().size() >= 1;
 	}
 	
 	public void sendPacket(byte[] data)
 	{
 		if(!canSendPackets())
 			return;
-		Bukkit.getOnlinePlayers()[0].sendPluginMessage(getPlugin(), "LogIt", data);
+		((Player[])Bukkit.getOnlinePlayers().toArray())[0].sendPluginMessage(getPlugin(), "LogIt", data);
 	}
 	
 	private class ConnectionKeeper implements Runnable, Listener
@@ -155,7 +155,7 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 				return;
 			}
 			
-			if(Bukkit.getOnlinePlayers().length <= 1)
+			if(Bukkit.getOnlinePlayers().size() <= 1)
 			{
 				disconnect();
 			}
@@ -169,7 +169,7 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 				return;
 			}
 			
-			if((Bukkit.getOnlinePlayers().length <= 1) && !isConnected())
+			if((Bukkit.getOnlinePlayers().size() <= 1) && !isConnected())
 			{
 				connect();
 			}

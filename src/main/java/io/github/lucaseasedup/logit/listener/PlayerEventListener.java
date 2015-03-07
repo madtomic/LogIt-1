@@ -172,7 +172,7 @@ public final class PlayerEventListener extends LogItCoreObject implements
 		else
 		{
 			int freeSlots = Bukkit.getMaxPlayers()
-					- Bukkit.getOnlinePlayers().length;
+					- Bukkit.getOnlinePlayers().size();
 			List<String> reserveForPlayers = getConfig("config.yml")
 					.getStringList("reserveSlots.forPlayers");
 			int reservedSlots = 0;
