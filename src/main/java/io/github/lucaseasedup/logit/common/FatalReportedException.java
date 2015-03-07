@@ -16,6 +16,8 @@
  */
 package io.github.lucaseasedup.logit.common;
 
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
+
 /**
  * Exception that does not need any further logging,
  * and is a signal to stop execution immediately.
@@ -29,16 +31,19 @@ public class FatalReportedException extends Exception
 	private FatalReportedException(String msg)
 	{
 		super(msg);
+		ExceptionHandler.handleException(this);
 	}
 
 	private FatalReportedException(Throwable cause)
 	{
 		super(cause);
+		ExceptionHandler.handleException(this);
 	}
 
 	private FatalReportedException(String msg, Throwable cause)
 	{
 		super(msg, cause);
+		ExceptionHandler.handleException(this);
 	}
 
 	public void rethrow() throws FatalReportedException

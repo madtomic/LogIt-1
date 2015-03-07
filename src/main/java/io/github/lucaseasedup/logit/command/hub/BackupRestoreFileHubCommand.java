@@ -21,7 +21,6 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.command.CommandAccess;
 import io.github.lucaseasedup.logit.command.CommandHelpLine;
 import io.github.lucaseasedup.logit.command.wizard.ConfirmationWizard;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
@@ -96,8 +95,6 @@ public final class BackupRestoreFileHubCommand extends HubCommand
 			{
 				try
 				{
-					ReportedException.incrementRequestCount();
-
 					getBackupManager().restoreBackup(args[0]);
 
 					if (sender instanceof Player)
@@ -107,17 +104,13 @@ public final class BackupRestoreFileHubCommand extends HubCommand
 										args[0]));
 					}
 				}
-				catch (FileNotFoundException | ReportedException ex)
+				catch (FileNotFoundException ex)
 				{
 					if (sender instanceof Player)
 					{
 						sendMsg(sender,
 								t("restoreBackup.fail").replace("{0}", args[0]));
 					}
-				}
-				finally
-				{
-					ReportedException.decrementRequestCount();
 				}
 			}
 		}).createWizard();

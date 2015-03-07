@@ -60,7 +60,6 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements
 			@Override
 			public void run()
 			{
-				@SuppressWarnings("deprecation")
 				Player player = Bukkit.getPlayerExact(username);
 
 				if (player != null)
@@ -270,7 +269,6 @@ public final class LogItMessageDispatcher extends LogItCoreObject implements
 		@Override
 		public void run()
 		{
-			@SuppressWarnings("deprecation")
 			Player player = Bukkit.getPlayerExact(username);
 
 			if (player == null || !isCoreStarted())

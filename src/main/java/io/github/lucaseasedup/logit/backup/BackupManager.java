@@ -19,12 +19,13 @@ package io.github.lucaseasedup.logit.backup;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.AccountManager;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.common.Timer;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.storage.SqliteStorage;
 import io.github.lucaseasedup.logit.storage.Storage;
 import io.github.lucaseasedup.logit.storage.Storage.DataType;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.logging.Level;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -94,12 +96,9 @@ public final class BackupManager extends LogItCoreObject implements Runnable
 	 * Creates a new backup of all the accounts stored
 	 * in the underlying {@code AccountManager}.
 	 * <p>
-	 * If this method was called with the {@code asynchronously} parameter set to {@code true}, a {@code ReportedException} will not be thrown even if an I/O error occurred.
+	 * If this method was called with the {@code asynchronously} parameter set to {@code true}.
 	 * 
 	 * @return the created backup file.
-	 * @throws ReportedException
-	 *             if an I/O error occurred,
-	 *             and it was reported to the logger.
 	 */
 	public File createBackup()
 	{
@@ -119,7 +118,7 @@ public final class BackupManager extends LogItCoreObject implements Runnable
 		{
 			log(Level.WARNING, t("createBackup.fail.log"), ex);
 
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 
 		return backupFile;
@@ -129,12 +128,9 @@ public final class BackupManager extends LogItCoreObject implements Runnable
 	 * Asynchronously creates a new backup of all the accounts stored
 	 * in the underlying {@code AccountManager}.
 	 * <p>
-	 * If this method was called with the {@code asynchronously} parameter set to {@code true}, a {@code ReportedException} will not be thrown even if an I/O error occurred.
+	 * If this method was called with the {@code asynchronously} parameter set to {@code true}.
 	 * 
 	 * @return the created backup file.
-	 * @throws ReportedException
-	 *             if an I/O error occurred,
-	 *             and it was reported to the logger.
 	 */
 	public File createBackupAsynchronously()
 	{
@@ -211,9 +207,6 @@ public final class BackupManager extends LogItCoreObject implements Runnable
 	 *             if no such backup exists.
 	 * @throws IllegalArgumentException
 	 *             if {@code filename} is {@code null} or blank.
-	 * @throws ReportedException
-	 *             if an I/O error occurred,
-	 *             and it was reported to the logger.
 	 */
 	public void restoreBackup(String filename) throws FileNotFoundException
 	{
@@ -260,7 +253,7 @@ public final class BackupManager extends LogItCoreObject implements Runnable
 		{
 			log(Level.WARNING, ex);
 
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 	}
 

@@ -17,6 +17,7 @@
 package io.github.lucaseasedup.logit.channels;
 
 import io.github.lucaseasedup.logit.channels.packets.IPacket;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -87,7 +88,7 @@ public class ChannelCodec
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			ExceptionHandler.handleException(e);
 		}
 		return bytes.toByteArray();
 	}

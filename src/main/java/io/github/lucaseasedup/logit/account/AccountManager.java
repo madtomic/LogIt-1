@@ -20,7 +20,6 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.CancelledState;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.common.QueuedMap;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
 import io.github.lucaseasedup.logit.session.SessionManager;
@@ -33,6 +32,8 @@ import io.github.lucaseasedup.logit.storage.Storage.Entry.Datum;
 import io.github.lucaseasedup.logit.storage.StorageObserver;
 import io.github.lucaseasedup.logit.storage.WrapperStorage;
 import io.github.lucaseasedup.logit.util.CollectionUtils;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -151,9 +153,6 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 	 *         or an I/O error occurred.
 	 * @throws IllegalArgumentException
 	 *             if {@code username} or {@code queryKeys} is {@code null}.
-	 * @throws ReportedException
-	 *             if an I/O error occurred,
-	 *             and it was reported to the logger.
 	 */
 	public Account selectAccount(String username, List<String> queryKeys)
 	{
@@ -216,9 +215,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 
 		// If an I/O error occurred, return null.
@@ -286,9 +283,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 
 		if (entries == null)
@@ -325,8 +320,6 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 	 * Returns all registered usernames in this {@code AccountManager}.
 	 *
 	 * @return A {@code Set} containing all registered usernames lowercase, or {@code null} if an I/O error occurred.
-	 * @throws ReportedException
-	 *             If an I/O error occurred, and it was reported to the logger.
 	 */
 	public Set<String> getRegisteredUsernames()
 	{
@@ -386,7 +379,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 
 			event.executeFailureTasks();
 
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 
 		return CancelledState.NOT_CANCELLED;
@@ -411,9 +404,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 		finally
 		{
@@ -447,9 +438,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 	}
 
@@ -466,9 +455,6 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 	 *         has been cancelled by one of the {@code AccountRemoveEvent} handlers.
 	 * @throws IllegalArgumentException
 	 *             if {@code username} is {@code null} or blank.
-	 * @throws ReportedException
-	 *             if an I/O error occurred,
-	 *             and it was reported to the logger.
 	 */
 	public CancelledState removeAccount(String username)
 	{
@@ -503,7 +489,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 
 			event.executeFailureTasks();
 
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 
 		return CancelledState.NOT_CANCELLED;
@@ -528,9 +514,7 @@ public final class AccountManager extends LogItCoreObject implements Runnable
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 		finally
 		{

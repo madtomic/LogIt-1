@@ -20,6 +20,7 @@ import io.github.lucaseasedup.logit.command.DisabledCommandExecutor;
 import io.github.lucaseasedup.logit.command.LogItCommand;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.config.LocationSerializable;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -32,6 +33,7 @@ import java.util.PropertyResourceBundle;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -95,7 +97,8 @@ public final class LogItPlugin extends JavaPlugin
 		customLocalMessages = null;
 		instance = null;
 	}
-
+	
+	@SuppressWarnings("unused")
 	private void enable()
 	{
 		getServer().getPluginManager().enablePlugin(this);

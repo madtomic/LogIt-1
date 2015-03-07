@@ -17,10 +17,10 @@
 package io.github.lucaseasedup.logit.account;
 
 import io.github.lucaseasedup.logit.LogItCoreObject;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.security.HashingAlgorithm;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.storage.Storage;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.IniUtils;
 import io.github.lucaseasedup.logit.util.Validators;
 import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
@@ -692,9 +692,6 @@ public final class Account extends LogItCoreObject
 	 *         whilst the deserialization process.
 	 * @throws IllegalArgumentException
 	 *             If the underlying entry does not contain the required keys.
-	 * @throws ReportedException
-	 *             If an I/O error occurred while deserializing the persistence,
-	 *             and the error was reported to the logger.
 	 */
 	public Map<String, String> getPersistence()
 	{
@@ -721,7 +718,7 @@ public final class Account extends LogItCoreObject
 				log(Level.WARNING, "Could not unserialize persistence"
 						+ " {username: " + getUsername() + "}", ex);
 
-				ReportedException.throwNew(ex);
+				ExceptionHandler.handleException(ex);
 
 				return null;
 			}
@@ -742,9 +739,6 @@ public final class Account extends LogItCoreObject
 	 *            The new persistence data.
 	 * @throws IllegalArgumentException
 	 *             If {@code persistence} is {@code null}.
-	 * @throws ReportedException
-	 *             If an I/O error occurred while serializing the persistence,
-	 *             and the error was reported to the logger.
 	 */
 	public void savePersistence(Map<String, String> persistence)
 	{
@@ -771,9 +765,7 @@ public final class Account extends LogItCoreObject
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew();
+			ExceptionHandler.handleException(ex);
 		}
 	}
 

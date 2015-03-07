@@ -17,6 +17,7 @@
 package io.github.lucaseasedup.logit.bungee;
 
 import io.github.lucaseasedup.logit.common.FatalReportedException;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeLogItPlugin extends Plugin
@@ -34,6 +35,7 @@ public class BungeeLogItPlugin extends Plugin
 		}
 		catch (FatalReportedException e)
 		{
+			ExceptionHandler.handleException(e);
 		}
 	}
 	

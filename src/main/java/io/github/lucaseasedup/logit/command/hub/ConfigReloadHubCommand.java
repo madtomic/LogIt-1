@@ -21,8 +21,11 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.command.CommandAccess;
 import io.github.lucaseasedup.logit.command.CommandHelpLine;
 import io.github.lucaseasedup.logit.config.InvalidPropertyValueException;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
+
 import java.io.IOException;
 import java.util.logging.Level;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
@@ -55,7 +58,7 @@ public final class ConfigReloadHubCommand extends HubCommand
 		catch (IOException | InvalidConfigurationException
 				| InvalidPropertyValueException ex)
 		{
-			ex.printStackTrace();
+			ExceptionHandler.handleException(ex);
 
 			sendMsg(sender, t("reloadConfig.fail"));
 		}

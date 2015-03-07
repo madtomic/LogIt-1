@@ -43,7 +43,6 @@ public final class BungeeHook
 		  out = null;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static void sendPlayerToServer(String player, String server)
 	{
 		sendPlayerToServer(Bukkit.getPlayerExact(player), server);

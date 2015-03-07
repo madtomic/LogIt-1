@@ -29,7 +29,6 @@ import io.github.lucaseasedup.logit.message.LogItMessageDispatcher;
 import io.github.lucaseasedup.logit.persistence.PersistenceManager;
 import io.github.lucaseasedup.logit.profile.ProfileManager;
 import io.github.lucaseasedup.logit.security.GlobalPasswordManager;
-import io.github.lucaseasedup.logit.security.RandomCodesManager;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.session.SessionManager;
 

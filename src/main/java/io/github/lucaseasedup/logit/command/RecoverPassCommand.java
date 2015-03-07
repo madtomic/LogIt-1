@@ -20,18 +20,21 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.mail.MailSender;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.IoUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
+
 import javax.mail.MessagingException;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -151,8 +154,6 @@ public final class RecoverPassCommand extends LogItCoreObject implements
 				{
 					try
 					{
-						ReportedException.incrementRequestCount();
-
 						Account account = getAccountManager()
 								.selectAccount(
 										playerName,
@@ -189,17 +190,16 @@ public final class RecoverPassCommand extends LogItCoreObject implements
 						log(Level.FINE, t("recoverPassword.success.log")
 								.replace("{0}", playerName).replace("{1}", to));
 					}
-					catch (ReportedException | IOException | MessagingException ex)
+					catch (IOException | MessagingException ex)
 					{
 						sendMsg(sender, t("recoverPassword.fail.self"));
 
 						log(Level.WARNING, t("recoverPassword.fail.log")
-								.replace("{0}", playerName), ex);
+								.replace("{0}", playerName));
+						ExceptionHandler.handleException(ex);
 					}
 					finally
 					{
-						ReportedException.decrementRequestCount();
-
 						playerLocks.remove(username);
 					}
 				}

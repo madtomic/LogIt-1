@@ -22,11 +22,11 @@ import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.command.CommandAccess;
 import io.github.lucaseasedup.logit.command.CommandHelpLine;
 import io.github.lucaseasedup.logit.command.wizard.ConfirmationWizard;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.security.AuthMePasswordHelper;
 import io.github.lucaseasedup.logit.storage.MySqlStorage;
 import io.github.lucaseasedup.logit.storage.SqliteStorage;
 import io.github.lucaseasedup.logit.storage.Storage;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.IniUtils;
 import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
 
@@ -103,20 +103,15 @@ public final class ImportAuthMeHubCommand extends HubCommand
 					{
 						try
 						{
-							ReportedException.incrementRequestCount();
-
 							importAccounts(sender, authMeConfig);
 						}
-						catch (ReportedException ex)
+						catch (Exception ex)
 						{
 							if (sender instanceof Player)
 							{
 								sendMsg(sender, t("unexpectedError"));
 							}
-						}
-						finally
-						{
-							ReportedException.decrementRequestCount();
+							ExceptionHandler.handleException(ex);
 						}
 
 						senderLocks.remove(sender);
@@ -426,9 +421,7 @@ public final class ImportAuthMeHubCommand extends HubCommand
 		}
 		catch (IOException ex)
 		{
-			log(Level.WARNING, ex);
-
-			ReportedException.throwNew(ex);
+			ExceptionHandler.handleException(ex);
 		}
 	}
 

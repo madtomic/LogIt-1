@@ -86,7 +86,6 @@ public final class LoginCommand extends LogItCoreObject implements
 				return true;
 			}
 
-			@SuppressWarnings("deprecation")
 			Player paramPlayer = Bukkit.getPlayerExact(args[1]);
 
 			if (getSessionManager().isSessionAlive(paramPlayer))

@@ -41,7 +41,6 @@ public abstract class HubCommand extends LogItCoreObject
 
 	public abstract void execute(CommandSender sender, String[] args);
 
-	@SuppressWarnings("unused")
 	public List<String> complete(CommandSender sender, String[] args)
 	{
 		return null;

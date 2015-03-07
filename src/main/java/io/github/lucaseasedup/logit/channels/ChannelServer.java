@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.UUID;
 
 import net.md_5.bungee.UserConnection;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import io.github.lucaseasedup.logit.bungee.BungeeLogItCoreObject;
 import io.github.lucaseasedup.logit.channels.listeners.server.NewClientPacketListener;
 import io.github.lucaseasedup.logit.channels.packets.NewClientPacket;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 
 public class ChannelServer extends BungeeLogItCoreObject implements IChannelManager
 {
@@ -126,7 +126,7 @@ public class ChannelServer extends BungeeLogItCoreObject implements IChannelMana
 			}
 			catch (IOException e1)
 			{
-				e1.printStackTrace();
+				ExceptionHandler.handleException(e1);
 			}
 		}
 	}

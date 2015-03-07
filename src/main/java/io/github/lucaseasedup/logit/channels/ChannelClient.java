@@ -34,10 +34,10 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.channels.listeners.client.NewClientResponseListener;
-import io.github.lucaseasedup.logit.channels.packets.DisconnectPacket;
 import io.github.lucaseasedup.logit.channels.packets.NewClientPacket;
 import io.github.lucaseasedup.logit.channels.packets.NewClientResponsePacket;
 import io.github.lucaseasedup.logit.channels.packets.PingPacket;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 
 public class ChannelClient extends LogItCoreObject implements IChannelManager
 {
@@ -119,7 +119,7 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 	{
 		if(!canSendPackets())
 			return;
-		((Player[])Bukkit.getOnlinePlayers().toArray())[0].sendPluginMessage(getPlugin(), "LogIt", data);
+		((Player)Bukkit.getOnlinePlayers().toArray()[0]).sendPluginMessage(getPlugin(), "LogIt", data);
 	}
 	
 	private class ConnectionKeeper implements Runnable, Listener
@@ -193,7 +193,7 @@ public class ChannelClient extends LogItCoreObject implements IChannelManager
 			}
 			catch (IOException e1)
 			{
-				e1.printStackTrace();
+				ExceptionHandler.handleException(e1);
 			}
 		}
 	}

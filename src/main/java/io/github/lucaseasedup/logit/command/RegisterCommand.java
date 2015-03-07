@@ -22,7 +22,6 @@ import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.isPlayerOnline;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.storage.Infix;
@@ -126,8 +125,6 @@ public final class RegisterCommand extends LogItCoreObject implements
 
 			try
 			{
-				ReportedException.incrementRequestCount();
-
 				Account account = new Account(args[1]);
 				account.changePassword(password);
 
@@ -187,14 +184,10 @@ public final class RegisterCommand extends LogItCoreObject implements
 					}
 				}
 			}
-			catch (ReportedException ex)
+			catch (Exception ex)
 			{
 				sendMsg(sender,
 						t("createAccount.fail.others").replace("{0}", args[1]));
-			}
-			finally
-			{
-				ReportedException.decrementRequestCount();
 			}
 		}
 		else if ((args.length == 0 && disablePasswords)
@@ -352,8 +345,6 @@ public final class RegisterCommand extends LogItCoreObject implements
 			{
 				try
 				{
-					ReportedException.incrementRequestCount();
-
 					Account account = getAccountManager().selectAccount(
 							username, Arrays.asList(keys().username()));
 
@@ -381,21 +372,15 @@ public final class RegisterCommand extends LogItCoreObject implements
 						}
 					});
 				}
-				catch (ReportedException ex)
+				catch (Exception ex)
 				{
 					sendMsg(sender, t("takeover.fail"));
-				}
-				finally
-				{
-					ReportedException.decrementRequestCount();
 				}
 			}
 			else
 			{
 				try
 				{
-					ReportedException.incrementRequestCount();
-
 					Account account = new Account(username);
 					account.setUuid(player.getUniqueId());
 					account.changePassword(password);
@@ -449,13 +434,9 @@ public final class RegisterCommand extends LogItCoreObject implements
 						}
 					}
 				}
-				catch (ReportedException ex)
+				catch (Exception ex)
 				{
 					sendMsg(sender, t("createAccount.fail.self"));
-				}
-				finally
-				{
-					ReportedException.decrementRequestCount();
 				}
 			}
 		}

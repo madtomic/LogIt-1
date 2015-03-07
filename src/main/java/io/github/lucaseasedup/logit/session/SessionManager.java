@@ -71,7 +71,6 @@ public final class SessionManager extends LogItCoreObject implements Runnable
 		{
 			String username = entry.getKey();
 			Session session = entry.getValue();
-			@SuppressWarnings("deprecation")
 			Player player = Bukkit.getPlayerExact(username);
 
 			// Player is logged in, either online or offline.
@@ -204,7 +203,6 @@ public final class SessionManager extends LogItCoreObject implements Runnable
 
 		if (PlayerUtils.isPlayerOnline(username))
 		{
-			@SuppressWarnings("deprecation")
 			Player player = Bukkit.getPlayerExact(username);
 			String ip = getPlayerIp(player);
 

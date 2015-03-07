@@ -20,7 +20,6 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
 import java.util.Arrays;
@@ -101,8 +100,6 @@ public final class UnregisterCommand extends LogItCoreObject implements
 
 			try
 			{
-				ReportedException.incrementRequestCount();
-
 				if (!getAccountManager().removeAccount(args[1]).isCancelled())
 				{
 					sendMsg(args[1], t("removeAccount.success.self"));
@@ -111,15 +108,11 @@ public final class UnregisterCommand extends LogItCoreObject implements
 									PlayerUtils.getPlayerRealName(args[1])));
 				}
 			}
-			catch (ReportedException ex)
+			catch (Exception ex)
 			{
 				sendMsg(sender,
 						t("removeAccount.fail.others").replace("{0}",
 								PlayerUtils.getPlayerRealName(args[1])));
-			}
-			finally
-			{
-				ReportedException.decrementRequestCount();
 			}
 		}
 		else if ((args.length == 0 && disablePasswords)
@@ -187,8 +180,6 @@ public final class UnregisterCommand extends LogItCoreObject implements
 
 			try
 			{
-				ReportedException.incrementRequestCount();
-
 				if (!getAccountManager().removeAccount(player.getName())
 						.isCancelled())
 				{
@@ -197,13 +188,9 @@ public final class UnregisterCommand extends LogItCoreObject implements
 					LogItCooldowns.activate(player, LogItCooldowns.UNREGISTER);
 				}
 			}
-			catch (ReportedException ex)
+			catch (Exception ex)
 			{
 				sendMsg(sender, t("removeAccount.fail.self"));
-			}
-			finally
-			{
-				ReportedException.decrementRequestCount();
 			}
 		}
 		else

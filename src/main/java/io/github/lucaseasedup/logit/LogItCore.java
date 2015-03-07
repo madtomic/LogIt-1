@@ -219,7 +219,7 @@ public final class LogItCore
 		{
 			channelManager = new ChannelClient();
 		}
-
+		
 		return CancelledState.NOT_CANCELLED;
 	}
 
@@ -1225,11 +1225,17 @@ public final class LogItCore
 	private ChannelClient channelManager;
 	private ITabListManager tabListManager;
 
+	@SuppressWarnings("unused")
 	private BukkitTask tabListUpdaterTask;
+	@SuppressWarnings("unused")
 	private BukkitTask accountManagerTask;
+	@SuppressWarnings("unused")
 	private BukkitTask backupManagerTask;
+	@SuppressWarnings("unused")
 	private BukkitTask sessionManagerTask;
+	@SuppressWarnings("unused")
 	private BukkitTask globalPasswordManagerTask;
+	@SuppressWarnings("unused")
 	private BukkitTask accountWatcherTask;
 
 	private Map<Class<? extends Listener>, Listener> eventListeners;

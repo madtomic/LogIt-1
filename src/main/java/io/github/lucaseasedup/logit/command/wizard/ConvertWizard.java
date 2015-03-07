@@ -18,8 +18,6 @@ package io.github.lucaseasedup.logit.command.wizard;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.common.FatalReportedException;
-import io.github.lucaseasedup.logit.common.ReportedException;
 import io.github.lucaseasedup.logit.config.PropertyType;
 import io.github.lucaseasedup.logit.config.validators.StorageTypeValidator;
 import io.github.lucaseasedup.logit.storage.SelectorConstant;
@@ -238,8 +236,6 @@ public final class ConvertWizard extends Wizard
 
 				try
 				{
-					ReportedException.incrementRequestCount();
-
 					List<Account> accounts = null;
 
 					if (copyAccounts)
@@ -265,7 +261,7 @@ public final class ConvertWizard extends Wizard
 
 					updateStep(Step.SUCCESS);
 				}
-				catch (ReportedException ex)
+				catch (Exception ex)
 				{
 					if (getSender() instanceof Player)
 					{
@@ -275,21 +271,6 @@ public final class ConvertWizard extends Wizard
 					log(Level.SEVERE, t("wizard.convert.fail.log"));
 
 					updateStep(Step.FAIL);
-				}
-				catch (FatalReportedException ex)
-				{
-					if (getSender() instanceof Player)
-					{
-						sendMessage(t("wizard.convert.fail"));
-					}
-
-					log(Level.SEVERE, t("wizard.convert.fail.log"), ex);
-
-					updateStep(Step.FAIL);
-				}
-				finally
-				{
-					ReportedException.decrementRequestCount();
 				}
 
 				cancelWizard();
