@@ -16,6 +16,8 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
+import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.tools.ant.util.LinkedHashtable;
 
 public final class CsvStorage extends Storage
 {

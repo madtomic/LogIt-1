@@ -16,6 +16,8 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
+import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -25,7 +27,6 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import org.apache.tools.ant.util.LinkedHashtable;
 
 public final class SqliteStorage extends Storage
 {

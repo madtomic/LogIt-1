@@ -17,11 +17,14 @@
 package io.github.lucaseasedup.logit.config;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
+
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
+
 import io.github.lucaseasedup.logit.util.IniUtils;
 import io.github.lucaseasedup.logit.util.IoUtils;
-import it.sauronsoftware.base64.Base64;
+import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -40,6 +43,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Color;
 import org.bukkit.configuration.ConfigurationSection;

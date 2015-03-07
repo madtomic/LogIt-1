@@ -42,13 +42,11 @@ import io.github.lucaseasedup.logit.command.UnregisterCommand;
 import io.github.lucaseasedup.logit.common.CancellableEvent;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.common.PlayerCollections;
-import io.github.lucaseasedup.logit.common.Wrapper;
 import io.github.lucaseasedup.logit.config.ConfigurationManager;
 import io.github.lucaseasedup.logit.config.InvalidPropertyValueException;
 import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.cooldown.CooldownManager;
-import io.github.lucaseasedup.logit.craftreflect.CraftReflect;
 import io.github.lucaseasedup.logit.hooks.VaultHook;
 import io.github.lucaseasedup.logit.listener.BlockEventListener;
 import io.github.lucaseasedup.logit.listener.EntityEventListener;
@@ -84,8 +82,9 @@ import io.github.lucaseasedup.logit.storage.Storage.DataType;
 import io.github.lucaseasedup.logit.storage.StorageFactory;
 import io.github.lucaseasedup.logit.storage.StorageType;
 import io.github.lucaseasedup.logit.storage.WrapperStorage;
-import io.github.lucaseasedup.logit.tab.TabListUpdater;
+import io.github.lucaseasedup.logit.tab.ITabListManager;
 import io.github.lucaseasedup.logit.util.IoUtils;
+import io.github.lucaseasedup.logit.util.com.comphenix.tinyprotocol.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -101,13 +100,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.InvalidConfigurationException;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.mcsg.double0negative.tabapi.TabAPI;
 
 import com.google.common.io.Files;
 
@@ -162,7 +158,6 @@ public final class LogItCore
 			doFirstRunStuff();
 		}
 
-		setUpCraftReflect();
 		setUpLocaleManager();
 		setUpAccountManager();
 		setUpPersistenceManager();
@@ -334,30 +329,6 @@ public final class LogItCore
 		}
 	}
 
-	private void setUpCraftReflect()
-	{
-		try
-		{
-			String version = LogItPlugin.getCraftBukkitVersion();
-			String craftClassName = "io.github.lucaseasedup.logit.craftreflect."
-					+ version + ".CraftReflect";
-			Class<?> craftClass = Class.forName(craftClassName);
-
-			craftReflect = (CraftReflect) craftClass.getConstructor()
-					.newInstance();
-		}
-		catch (ClassNotFoundException ex)
-		{
-			log(Level.WARNING, "LogIt does not support this version of Bukkit."
-					+ " Some features may not work.");
-		}
-		catch (ReflectiveOperationException ex)
-		{
-			log(Level.WARNING, "Could not set up CraftBukkit reflection."
-					+ " Some features may not work.", ex);
-		}
-	}
-
 	private void setUpLocaleManager()
 	{
 		localeManager = new LocaleManager();
@@ -523,21 +494,19 @@ public final class LogItCore
 		{
 			return;
 		}
-		tabApiWrapper = new Wrapper<>();
-		tabListUpdater = new TabListUpdater(tabApiWrapper, craftReflect);
-
-		new BukkitRunnable()
+		String version = Reflection.getVersion();
+		if (version.startsWith("v1.7"))
 		{
-			@Override
-			public void run()
-			{
-				if (Bukkit.getPluginManager().getPlugin("ProtocolLib") != null)
-				{
-					tabApiWrapper.set(new TabAPI());
-					tabApiWrapper.get().onEnable();
-				}
-			}
-		}.runTaskLater(getPlugin(), 1L);
+			tabListManager = new io.github.lucaseasedup.logit.tab.TabListManager17();
+		}
+		else if (version.startsWith("v1.8"))
+		{
+			tabListManager = new io.github.lucaseasedup.logit.tab.TabListManager18();
+		}
+		else
+		{
+			log(Level.WARNING, t("minecraftEngineError"));
+		}
 	}
 
 	private void setSerializerEnabled(
@@ -609,12 +578,6 @@ public final class LogItCore
 				GlobalPasswordManager.TASK_PERIOD);
 		accountWatcherTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
 				getAccountWatcher(), 0L, AccountWatcher.TASK_PERIOD);
-		if (tabListUpdaterTask == null)
-		{
-			return;
-		}
-		tabListUpdaterTask = Bukkit.getScheduler().runTaskTimer(getPlugin(),
-				tabListUpdater, 20L, TabListUpdater.TASK_PERIOD);
 	}
 
 	private void enableCommands()
@@ -669,8 +632,6 @@ public final class LogItCore
 		registerEventListener(new PlayerEventListener());
 		registerEventListener(new InventoryEventListener());
 		registerEventListener(new SessionEventListener());
-		if (getTabListUpdater() != null)
-			registerEventListener(getTabListUpdater());
 	}
 
 	private <T extends Listener> void registerEventListener(T listener)
@@ -877,14 +838,11 @@ public final class LogItCore
 			channelManager = null;
 		}
 
-		if (tabApiWrapper != null && tabApiWrapper.get() != null)
+		if (tabListManager != null)
 		{
-			tabApiWrapper.get().onDisable();
-			tabApiWrapper.set(null);
-			tabApiWrapper = null;
+			tabListManager.stop();
+			tabListManager = null;
 		}
-
-		tabListUpdater = null;
 	}
 
 	/**
@@ -1222,11 +1180,6 @@ public final class LogItCore
 		return accountWatcher;
 	}
 
-	public TabListUpdater getTabListUpdater()
-	{
-		return tabListUpdater;
-	}
-
 	@SuppressWarnings("unchecked")
 	public <T extends Listener> T getEventListener(Class<T> listenerClass)
 	{
@@ -1257,7 +1210,6 @@ public final class LogItCore
 	private ConfigurationManager configurationManager;
 	private LogItCoreLogger logger;
 	private CommandSilencer commandSilencer;
-	private CraftReflect craftReflect;
 	private LocaleManager localeManager;
 	private AccountManager accountManager;
 	private PersistenceManager persistenceManager;
@@ -1271,8 +1223,7 @@ public final class LogItCore
 	private CooldownManager cooldownManager;
 	private AccountWatcher accountWatcher;
 	private ChannelClient channelManager;
-	private Wrapper<TabAPI> tabApiWrapper;
-	private TabListUpdater tabListUpdater;
+	private ITabListManager tabListManager;
 
 	private BukkitTask tabListUpdaterTask;
 	private BukkitTask accountManagerTask;

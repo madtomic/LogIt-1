@@ -28,7 +28,8 @@ import io.github.lucaseasedup.logit.storage.MySqlStorage;
 import io.github.lucaseasedup.logit.storage.SqliteStorage;
 import io.github.lucaseasedup.logit.storage.Storage;
 import io.github.lucaseasedup.logit.util.IniUtils;
-import it.sauronsoftware.base64.Base64;
+import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -42,6 +43,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;

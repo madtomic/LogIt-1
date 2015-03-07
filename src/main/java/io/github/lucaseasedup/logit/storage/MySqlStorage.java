@@ -18,6 +18,8 @@ package io.github.lucaseasedup.logit.storage;
 
 import io.github.lucaseasedup.logit.LogItCore;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
+import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +29,6 @@ import java.sql.Statement;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import org.apache.tools.ant.util.LinkedHashtable;
 
 public final class MySqlStorage extends Storage
 {

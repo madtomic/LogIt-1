@@ -23,7 +23,8 @@ import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.storage.Storage;
 import io.github.lucaseasedup.logit.util.IniUtils;
 import io.github.lucaseasedup.logit.util.Validators;
-import it.sauronsoftware.base64.Base64;
+import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.logging.Level;
+
 import org.apache.commons.lang.StringUtils;
 
 /**

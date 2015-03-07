@@ -17,9 +17,11 @@
 package io.github.lucaseasedup.logit.account;
 
 import com.google.common.collect.ImmutableList;
+
 import io.github.lucaseasedup.logit.storage.Storage.DataType;
+import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
+
 import java.util.List;
-import org.apache.tools.ant.util.LinkedHashtable;
 
 public final class AccountKeys extends LinkedHashtable<String, DataType>
 {

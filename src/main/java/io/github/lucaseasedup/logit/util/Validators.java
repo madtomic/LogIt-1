@@ -16,9 +16,11 @@
  */
 package io.github.lucaseasedup.logit.util;
 
+import io.github.lucaseasedup.logit.util.org.apache.http.conn.util.InetAddressUtils;
+
 import java.util.regex.Pattern;
+
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.conn.util.InetAddressUtils;
 
 public final class Validators
 {
