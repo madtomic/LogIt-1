@@ -83,6 +83,7 @@ import io.github.lucaseasedup.logit.storage.StorageFactory;
 import io.github.lucaseasedup.logit.storage.StorageType;
 import io.github.lucaseasedup.logit.storage.WrapperStorage;
 import io.github.lucaseasedup.logit.tab.ITabListManager;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.IoUtils;
 import io.github.lucaseasedup.logit.util.com.comphenix.tinyprotocol.Reflection;
 
@@ -183,6 +184,7 @@ public final class LogItCore
 		registerEventListeners();
 
 		started = true;
+		ExceptionHandler.isCoreEnabled = true;
 
 		log(Level.FINE, t("startPlugin.success"));
 
@@ -706,6 +708,7 @@ public final class LogItCore
 		HandlerList.unregisterAll(getPlugin());
 
 		started = false;
+		ExceptionHandler.isCoreEnabled = false;
 
 		dispose();
 

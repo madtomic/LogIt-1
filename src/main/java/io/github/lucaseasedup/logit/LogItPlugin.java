@@ -20,6 +20,8 @@ import io.github.lucaseasedup.logit.command.DisabledCommandExecutor;
 import io.github.lucaseasedup.logit.command.LogItCommand;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.config.LocationSerializable;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
+import io.github.lucaseasedup.logit.util.com.comphenix.tinyprotocol.Reflection;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +50,10 @@ public final class LogItPlugin extends JavaPlugin
 	public void onEnable()
 	{
 		instance = this;
-
+		
+		ExceptionHandler.logitVersion = instance.getDescription().getVersion();
+		ExceptionHandler.serverVersion = Reflection.getVersion();
+		
 		try
 		{
 			loadMessages(getConfig().getString("locale", "en"));

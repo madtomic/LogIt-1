@@ -44,7 +44,16 @@ public final class ExceptionHandler
 		message.add("Stack trace: ");
 		for(StackTraceElement element : e.getStackTrace())
 		{
-			message.add(" "+element.getClassName()+"/"+element.getMethodName()+" ("+element.getLineNumber()+")");
+			StringBuilder sb = new StringBuilder();
+			sb.append(" ");
+			sb.append(element.getClassName());
+			sb.append("/");
+			sb.append(element.getMethodName());
+			sb.append(" (");
+			sb.append(element.getLineNumber());
+			sb.append(")");
+			message.add(sb.toString());
+			sb = null;
 		}
 		message.add(" ");
 		message.add("END OF LOGIT ERROR MESSAGE");
