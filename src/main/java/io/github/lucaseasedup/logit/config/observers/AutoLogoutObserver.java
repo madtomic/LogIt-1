@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.config.observers;
 
-import io.github.lucaseasedup.logit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
 import io.github.lucaseasedup.logit.config.Property;
 import io.github.lucaseasedup.logit.config.PropertyObserver;
 

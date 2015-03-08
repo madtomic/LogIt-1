@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.profile.field;
 
-import org.apache.commons.lang.StringUtils;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 
 public abstract class Field
 {

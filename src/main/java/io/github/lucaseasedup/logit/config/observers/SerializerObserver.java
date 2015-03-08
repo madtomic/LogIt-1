@@ -16,7 +16,11 @@
  */
 package io.github.lucaseasedup.logit.config.observers;
 
+import io.github.lucaseasedup.logit.Core;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
 import io.github.lucaseasedup.logit.account.Account;
+import io.github.lucaseasedup.logit.account.AccountKeys;
+import io.github.lucaseasedup.logit.account.AccountManager;
 import io.github.lucaseasedup.logit.config.Property;
 import io.github.lucaseasedup.logit.config.PropertyObserver;
 import io.github.lucaseasedup.logit.persistence.AirBarSerializer;
@@ -24,14 +28,43 @@ import io.github.lucaseasedup.logit.persistence.ExperienceSerializer;
 import io.github.lucaseasedup.logit.persistence.HealthBarSerializer;
 import io.github.lucaseasedup.logit.persistence.HungerBarSerializer;
 import io.github.lucaseasedup.logit.persistence.LocationSerializer;
+import io.github.lucaseasedup.logit.persistence.PersistenceManager;
 import io.github.lucaseasedup.logit.persistence.PersistenceSerializer;
+import io.github.lucaseasedup.logit.session.SessionManager;
+
 import java.util.Arrays;
 import java.util.logging.Level;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public final class SerializerObserver extends PropertyObserver
 {
+	private LogItCore getBukkitCore()
+	{
+		return ((LogItCore)Core.getCore());
+	}
+	
+	private AccountManager getAccountManager()
+	{
+		return getBukkitCore().getAccountManager();
+	}
+	
+	private PersistenceManager getPersistenceManager()
+	{
+		return getBukkitCore().getPersistenceManager();
+	}
+	
+	private SessionManager getSessionManager()
+	{
+		return getBukkitCore().getSessionManager();
+	}
+	
+	private AccountKeys keys()
+	{
+		return getAccountManager().getKeys();
+	}
+	
 	@Override
 	public void update(Property p)
 	{

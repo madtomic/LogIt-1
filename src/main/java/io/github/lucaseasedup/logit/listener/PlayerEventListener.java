@@ -19,8 +19,8 @@ package io.github.lucaseasedup.logit.listener;
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
-import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.hooks.VanishNoPacketHook;
@@ -35,6 +35,7 @@ import io.github.lucaseasedup.logit.storage.SelectorNegation;
 import io.github.lucaseasedup.logit.util.BlockUtils;
 import io.github.lucaseasedup.logit.util.CollectionUtils;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,9 +43,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import org.apache.commons.lang.StringUtils;
+
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+
+import multiengine.org.bukkit.Location;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
@@ -337,7 +342,7 @@ public final class PlayerEventListener extends LogItCoreObject implements
 		{
 			if (getConfig("config.yml").getBoolean("waitingRoom.enabled"))
 			{
-				player.teleport(getCore().getWaitingRoomLocation());
+				player.teleport(getCore().getWaitingRoomLocation().toBukkitLocation());
 			}
 		}
 
@@ -362,7 +367,7 @@ public final class PlayerEventListener extends LogItCoreObject implements
 
 			if (!getConfig("config.yml").getBoolean("waitingRoom.enabled"))
 			{
-				Location playerLocation = player.getLocation();
+				Location playerLocation = Location.fromBukkitLocation(player.getLocation());
 				Block nearestBlockBelow = BlockUtils
 						.getNearestBlockBelow(playerLocation);
 
@@ -374,7 +379,7 @@ public final class PlayerEventListener extends LogItCoreObject implements
 
 					if (playerLocation != null)
 					{
-						player.teleport(playerLocation);
+						player.teleport(playerLocation.toBukkitLocation());
 					}
 				}
 			}
@@ -749,7 +754,7 @@ public final class PlayerEventListener extends LogItCoreObject implements
 		{
 			if (playersDeadOnJoin.contains(player))
 			{
-				Location respawnLocation = event.getRespawnLocation();
+				Location respawnLocation = Location.fromBukkitLocation(event.getRespawnLocation());
 
 				Account account = getAccountManager().selectAccount(
 						player.getName(),
@@ -764,11 +769,11 @@ public final class PlayerEventListener extends LogItCoreObject implements
 									account,
 									player,
 									new LocationSerializer.PlayerlessLocationSerializer(
-											respawnLocation));
+											respawnLocation.toBukkitLocation()));
 				}
 			}
 
-			event.setRespawnLocation(getCore().getWaitingRoomLocation());
+			event.setRespawnLocation(getCore().getWaitingRoomLocation().toBukkitLocation());
 		}
 
 		if (playersDeadOnJoin.contains(player))

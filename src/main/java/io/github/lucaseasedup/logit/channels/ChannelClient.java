@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.channels.listeners.client.NewClientResponseListener;
 import io.github.lucaseasedup.logit.channels.packets.NewClientPacket;
 import io.github.lucaseasedup.logit.channels.packets.NewClientResponsePacket;

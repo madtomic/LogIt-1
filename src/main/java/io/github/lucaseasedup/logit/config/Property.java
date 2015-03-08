@@ -21,10 +21,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Observable;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 
 public final class Property extends Observable implements Disposable
 {
@@ -139,9 +136,9 @@ public final class Property extends Observable implements Disposable
 		return (Boolean) value;
 	}
 
-	public Color getColor()
+	public org.bukkit.Color getColor()
 	{
-		return (Color) value;
+		return (org.bukkit.Color) value;
 	}
 
 	public double getDouble()
@@ -154,9 +151,9 @@ public final class Property extends Observable implements Disposable
 		return (Integer) value;
 	}
 
-	public ItemStack getItemStack()
+	public org.bukkit.inventory.ItemStack getItemStack()
 	{
-		return (ItemStack) value;
+		return (org.bukkit.inventory.ItemStack) value;
 	}
 
 	public long getLong()
@@ -169,9 +166,9 @@ public final class Property extends Observable implements Disposable
 		return (String) value;
 	}
 
-	public Vector getVector()
+	public org.bukkit.util.Vector getVector()
 	{
-		return (Vector) value;
+		return (org.bukkit.util.Vector) value;
 	}
 
 	@SuppressWarnings("rawtypes")

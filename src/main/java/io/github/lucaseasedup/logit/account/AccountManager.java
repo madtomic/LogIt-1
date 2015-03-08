@@ -17,8 +17,8 @@
 package io.github.lucaseasedup.logit.account;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.CancelledState;
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.QueuedMap;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
@@ -44,7 +44,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.apache.commons.lang.StringUtils;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

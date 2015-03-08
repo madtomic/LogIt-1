@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.util;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import multiengine.org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public final class PlayerUtils
@@ -98,7 +98,7 @@ public final class PlayerUtils
 	public static boolean isPlayerAt(Player player, Location location,
 			double radiusX, double radiusY, double radiusZ)
 	{
-		Location playerLocation = player.getLocation();
+		Location playerLocation = Location.fromBukkitLocation(player.getLocation());
 
 		if (playerLocation.getWorld() != location.getWorld())
 			return false;

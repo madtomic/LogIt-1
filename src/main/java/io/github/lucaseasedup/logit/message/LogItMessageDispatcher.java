@@ -19,7 +19,7 @@ package io.github.lucaseasedup.logit.message;
 import static io.github.lucaseasedup.logit.message.MessageHelper.broadcastMsgExcept;
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.EssentialsHook;
 import io.github.lucaseasedup.logit.hooks.VanishNoPacketHook;

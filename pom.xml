@@ -146,7 +146,6 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>org.mcstats.bukkit:metrics-lite</include>
                             <include>postgresql:postgresql</include>
                             <include>javax.mail:mail</include>
                         </includes>

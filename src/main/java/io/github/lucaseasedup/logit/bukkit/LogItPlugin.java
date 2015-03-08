@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit;
+package io.github.lucaseasedup.logit.bukkit;
 
+import io.github.lucaseasedup.logit.IPlugin;
+import io.github.lucaseasedup.logit.Plugin;
 import io.github.lucaseasedup.logit.command.DisabledCommandExecutor;
 import io.github.lucaseasedup.logit.command.LogItCommand;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
@@ -36,13 +38,25 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
+import multiengine.org.bukkit.configuration.InvalidConfigurationException;
+import multiengine.org.bukkit.configuration.file.YamlConfiguration;
+import multiengine.org.bukkit.configuration.serialization.ConfigurationSerialization;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class LogItPlugin extends JavaPlugin
+public final class LogItPlugin extends JavaPlugin implements IPlugin
 {
+	/**
+	 * Internal method. Do not call directly.
+	 */
+	@Override
+	public void onLoad()
+	{
+		ConfigurationSerialization.registerClass(LocationSerializable.class);
+	}
+	
 	/**
 	 * Internal method. Do not call directly.
 	 */
@@ -50,22 +64,23 @@ public final class LogItPlugin extends JavaPlugin
 	public void onEnable()
 	{
 		instance = this;
-		
+		Plugin.setPlugin(instance);
 		ExceptionHandler.logitVersion = instance.getDescription().getVersion();
 		ExceptionHandler.serverVersion = Reflection.getVersion();
 		
+		config = new YamlConfiguration();
+		
 		try
 		{
-			loadMessages(getConfig().getString("locale", "en"));
+			config.load(new File(getDataFolder(), "config.yml"));
+			loadMessages(getConfiguration().getString("locale", "en"));
 		}
-		catch (IOException ex)
+		catch (IOException | InvalidConfigurationException ex)
 		{
 			// If messages could not be loaded, just log the failure.
 			// They're not necessary for LogIt to work.
 			getLogger().log(Level.WARNING, "Could not load messages.", ex);
 		}
-
-		getCommand("logit").setExecutor(new LogItCommand());
 
 		core = LogItCore.getInstance();
 
@@ -77,6 +92,8 @@ public final class LogItPlugin extends JavaPlugin
 		{
 			disable();
 		}
+		
+		getCommand("logit").setExecutor(new LogItCommand());
 	}
 
 	/**
@@ -101,6 +118,11 @@ public final class LogItPlugin extends JavaPlugin
 		customGlobalMessages = null;
 		customLocalMessages = null;
 		instance = null;
+	}
+	
+	public YamlConfiguration getConfiguration()
+	{
+		return config;
 	}
 	
 	@SuppressWarnings("unused")
@@ -199,7 +221,7 @@ public final class LogItPlugin extends JavaPlugin
 		}
 	}
 
-	public static String getMessage(String label)
+	public String getMessage(String label)
 	{
 		if (label == null)
 			throw new IllegalArgumentException();
@@ -257,14 +279,10 @@ public final class LogItPlugin extends JavaPlugin
 		return instance;
 	}
 
-	static
-	{
-		ConfigurationSerialization.registerClass(LocationSerializable.class);
-	}
-
 	private PropertyResourceBundle messages;
 	private PropertyResourceBundle customGlobalMessages;
 	private PropertyResourceBundle customLocalMessages;
 	private static LogItPlugin instance;
 	private LogItCore core;
+	private YamlConfiguration config;
 }

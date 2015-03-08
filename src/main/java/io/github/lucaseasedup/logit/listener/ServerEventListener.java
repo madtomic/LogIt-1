@@ -16,10 +16,12 @@
  */
 package io.github.lucaseasedup.logit.listener;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

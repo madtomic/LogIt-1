@@ -14,10 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit;
+package io.github.lucaseasedup.logit.bukkit;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.CollectionUtils.containsIgnoreCase;
+import io.github.lucaseasedup.logit.Core;
+import io.github.lucaseasedup.logit.ICore;
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
@@ -40,6 +42,7 @@ import io.github.lucaseasedup.logit.command.RegisterCommand;
 import io.github.lucaseasedup.logit.command.RememberCommand;
 import io.github.lucaseasedup.logit.command.UnregisterCommand;
 import io.github.lucaseasedup.logit.common.CancellableEvent;
+import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.common.PlayerCollections;
 import io.github.lucaseasedup.logit.config.ConfigurationManager;
@@ -96,11 +99,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
+import multiengine.org.bukkit.Location;
+import multiengine.org.bukkit.configuration.InvalidConfigurationException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -113,13 +117,16 @@ import com.google.common.io.Files;
  * <p>
  * There is only one instance of {@code LogItCore}, obtainable using {@link #getInstance()}.
  */
-public final class LogItCore
+public final class LogItCore implements ICore
 {
 	private LogItCore(LogItPlugin plugin)
 	{
 		assert plugin != null;
 
 		this.plugin = plugin;
+		Core.setCore(this);
+		
+		assert Core.getCore() != null;
 	}
 
 	/**
@@ -146,7 +153,7 @@ public final class LogItCore
 
 		if (evt.isCancelled())
 			return CancelledState.CANCELLED;
-
+		
 		getDataFolder().mkdir();
 
 		firstRun = !getDataFile("config.yml").exists();

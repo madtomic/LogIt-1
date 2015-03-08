@@ -16,11 +16,13 @@
  */
 package io.github.lucaseasedup.logit.message;
 
-import io.github.lucaseasedup.logit.LogItPlugin;
+import io.github.lucaseasedup.logit.Plugin;
 import io.github.lucaseasedup.logit.util.CollectionUtils;
+
 import java.util.Collection;
+
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import multiengine.org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -39,7 +41,7 @@ public final class MessageHelper
 	 */
 	public static String t(String label)
 	{
-		return LogItPlugin.getMessage(label);
+		return Plugin.getPlugin().getMessage(label);
 	}
 
 	/**

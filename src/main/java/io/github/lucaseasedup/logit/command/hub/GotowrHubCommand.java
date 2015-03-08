@@ -35,6 +35,6 @@ public final class GotowrHubCommand extends HubCommand
 	@Override
 	public void execute(CommandSender sender, String[] args)
 	{
-		((Player) sender).teleport(getCore().getWaitingRoomLocation());
+		((Player) sender).teleport(getCore().getWaitingRoomLocation().toBukkitLocation());
 	}
 }

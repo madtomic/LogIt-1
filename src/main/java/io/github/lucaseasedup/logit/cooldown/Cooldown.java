@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.cooldown;
 
-import org.apache.commons.lang.StringUtils;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 
 public final class Cooldown
 {

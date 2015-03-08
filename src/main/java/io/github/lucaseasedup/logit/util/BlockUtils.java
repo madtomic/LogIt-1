@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.util;
 
-import org.bukkit.Location;
+import multiengine.org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -126,7 +126,7 @@ public final class BlockUtils
 							if (isBlockAdjacent(block, BlockFace.UP,
 									Material.AIR, Material.AIR))
 							{
-								return block.getLocation().add(0.5, 1.0, 0.5);
+								return Location.fromBukkitLocation(block.getLocation()).add(0.5, 1.0, 0.5);
 							}
 						}
 					}

@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.command.wizard;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import org.apache.commons.lang.StringUtils;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 import org.bukkit.command.CommandSender;
 
 public final class ConfirmationWizard extends Wizard

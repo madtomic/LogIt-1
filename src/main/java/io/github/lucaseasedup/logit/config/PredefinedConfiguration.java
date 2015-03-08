@@ -21,6 +21,7 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
+import io.github.lucaseasedup.logit.common.Disposable;
 import io.github.lucaseasedup.logit.util.IniUtils;
 import io.github.lucaseasedup.logit.util.IoUtils;
 import io.github.lucaseasedup.logit.util.it.sauronsoftware.base64.Base64;
@@ -44,16 +45,12 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Color;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
+import multiengine.org.bukkit.configuration.ConfigurationSection;
+import multiengine.org.bukkit.configuration.file.FileConfiguration;
+import multiengine.org.bukkit.configuration.file.YamlConfiguration;
 
-public final class PredefinedConfiguration extends PropertyObserver implements
-		PropertyHolder
+public final class PredefinedConfiguration extends PropertyObserver implements PropertyHolder, Disposable
 {
 	public PredefinedConfiguration(String filename, String userDefPathname,
 			String packageDefPathname, String header)
@@ -359,9 +356,9 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 	}
 
 	@Override
-	public Color getColor(String path)
+	public org.bukkit.Color getColor(String path)
 	{
-		return (Color) properties.get(path).getValue();
+		return (org.bukkit.Color) properties.get(path).getValue();
 	}
 
 	@Override
@@ -398,9 +395,9 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 	}
 
 	@Override
-	public ItemStack getItemStack(String path)
+	public org.bukkit.inventory.ItemStack getItemStack(String path)
 	{
-		return (ItemStack) properties.get(path).getValue();
+		return (org.bukkit.inventory.ItemStack) properties.get(path).getValue();
 	}
 
 	@Override
@@ -450,9 +447,9 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 	}
 
 	@Override
-	public Vector getVector(String path)
+	public org.bukkit.util.Vector getVector(String path)
 	{
-		return (Vector) properties.get(path).getValue();
+		return (org.bukkit.util.Vector) properties.get(path).getValue();
 	}
 
 	@Override
@@ -635,55 +632,55 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 				switch (defaultValueString.toLowerCase())
 				{
 					case "aqua":
-						defaultValue = Color.AQUA;
+						defaultValue = org.bukkit.Color.AQUA;
 						break;
 					case "black":
-						defaultValue = Color.BLACK;
+						defaultValue = org.bukkit.Color.BLACK;
 						break;
 					case "blue":
-						defaultValue = Color.BLUE;
+						defaultValue = org.bukkit.Color.BLUE;
 						break;
 					case "fuchsia":
-						defaultValue = Color.FUCHSIA;
+						defaultValue = org.bukkit.Color.FUCHSIA;
 						break;
 					case "gray":
-						defaultValue = Color.GRAY;
+						defaultValue = org.bukkit.Color.GRAY;
 						break;
 					case "green":
-						defaultValue = Color.GREEN;
+						defaultValue = org.bukkit.Color.GREEN;
 						break;
 					case "lime":
-						defaultValue = Color.LIME;
+						defaultValue = org.bukkit.Color.LIME;
 						break;
 					case "maroon":
-						defaultValue = Color.MAROON;
+						defaultValue = org.bukkit.Color.MAROON;
 						break;
 					case "navy":
-						defaultValue = Color.NAVY;
+						defaultValue = org.bukkit.Color.NAVY;
 						break;
 					case "olive":
-						defaultValue = Color.OLIVE;
+						defaultValue = org.bukkit.Color.OLIVE;
 						break;
 					case "orange":
-						defaultValue = Color.ORANGE;
+						defaultValue = org.bukkit.Color.ORANGE;
 						break;
 					case "purple":
-						defaultValue = Color.PURPLE;
+						defaultValue = org.bukkit.Color.PURPLE;
 						break;
 					case "red":
-						defaultValue = Color.RED;
+						defaultValue = org.bukkit.Color.RED;
 						break;
 					case "silver":
-						defaultValue = Color.SILVER;
+						defaultValue = org.bukkit.Color.SILVER;
 						break;
 					case "teal":
-						defaultValue = Color.TEAL;
+						defaultValue = org.bukkit.Color.TEAL;
 						break;
 					case "white":
-						defaultValue = Color.WHITE;
+						defaultValue = org.bukkit.Color.WHITE;
 						break;
 					case "yellow":
-						defaultValue = Color.YELLOW;
+						defaultValue = org.bukkit.Color.YELLOW;
 						break;
 					default:
 					{
@@ -691,14 +688,14 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 
 						if (rgb.length == 3)
 						{
-							defaultValue = Color.fromRGB(
+							defaultValue = org.bukkit.Color.fromRGB(
 									Integer.parseInt(rgb[0]),
 									Integer.parseInt(rgb[1]),
 									Integer.parseInt(rgb[2]));
 						}
 						else
 						{
-							defaultValue = Color.BLACK;
+							defaultValue = org.bukkit.Color.BLACK;
 						}
 
 						break;
@@ -733,12 +730,12 @@ public final class PredefinedConfiguration extends PropertyObserver implements
 
 				if (axes.length == 3)
 				{
-					defaultValue = new Vector(Double.valueOf(axes[0]),
+					defaultValue = new org.bukkit.util.Vector(Double.valueOf(axes[0]),
 							Double.valueOf(axes[1]), Double.valueOf(axes[2]));
 				}
 				else
 				{
-					defaultValue = new Vector(0, 0, 0);
+					defaultValue = new org.bukkit.util.Vector(0, 0, 0);
 				}
 
 				break;

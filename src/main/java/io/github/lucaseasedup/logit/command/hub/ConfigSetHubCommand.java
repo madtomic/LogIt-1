@@ -25,7 +25,7 @@ import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
 import io.github.lucaseasedup.logit.config.Property;
 import java.util.logging.Level;
 import org.bukkit.Color;
-import org.bukkit.Location;
+import multiengine.org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -250,7 +250,7 @@ public final class ConfigSetHubCommand extends HubCommand
 						if (!(sender instanceof Player))
 							throw new RuntimeException(t("onlyForPlayers"));
 
-						Location loc = ((Player) sender).getLocation();
+						Location loc = Location.fromBukkitLocation(((Player) sender).getLocation());
 
 						outputValue = new LocationSerializable(loc.getWorld()
 								.getName(), loc.getX(), loc.getY(), loc.getZ(),

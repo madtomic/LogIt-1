@@ -20,9 +20,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.configuration.serialization.SerializableAs;
+import multiengine.org.bukkit.configuration.serialization.ConfigurationSerializable;
+import multiengine.org.bukkit.configuration.serialization.SerializableAs;
 
 @SerializableAs("Location")
 public final class LocationSerializable implements Cloneable,
@@ -73,9 +72,9 @@ public final class LocationSerializable implements Cloneable,
 				+ new BigDecimal(pitch).setScale(2, RoundingMode.HALF_UP);
 	}
 
-	public org.bukkit.Location toBukkitLocation()
+	public multiengine.org.bukkit.Location toBukkitLocation()
 	{
-		return new org.bukkit.Location(Bukkit.getWorld(world), x, y, z, yaw,
+		return new multiengine.org.bukkit.Location(org.bukkit.Bukkit.getWorld(world), x, y, z, yaw,
 				pitch);
 	}
 

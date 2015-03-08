@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.hooks;
 
-import io.github.lucaseasedup.logit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

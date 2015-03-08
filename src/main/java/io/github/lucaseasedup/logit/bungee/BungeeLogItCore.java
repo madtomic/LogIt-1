@@ -16,23 +16,38 @@
  */
 package io.github.lucaseasedup.logit.bungee;
 
-import io.github.lucaseasedup.logit.CancelledState;
+import io.github.lucaseasedup.logit.Core;
+import io.github.lucaseasedup.logit.ICore;
 import io.github.lucaseasedup.logit.channels.ChannelServer;
+import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
+import io.github.lucaseasedup.logit.config.ConfigurationManager;
+import io.github.lucaseasedup.logit.config.InvalidPropertyValueException;
+import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
+import io.github.lucaseasedup.logit.util.ExceptionHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class BungeeLogItCore
+import org.bukkit.ChatColor;
+
+import multiengine.org.bukkit.configuration.InvalidConfigurationException;
+
+import com.google.common.io.Files;
+
+public final class BungeeLogItCore implements ICore
 {
 	private BungeeLogItCore(BungeeLogItPlugin plugin)
 	{
 		assert plugin != null;
 
 		this.plugin = plugin;
+		Core.setCore(this);
 	}
 
+	@Override
 	public CancelledState start() throws FatalReportedException
 	{
 		if (isStarted())
@@ -42,19 +57,104 @@ public final class BungeeLogItCore
 		firstRun = !getDataFolder().exists();
 		getDataFolder().mkdir();
 		
+		setUpConfiguration();
+		
 		channelManager = new ChannelServer();
 		
 		started = true;
 
 		return CancelledState.NOT_CANCELLED;
 	}
+	
+	private void setUpConfiguration() throws FatalReportedException
+	{
+		String configHeader = 
+				  "# # # # # # # # # # # # # # # # # # # # #\n"
+				+ "# BungeeCord LogIt Configuration File   #\n"
+				+ "# # # # # # # # # # # # # # # # # # # # #\n";
 
+		File oldConfigDefFile = getDataFile("config-def.b64");
+		
+		if (oldConfigDefFile.exists())
+		{
+			File newConfigDefFile = getDataFile(".doNotTouch/config-def.b64");
+
+			try
+			{
+				newConfigDefFile.getParentFile().mkdirs();
+				newConfigDefFile.createNewFile();
+
+				Files.copy(oldConfigDefFile, newConfigDefFile);
+
+				oldConfigDefFile.delete();
+			}
+			catch (IOException ex)
+			{
+				ExceptionHandler.handleException(ex);
+			}
+		}
+
+		configurationManager = new ConfigurationManager();
+		configurationManager.registerConfiguration("config.yml",
+				".doNotTouch/config-def.b64", "bungee-config-def.ini", configHeader);
+
+		try
+		{
+			configurationManager.loadAll();
+		}
+		catch (IOException | InvalidConfigurationException ex)
+		{
+			log(Level.SEVERE, "Could not load a configuration file.", ex);
+
+			FatalReportedException.throwNew(ex);
+		}
+		catch (InvalidPropertyValueException ex)
+		{
+			log(Level.SEVERE, ex.getMessage());
+
+			FatalReportedException.throwNew(ex);
+		}
+	}
+
+	@Override
 	public void stop()
 	{
 		if (!isStarted())
 			throw new IllegalStateException("The LogIt core is not started.");
 		
 		channelManager.stop();
+	}
+	
+	@Override
+	public void restart() throws FatalReportedException
+	{
+		if (!isStarted())
+			throw new IllegalStateException("The LogIt core is not started.");
+		
+		stop();
+		
+		start();
+	}
+
+	@Override
+	public void log(Level level, Throwable throwable)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ConfigurationManager getConfigurationManager()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PredefinedConfiguration getConfig(String filename)
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public boolean isStarted()
@@ -71,7 +171,7 @@ public final class BungeeLogItCore
 	{
 		return channelManager;
 	}
-
+	
 	public File getDataFile(String path)
 	{
 		return new File(getDataFolder(), path);
@@ -80,6 +180,31 @@ public final class BungeeLogItCore
 	public Logger getLogger()
 	{
 		return getPlugin().getProxy().getLogger();
+	}
+	
+	public void log(Level level, String msg)
+	{
+		if (getLogger() == null)
+		{
+			getPlugin().getLogger().log(level, ChatColor.stripColor(msg));
+		}
+		else
+		{
+			getLogger().log(level, msg);
+		}
+	}
+
+	public void log(Level level, String msg, Throwable throwable)
+	{
+		if (getLogger() == null)
+		{
+			getPlugin().getLogger().log(level, ChatColor.stripColor(msg),
+					throwable);
+		}
+		else
+		{
+			getLogger().log(level, msg, throwable);
+		}
 	}
 
 	public boolean isFirstRun()
@@ -109,8 +234,10 @@ public final class BungeeLogItCore
 	
 	private static volatile BungeeLogItCore instance = null;
 
+	private ConfigurationManager configurationManager;
 	private ChannelServer channelManager;
 	private final BungeeLogItPlugin plugin;
+	
 	private boolean firstRun;
 	private boolean started = false;
 }

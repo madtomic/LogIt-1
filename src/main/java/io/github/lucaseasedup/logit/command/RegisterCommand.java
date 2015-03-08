@@ -20,16 +20,19 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.isPlayerOnline;
-import io.github.lucaseasedup.logit.LogItCoreObject;
 import io.github.lucaseasedup.logit.account.Account;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.storage.Infix;
 import io.github.lucaseasedup.logit.storage.SelectorCondition;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
+
 import java.util.Arrays;
 import java.util.List;
-import org.bukkit.Location;
+
+import multiengine.org.bukkit.Location;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -179,7 +182,7 @@ public final class RegisterCommand extends LogItCoreObject implements
 									"newbieTeleport.location")
 									.toBukkitLocation();
 
-							paramPlayer.teleport(newbieTeleportLocation);
+							paramPlayer.teleport(newbieTeleportLocation.toBukkitLocation());
 						}
 					}
 				}
@@ -416,7 +419,7 @@ public final class RegisterCommand extends LogItCoreObject implements
 									"newbieTeleport.location")
 									.toBukkitLocation();
 
-							player.teleport(newbieTeleportLocation);
+							player.teleport(newbieTeleportLocation.toBukkitLocation());
 						}
 
 						if (getConfig("config.yml").getBoolean(

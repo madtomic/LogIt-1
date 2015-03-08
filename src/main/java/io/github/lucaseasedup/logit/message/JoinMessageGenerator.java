@@ -17,7 +17,8 @@
 package io.github.lucaseasedup.logit.message;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
+
 import org.bukkit.entity.Player;
 
 public final class JoinMessageGenerator

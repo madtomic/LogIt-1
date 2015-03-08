@@ -14,38 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit;
+package io.github.lucaseasedup.logit.common;
 
-import io.github.lucaseasedup.logit.common.CancellableEvent;
-import org.bukkit.event.HandlerList;
-
-public final class LogItCoreStartEvent extends CancellableEvent
+public enum CancelledState
 {
-	/* package */LogItCoreStartEvent(LogItCore core)
+	CANCELLED, NOT_CANCELLED;
+
+	/**
+	 * Returns {@code true} if this state represents an operation
+	 * that has been externally cancelled by whatever means it would possibly become so.
+	 * 
+	 * @return {@code true} if cancelled; {@code false} otherwise.
+	 */
+	public boolean isCancelled()
 	{
-		if (core == null)
-			throw new IllegalArgumentException();
-
-		this.core = core;
+		return this.equals(CANCELLED);
 	}
-
-	public LogItCore getCore()
-	{
-		return core;
-	}
-
-	@Override
-	public HandlerList getHandlers()
-	{
-		return handlers;
-	}
-
-	public static HandlerList getHandlerList()
-	{
-		return handlers;
-	}
-
-	private static final HandlerList handlers = new HandlerList();
-
-	private final LogItCore core;
 }

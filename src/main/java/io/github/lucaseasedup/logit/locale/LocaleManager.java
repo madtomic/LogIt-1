@@ -16,7 +16,8 @@
  */
 package io.github.lucaseasedup.logit.locale;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+
 import java.util.HashMap;
 import java.util.Map;
 

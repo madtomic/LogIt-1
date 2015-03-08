@@ -16,22 +16,31 @@
  */
 package io.github.lucaseasedup.logit.config.observers;
 
+import io.github.lucaseasedup.logit.Core;
+import io.github.lucaseasedup.logit.Plugin;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
 import io.github.lucaseasedup.logit.config.Property;
 import io.github.lucaseasedup.logit.config.PropertyObserver;
+
 import java.io.IOException;
 import java.util.logging.Level;
 
 public final class LocaleObserver extends PropertyObserver
 {
+	private LogItCore getBukkitCore()
+	{
+		return ((LogItCore)Core.getCore());
+	}
+	
 	@Override
 	public void update(Property p)
 	{
 		try
 		{
-			getPlugin().reloadMessages(p.getString());
-			if(getLocaleManager() != null)
+			Plugin.getPlugin().reloadMessages(p.getString());
+			if(getBukkitCore().getLocaleManager() != null)
 			{
-				getLocaleManager().switchActiveLocale(p.getString());
+				getBukkitCore().getLocaleManager().switchActiveLocale(p.getString());
 			}
 		}
 		catch (IOException ex)

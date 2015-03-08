@@ -16,14 +16,17 @@
  */
 package io.github.lucaseasedup.logit.config;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.common.Disposable;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.configuration.InvalidConfigurationException;
 
-public final class ConfigurationManager extends LogItCoreObject
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
+
+import multiengine.org.bukkit.configuration.InvalidConfigurationException;
+
+public final class ConfigurationManager implements Disposable
 {
 	@Override
 	public void dispose()

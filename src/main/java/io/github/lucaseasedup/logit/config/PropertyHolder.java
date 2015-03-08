@@ -19,9 +19,6 @@ package io.github.lucaseasedup.logit.config;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.bukkit.Color;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public interface PropertyHolder
 {
@@ -45,7 +42,7 @@ public interface PropertyHolder
 
 	public List<Character> getCharacterList(String path);
 
-	public Color getColor(String path);
+	public org.bukkit.Color getColor(String path);
 
 	public double getDouble(String path);
 
@@ -57,7 +54,7 @@ public interface PropertyHolder
 
 	public List<Integer> getIntegerList(String path);
 
-	public ItemStack getItemStack(String path);
+	public org.bukkit.inventory.ItemStack getItemStack(String path);
 
 	public List<?> getList(String path);
 
@@ -73,7 +70,7 @@ public interface PropertyHolder
 
 	public List<String> getStringList(String path);
 
-	public Vector getVector(String path);
+	public org.bukkit.util.Vector getVector(String path);
 
 	public LocationSerializable getLocation(String path);
 

@@ -20,7 +20,7 @@ import io.github.lucaseasedup.logit.util.org.apache.http.conn.util.InetAddressUt
 
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
+import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 
 public final class Validators
 {

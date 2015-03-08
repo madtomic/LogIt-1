@@ -16,13 +16,15 @@
  */
 package io.github.lucaseasedup.logit.persistence;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
 
 import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+
+import multiengine.org.bukkit.Location;
+
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,7 +48,7 @@ public final class LocationSerializer extends LogItCoreObject implements
 			final Location waitingRoomLocation = getCore()
 					.getWaitingRoomLocation();
 
-			player.teleport(waitingRoomLocation);
+			player.teleport(waitingRoomLocation.toBukkitLocation());
 
 			final int teleportPasses = getConfig("secret.yml").getInt(
 					"locationSerializer.teleportCheck.passes");
@@ -67,7 +69,7 @@ public final class LocationSerializer extends LogItCoreObject implements
 							waitingRoomLocation, dislocationRadius,
 							dislocationRadius, dislocationRadius))
 					{
-						player.teleport(waitingRoomLocation);
+						player.teleport(waitingRoomLocation.toBukkitLocation());
 					}
 				}
 
@@ -131,19 +133,19 @@ public final class LocationSerializer extends LogItCoreObject implements
 			if (location == null)
 				throw new IllegalArgumentException();
 
-			this.location = location;
+			this.location = Location.fromBukkitLocation(location);
 		}
 
 		@Override
 		public void serialize(Map<String, String> data, Player player)
 		{
-			LocationSerializer.serialize(data, location);
+			LocationSerializer.serialize(data, location.toBukkitLocation());
 		}
 
 		@Override
 		public void unserialize(Map<String, String> data, Player player)
 		{
-			location = LocationSerializer.unserialize(data);
+			location = Location.fromBukkitLocation(LocationSerializer.unserialize(data));
 		}
 
 		public Location getLocation()

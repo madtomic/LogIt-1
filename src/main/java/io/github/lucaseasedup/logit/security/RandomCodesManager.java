@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.security;
 
-import io.github.lucaseasedup.logit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
 
 import java.util.Random;
 

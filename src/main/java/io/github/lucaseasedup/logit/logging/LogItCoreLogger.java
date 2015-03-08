@@ -16,7 +16,8 @@
  */
 package io.github.lucaseasedup.logit.logging;
 
-import io.github.lucaseasedup.logit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.LogItCore;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
+
 import org.bukkit.ChatColor;
 
 public final class LogItCoreLogger

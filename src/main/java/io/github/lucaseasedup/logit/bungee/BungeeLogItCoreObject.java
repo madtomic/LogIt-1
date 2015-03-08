@@ -16,9 +16,11 @@
  */
 package io.github.lucaseasedup.logit.bungee;
 
+import io.github.lucaseasedup.logit.UniversalLogItCoreObject;
+
 import java.util.logging.Logger;
 
-public abstract class BungeeLogItCoreObject
+public abstract class BungeeLogItCoreObject extends UniversalLogItCoreObject
 {
 	public BungeeLogItCoreObject()
 	{

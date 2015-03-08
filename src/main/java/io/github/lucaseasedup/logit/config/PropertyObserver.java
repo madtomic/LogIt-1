@@ -16,12 +16,12 @@
  */
 package io.github.lucaseasedup.logit.config;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.UniversalLogItCoreObject;
+
 import java.util.Observable;
 import java.util.Observer;
 
-public abstract class PropertyObserver extends LogItCoreObject implements
-		Observer
+public abstract class PropertyObserver extends UniversalLogItCoreObject implements Observer
 {
 	@Override
 	public final void update(Observable o, Object arg)

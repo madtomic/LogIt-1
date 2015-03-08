@@ -16,18 +16,17 @@
  */
 package io.github.lucaseasedup.logit;
 
-public enum CancelledState
+public final class Core
 {
-	CANCELLED, NOT_CANCELLED;
-
-	/**
-	 * Returns {@code true} if this state represents an operation
-	 * that has been externally cancelled by whatever means it would possibly become so.
-	 * 
-	 * @return {@code true} if cancelled; {@code false} otherwise.
-	 */
-	public boolean isCancelled()
+	public static ICore getCore()
 	{
-		return this.equals(CANCELLED);
+		return core;
 	}
+	
+	public static void setCore(ICore core)
+	{
+		Core.core = core;
+	}
+	
+	private static ICore core;
 }

@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit;
+package io.github.lucaseasedup.logit.bukkit;
 
+import io.github.lucaseasedup.logit.UniversalLogItCoreObject;
 import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
 import io.github.lucaseasedup.logit.backup.BackupManager;
@@ -32,13 +33,10 @@ import io.github.lucaseasedup.logit.security.GlobalPasswordManager;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.session.SessionManager;
 
-import java.io.File;
-import java.util.logging.Level;
-
 /**
  * Provides a convenient way for objects to interact with the LogIt core.
  */
-public abstract class LogItCoreObject implements Disposable
+public abstract class LogItCoreObject extends UniversalLogItCoreObject implements Disposable
 {
 	/**
 	 * Constructs a new {@code LogItCoreObject}.
@@ -62,44 +60,15 @@ public abstract class LogItCoreObject implements Disposable
 		// Left for optional implementation by extending classes.
 	}
 
+	@Override
 	protected final LogItCore getCore()
 	{
 		return core;
 	}
 
-	protected final void log(Level level, String msg)
-	{
-		getCore().log(level, msg);
-	}
-
-	protected final void log(Level level, String msg, Throwable throwable)
-	{
-		getCore().log(level, msg, throwable);
-	}
-
-	protected final void log(Level level, Throwable throwable)
-	{
-		getCore().log(level, throwable);
-	}
-
 	protected final LogItPlugin getPlugin()
 	{
 		return getCore().getPlugin();
-	}
-
-	protected final boolean isCoreStarted()
-	{
-		return getCore().isStarted();
-	}
-
-	protected final File getDataFolder()
-	{
-		return getCore().getPlugin().getDataFolder();
-	}
-
-	protected final File getDataFile(String path)
-	{
-		return getCore().getDataFile(path);
 	}
 
 	protected final ConfigurationManager getConfigurationManager()

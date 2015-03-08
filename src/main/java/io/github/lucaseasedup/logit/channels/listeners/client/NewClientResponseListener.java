@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.channels.listeners.client;
 
 import java.util.logging.Level;
 
-import io.github.lucaseasedup.logit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
 import io.github.lucaseasedup.logit.channels.IPacketListener;
 import io.github.lucaseasedup.logit.channels.packets.IPacket;
 import io.github.lucaseasedup.logit.channels.packets.NewClientResponsePacket;
