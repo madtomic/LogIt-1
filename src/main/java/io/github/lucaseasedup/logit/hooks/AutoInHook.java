@@ -41,6 +41,6 @@ public final class AutoInHook
 		if (!Bukkit.getPluginManager().isPluginEnabled("AutoIn"))
 			return false;
 
-		return false; // TODO
+		return com.gmail.bartlomiejkmazur.autoin.api.APICore.getAPI().getPremiumStatus(player.getName()).isPremium();
 	}
 }

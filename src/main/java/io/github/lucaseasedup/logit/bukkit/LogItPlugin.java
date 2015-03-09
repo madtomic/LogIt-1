@@ -125,7 +125,6 @@ public final class LogItPlugin extends JavaPlugin implements IPlugin
 		return config;
 	}
 	
-	@SuppressWarnings("unused")
 	private void enable()
 	{
 		getServer().getPluginManager().enablePlugin(this);
