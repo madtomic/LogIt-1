@@ -26,9 +26,7 @@ public abstract class UniversalLogItCoreObject
 		core = Core.getCore();
 
 		if (core == null)
-		{
 			throw new IllegalStateException("No LogItCore instance found.");
-		}
 	}
 	
 	protected ICore getCore()

@@ -24,29 +24,20 @@ import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.config.LocationSerializable;
 import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.com.comphenix.tinyprotocol.Reflection;
+import multiengine.org.bukkit.configuration.InvalidConfigurationException;
+import multiengine.org.bukkit.configuration.file.YamlConfiguration;
+import multiengine.org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
-import multiengine.org.bukkit.configuration.InvalidConfigurationException;
-import multiengine.org.bukkit.configuration.file.YamlConfiguration;
-import multiengine.org.bukkit.configuration.serialization.ConfigurationSerialization;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.plugin.java.JavaPlugin;
-
-public final class LogItPlugin extends JavaPlugin implements IPlugin
+public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implements IPlugin
 {
 	/**
 	 * Internal method. Do not call directly.
