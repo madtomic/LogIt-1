@@ -31,10 +31,6 @@
             <id>vault-repo</id>
             <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
         </repository>
-       <!--  <repository>
-            <id>AC3-Servers</id>
-            <url>http://ci.ac3-servers.eu/plugin/repository/everything/</url>
-        </repository> -->
         <repository>
             <id>shadowvolt-repo</id>
             <name>Comphenix Repository</name>
@@ -65,13 +61,6 @@
             <version>1.8</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/spigot-1.8.3.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>1.7.9</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/craftbukkit-1.7.9-R0.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.kitteh</groupId>
