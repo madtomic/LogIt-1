@@ -19,7 +19,7 @@ package io.github.lucaseasedup.logit.command;
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import java.util.Arrays;
 
@@ -29,7 +29,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public final class LogoutCommand extends LogItCoreObject implements
+public final class LogoutCommand extends BukkitLogItCoreObject implements
 		CommandExecutor
 {
 	@Override

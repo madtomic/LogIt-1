@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.persistence;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.util.PlayerUtils;
 
 import java.util.Map;
@@ -35,7 +35,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 		@Key(name = "z", constraint = KeyConstraint.NOT_EMPTY),
 		@Key(name = "yaw", constraint = KeyConstraint.NOT_EMPTY),
 		@Key(name = "pitch", constraint = KeyConstraint.NOT_EMPTY), })
-public final class LocationSerializer extends LogItCoreObject implements
+public final class LocationSerializer extends BukkitLogItCoreObject implements
 		PersistenceSerializer
 {
 	@Override

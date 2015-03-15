@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.listener;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.session.Session;
 
 import org.bukkit.entity.Player;
@@ -26,7 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-public final class InventoryEventListener extends LogItCoreObject implements
+public final class InventoryEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.NORMAL)

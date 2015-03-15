@@ -1,7 +1,7 @@
 name: LogIt
 version: ${project.version}
 authors: [LucasEasedUp, NorthPL]
-main: io.github.lucaseasedup.logit.bukkit.LogItPlugin
+main: io.github.lucaseasedup.logit.bukkit.BukkitLogItPlugin
 softdepend: [AutoIn, Essentials, Multiverse-Core, ProtocolLib, Vault]
 
 commands:
@@ -34,6 +34,7 @@ commands:
   changepass:
     description: Changes your password.
     usage: /<command> <oldpassword> <newpassword> <confirmpassword>
+    aliases: [changepassword]
 
   changeemail:
     description: Changes your e-mail address.

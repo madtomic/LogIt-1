@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.listener;
 
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.session.SessionEndEvent;
 import io.github.lucaseasedup.logit.session.SessionStartEvent;
@@ -32,7 +32,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class SessionEventListener extends LogItCoreObject implements
+public final class SessionEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

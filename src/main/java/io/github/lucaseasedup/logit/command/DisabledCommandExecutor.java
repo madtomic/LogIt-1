@@ -18,13 +18,13 @@ package io.github.lucaseasedup.logit.command;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public final class DisabledCommandExecutor extends LogItCoreObject implements
+public final class DisabledCommandExecutor extends BukkitLogItCoreObject implements
 		CommandExecutor
 {
 	@Override

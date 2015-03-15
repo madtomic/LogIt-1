@@ -19,7 +19,7 @@ package io.github.lucaseasedup.logit.command;
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.mail.MailSender;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
@@ -41,7 +41,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class RecoverPassCommand extends LogItCoreObject implements
+public final class RecoverPassCommand extends BukkitLogItCoreObject implements
 		CommandExecutor
 {
 	@Override

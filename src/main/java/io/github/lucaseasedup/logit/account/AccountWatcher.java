@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.account;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.storage.Infix;
 import io.github.lucaseasedup.logit.storage.SelectorBinary;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class AccountWatcher extends LogItCoreObject implements Runnable
+public final class AccountWatcher extends BukkitLogItCoreObject implements Runnable
 {
 	/**
 	 * Internal method. Do not call directly.

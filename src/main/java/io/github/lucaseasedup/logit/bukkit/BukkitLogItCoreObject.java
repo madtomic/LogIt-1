@@ -20,13 +20,13 @@ import io.github.lucaseasedup.logit.UniversalLogItCoreObject;
 import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
 import io.github.lucaseasedup.logit.backup.BackupManager;
-import io.github.lucaseasedup.logit.command.LogItTabCompleter;
+import io.github.lucaseasedup.logit.command.BukkitLogItTabCompleter;
 import io.github.lucaseasedup.logit.common.Disposable;
 import io.github.lucaseasedup.logit.config.ConfigurationManager;
 import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
 import io.github.lucaseasedup.logit.cooldown.CooldownManager;
 import io.github.lucaseasedup.logit.locale.LocaleManager;
-import io.github.lucaseasedup.logit.message.LogItMessageDispatcher;
+import io.github.lucaseasedup.logit.message.BukkitLogItMessageDispatcher;
 import io.github.lucaseasedup.logit.persistence.PersistenceManager;
 import io.github.lucaseasedup.logit.profile.ProfileManager;
 import io.github.lucaseasedup.logit.security.GlobalPasswordManager;
@@ -36,7 +36,7 @@ import io.github.lucaseasedup.logit.session.SessionManager;
 /**
  * Provides a convenient way for objects to interact with the LogIt core.
  */
-public abstract class LogItCoreObject extends UniversalLogItCoreObject implements Disposable
+public abstract class BukkitLogItCoreObject extends UniversalLogItCoreObject implements Disposable
 {
 	/**
 	 * Constructs a new {@code LogItCoreObject}.
@@ -44,9 +44,9 @@ public abstract class LogItCoreObject extends UniversalLogItCoreObject implement
 	 * @throws IllegalStateException
 	 *             if no {@code LogItCore} instance could be found.
 	 */
-	public LogItCoreObject()
+	public BukkitLogItCoreObject()
 	{
-		core = LogItCore.getInstance();
+		core = BukkitLogItCore.getInstance();
 
 		if (core == null)
 		{
@@ -61,12 +61,12 @@ public abstract class LogItCoreObject extends UniversalLogItCoreObject implement
 	}
 
 	@Override
-	protected final LogItCore getCore()
+	protected final BukkitLogItCore getCore()
 	{
 		return core;
 	}
 
-	protected final LogItPlugin getPlugin()
+	protected final BukkitLogItPlugin getPlugin()
 	{
 		return getCore().getPlugin();
 	}
@@ -116,12 +116,12 @@ public abstract class LogItCoreObject extends UniversalLogItCoreObject implement
 		return getCore().getSessionManager();
 	}
 
-	protected final LogItMessageDispatcher getMessageDispatcher()
+	protected final BukkitLogItMessageDispatcher getMessageDispatcher()
 	{
 		return getCore().getMessageDispatcher();
 	}
 
-	protected final LogItTabCompleter getTabCompleter()
+	protected final BukkitLogItTabCompleter getTabCompleter()
 	{
 		return getCore().getTabCompleter();
 	}
@@ -141,5 +141,5 @@ public abstract class LogItCoreObject extends UniversalLogItCoreObject implement
 		return getCore().getCooldownManager();
 	}
 
-	private final LogItCore core;
+	private final BukkitLogItCore core;
 }

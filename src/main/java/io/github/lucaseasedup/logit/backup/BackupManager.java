@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.backup;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.account.AccountManager;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.common.Timer;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.storage.SqliteStorage;
@@ -43,7 +43,7 @@ import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class BackupManager extends LogItCoreObject implements Runnable
+public final class BackupManager extends BukkitLogItCoreObject implements Runnable
 {
 	/**
 	 * Creates a new {@code BackupManager}.

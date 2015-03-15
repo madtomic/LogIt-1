@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.profile;
 
 import com.google.common.collect.ImmutableList;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.profile.field.Field;
 import io.github.lucaseasedup.logit.profile.field.FloatField;
 import io.github.lucaseasedup.logit.profile.field.IntegerField;
@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
 import multiengine.org.bukkit.configuration.file.YamlConfiguration;
 
-public final class ProfileManager extends LogItCoreObject
+public final class ProfileManager extends BukkitLogItCoreObject
 {
 	public ProfileManager(File path, Map<String, Object> fields)
 	{

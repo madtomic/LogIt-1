@@ -14,42 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit.channels.packets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+package io.github.lucaseasedup.logit.network;
 
-public class NewClientResponsePacket implements IPacket
+public class PacketManager
 {
-	public NewClientResponsePacket()
-	{
-	}
-	
-	public NewClientResponsePacket(UUID newUuid)
-	{
-		this.newUuid = newUuid;
-	}
-	
-	public UUID getUuid()
-	{
-		return newUuid;
-	}
-	
-	@Override
-	public IPacket decode(List<String> message)
-	{
-		return new NewClientResponsePacket(UUID.fromString(message.get(0)));
-	}
 
-	@Override
-	public List<String> encode()
-	{
-		List<String> temp = new ArrayList<String>(2);
-		temp.add("NewClientResponsePacket");
-		temp.add(newUuid.toString());
-		return temp;
-	}
-	
-	private UUID newUuid;
 }

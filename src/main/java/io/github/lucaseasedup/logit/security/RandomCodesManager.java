@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.security;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 
 import java.util.Random;
 
@@ -29,7 +29,7 @@ public final class RandomCodesManager
 	public static String generateCode()
 	{
 		StringBuilder sb = new StringBuilder();
-		int codeLength = LogItCore.getInstance().getConfig("config.yml")
+		int codeLength = BukkitLogItCore.getInstance().getConfig("config.yml")
 				.getInt("forceLogin.registerCode.length");
 		for (int i = 0; i < codeLength; i++)
 		{

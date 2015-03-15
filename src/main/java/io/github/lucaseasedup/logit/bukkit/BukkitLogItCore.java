@@ -25,22 +25,8 @@ import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
 import io.github.lucaseasedup.logit.account.AccountWatcher;
 import io.github.lucaseasedup.logit.backup.BackupManager;
-import io.github.lucaseasedup.logit.channels.ChannelClient;
-import io.github.lucaseasedup.logit.command.AcclockCommand;
-import io.github.lucaseasedup.logit.command.AccunlockCommand;
-import io.github.lucaseasedup.logit.command.ChangeEmailCommand;
-import io.github.lucaseasedup.logit.command.ChangePassCommand;
-import io.github.lucaseasedup.logit.command.DisabledCommandExecutor;
-import io.github.lucaseasedup.logit.command.LogItTabCompleter;
-import io.github.lucaseasedup.logit.command.LoginCommand;
-import io.github.lucaseasedup.logit.command.LoginHistoryCommand;
-import io.github.lucaseasedup.logit.command.LogoutCommand;
-import io.github.lucaseasedup.logit.command.NopCommandExecutor;
-import io.github.lucaseasedup.logit.command.ProfileCommand;
-import io.github.lucaseasedup.logit.command.RecoverPassCommand;
-import io.github.lucaseasedup.logit.command.RegisterCommand;
-import io.github.lucaseasedup.logit.command.RememberCommand;
-import io.github.lucaseasedup.logit.command.UnregisterCommand;
+import io.github.lucaseasedup.logit.bukkit.events.LogItCoreStartEvent;
+import io.github.lucaseasedup.logit.command.*;
 import io.github.lucaseasedup.logit.common.CancellableEvent;
 import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
@@ -66,8 +52,9 @@ import io.github.lucaseasedup.logit.locale.LocaleManager;
 import io.github.lucaseasedup.logit.locale.PolishLocale;
 import io.github.lucaseasedup.logit.logging.CommandSilencer;
 import io.github.lucaseasedup.logit.logging.LogItCoreLogger;
-import io.github.lucaseasedup.logit.message.LogItMessageDispatcher;
+import io.github.lucaseasedup.logit.message.BukkitLogItMessageDispatcher;
 import io.github.lucaseasedup.logit.message.MessageHelper;
+import io.github.lucaseasedup.logit.network.Client;
 import io.github.lucaseasedup.logit.persistence.AirBarSerializer;
 import io.github.lucaseasedup.logit.persistence.ExperienceSerializer;
 import io.github.lucaseasedup.logit.persistence.HealthBarSerializer;
@@ -117,15 +104,15 @@ import com.google.common.io.Files;
  * <p>
  * There is only one instance of {@code LogItCore}, obtainable using {@link #getInstance()}.
  */
-public final class LogItCore implements ICore
+public final class BukkitLogItCore implements ICore
 {
-	private LogItCore(LogItPlugin plugin)
+	private BukkitLogItCore(BukkitLogItPlugin plugin)
 	{
 		assert plugin != null;
 
 		this.plugin = plugin;
 		Core.setCore(this);
-		
+
 		assert Core.getCore() != null;
 	}
 
@@ -153,7 +140,7 @@ public final class LogItCore implements ICore
 
 		if (evt.isCancelled())
 			return CancelledState.CANCELLED;
-		
+
 		getDataFolder().mkdir();
 
 		firstRun = !getDataFile("config.yml").exists();
@@ -173,8 +160,8 @@ public final class LogItCore implements ICore
 		securityHelper = new SecurityHelper();
 		backupManager = new BackupManager(getAccountManager());
 		sessionManager = new SessionManager();
-		messageDispatcher = new LogItMessageDispatcher();
-		tabCompleter = new LogItTabCompleter();
+		messageDispatcher = new BukkitLogItMessageDispatcher();
+		tabCompleter = new BukkitLogItTabCompleter();
 
 		if (getConfig("config.yml").getBoolean("profiles.enabled"))
 		{
@@ -223,12 +210,12 @@ public final class LogItCore implements ICore
 				}
 			});
 		}
-		
+
 		if(getConfig("config.yml").getBoolean("bungeecord.syncSessionsWithBungee"))
 		{
-			channelManager = new ChannelClient();
+			channelManager = new Client();
 		}
-		
+
 		return CancelledState.NOT_CANCELLED;
 	}
 
@@ -249,7 +236,7 @@ public final class LogItCore implements ICore
 				+ "# # # # # # # # # # # # # # # # # # # # # # # # # # # #\n";
 
 		File oldConfigDefFile = getDataFile("config-def.b64");
-		
+
 		if (oldConfigDefFile.exists())
 		{
 			File newConfigDefFile = getDataFile(".doNotTouch/config-def.b64");
@@ -306,7 +293,7 @@ public final class LogItCore implements ICore
 			return;
 		}
 		commandSilencer = new CommandSilencer(Arrays.asList(getPlugin()
-				.getCommand("login"), getPlugin().getCommand("logout"),
+						.getCommand("login"), getPlugin().getCommand("logout"),
 				getPlugin().getCommand("register"),
 				getPlugin().getCommand("unregister"),
 				getPlugin().getCommand("changepass"),
@@ -366,24 +353,24 @@ public final class LogItCore implements ICore
 				getConfig("config.yml").getString("storage.accounts.keys.salt"),
 				getConfig("config.yml").getString(
 						"storage.accounts.keys.password"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.hashing_algorithm"), getConfig(
-						"config.yml").getString("storage.accounts.keys.ip"),
+				"config.yml").getString(
+				"storage.accounts.keys.hashing_algorithm"), getConfig(
+				"config.yml").getString("storage.accounts.keys.ip"),
 				getConfig("config.yml").getString(
 						"storage.accounts.keys.login_session"), getConfig(
-						"config.yml").getString("storage.accounts.keys.email"),
+				"config.yml").getString("storage.accounts.keys.email"),
 				getConfig("config.yml").getString(
 						"storage.accounts.keys.last_active_date"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.reg_date"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.is_locked"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.login_history"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.display_name"), getConfig(
-						"config.yml").getString(
-						"storage.accounts.keys.persistence"));
+				"config.yml").getString(
+				"storage.accounts.keys.reg_date"), getConfig(
+				"config.yml").getString(
+				"storage.accounts.keys.is_locked"), getConfig(
+				"config.yml").getString(
+				"storage.accounts.keys.login_history"), getConfig(
+				"config.yml").getString(
+				"storage.accounts.keys.display_name"), getConfig(
+				"config.yml").getString(
+				"storage.accounts.keys.persistence"));
 
 		Storage leadingAccountStorage = new StorageFactory(
 				getConfig("config.yml"), "storage.accounts.leading")
@@ -406,7 +393,7 @@ public final class LogItCore implements ICore
 
 					{
 						put(getConfig("config.yml").getString(
-								"storage.accounts.leading.unit"),
+										"storage.accounts.leading.unit"),
 								getConfig("config.yml").getString(
 										"storage.accounts.mirror.unit"));
 					}
@@ -612,7 +599,7 @@ public final class LogItCore implements ICore
 	}
 
 	private void enableCommand(String command, CommandExecutor executor,
-			boolean enabled)
+							   boolean enabled)
 	{
 		if (enabled)
 		{
@@ -660,7 +647,7 @@ public final class LogItCore implements ICore
 
 	/**
 	 * Stops the LogIt core.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             If the LogIt core is not running.
 	 * @see #isStarted()
@@ -670,12 +657,12 @@ public final class LogItCore implements ICore
 	{
 		if (!isStarted())
 			throw new IllegalStateException("The LogIt core is not started.");
-		
+
 		if(channelManager != null)
 		{
 			channelManager.stop();
 		}
-		
+
 		PlayerEventListener playerEventListener = getEventListener(PlayerEventListener.class);
 
 		for (final Player player : Bukkit.getOnlinePlayers())
@@ -753,7 +740,7 @@ public final class LogItCore implements ICore
 
 	/**
 	 * Disposes the LogIt core.
-	 * 
+	 *
 	 * @throws IllegalStateException
 	 *             if the LogIt core is running.
 	 */
@@ -842,7 +829,7 @@ public final class LogItCore implements ICore
 			accountWatcher.dispose();
 			accountWatcher = null;
 		}
-		
+
 		if(channelManager != null)
 		{
 			channelManager = null;
@@ -926,7 +913,7 @@ public final class LogItCore implements ICore
 	 * If the player name is contained in the <i>forceLogin.exemptPlayers</i> config property, it always returns {@code false} regardless of the above conditions.
 	 * <p>
 	 * Note that this method does not check if the player is logged in. For that purpose, use {@link SessionManager#isSessionAlive(Player)} or {@link SessionManager#isSessionAlive(String)}.
-	 * 
+	 *
 	 * @param player
 	 *            The player whom this check will be ran on.
 	 * @return {@code true} if the player is forced to log in; {@code false} otherwise.
@@ -1046,10 +1033,10 @@ public final class LogItCore implements ICore
 	 * Returns the {@code LogItPlugin} object.
 	 * <p>
 	 * Most of times, all the work will be done with the LogIt core, but the {@code LogItPlugin} may come useful if you want to, for example, reload the message files.
-	 * 
+	 *
 	 * @return The {@code LogItPlugin} object.
 	 */
-	public LogItPlugin getPlugin()
+	public BukkitLogItPlugin getPlugin()
 	{
 		return plugin;
 	}
@@ -1057,7 +1044,7 @@ public final class LogItCore implements ICore
 	/**
 	 * Returns the LogIt data folder as a {@code File} object
 	 * (<i>/plugins/LogIt/</i>).
-	 * 
+	 *
 	 * @return The data folder.
 	 */
 	public File getDataFolder()
@@ -1068,7 +1055,7 @@ public final class LogItCore implements ICore
 	/**
 	 * Returns a file, as a {@code File} object,
 	 * relative to the LogIt data folder (<i>/plugins/LogIt/</i>).
-	 * 
+	 *
 	 * @param path
 	 *            The relative path.
 	 * @return The data file.
@@ -1078,9 +1065,15 @@ public final class LogItCore implements ICore
 		return new File(getDataFolder(), path);
 	}
 
+	@Override
+	public String getVersion()
+	{
+		return getPlugin().getDescription().getVersion();
+	}
+
 	/**
 	 * Checks if this is the first time LogIt is running on this server.
-	 * 
+	 *
 	 * @return {@code true} if LogIt is running for the first time; {@code false} otherwise.
 	 */
 	public boolean isFirstRun()
@@ -1090,7 +1083,7 @@ public final class LogItCore implements ICore
 
 	/**
 	 * Checks if the LogIt core has been successfully started and is running.
-	 * 
+	 *
 	 * @return {@code true} if the LogIt core is started; {@code false} otherwise.
 	 */
 	public boolean isStarted()
@@ -1155,17 +1148,17 @@ public final class LogItCore implements ICore
 		return sessionManager;
 	}
 
-	public LogItMessageDispatcher getMessageDispatcher()
+	public BukkitLogItMessageDispatcher getMessageDispatcher()
 	{
 		return messageDispatcher;
 	}
 
-	public LogItTabCompleter getTabCompleter()
+	public BukkitLogItTabCompleter getTabCompleter()
 	{
 		return tabCompleter;
 	}
-	
-	public ChannelClient getChannelManager()
+
+	public Client getNetworkManager()
 	{
 		return channelManager;
 	}
@@ -1198,22 +1191,22 @@ public final class LogItCore implements ICore
 
 	/**
 	 * The preferred way to obtain the instance of {@code LogItCore}.
-	 * 
+	 *
 	 * @return The instance of {@code LogItCore}.
 	 */
-	public static LogItCore getInstance()
+	public static BukkitLogItCore getInstance()
 	{
 		if (instance == null)
 		{
-			instance = new LogItCore(LogItPlugin.getInstance());
+			instance = new BukkitLogItCore(BukkitLogItPlugin.getInstance());
 		}
 
 		return instance;
 	}
 
-	private static volatile LogItCore instance = null;
+	private static volatile BukkitLogItCore instance = null;
 
-	private final LogItPlugin plugin;
+	private final BukkitLogItPlugin plugin;
 	private boolean firstRun;
 	private boolean started = false;
 
@@ -1226,13 +1219,13 @@ public final class LogItCore implements ICore
 	private SecurityHelper securityHelper;
 	private BackupManager backupManager;
 	private SessionManager sessionManager;
-	private LogItMessageDispatcher messageDispatcher;
-	private LogItTabCompleter tabCompleter;
+	private BukkitLogItMessageDispatcher messageDispatcher;
+	private BukkitLogItTabCompleter tabCompleter;
 	private ProfileManager profileManager;
 	private GlobalPasswordManager globalPasswordManager;
 	private CooldownManager cooldownManager;
 	private AccountWatcher accountWatcher;
-	private ChannelClient channelManager;
+	private Client channelManager;
 	private ITabListManager tabListManager;
 
 	private BukkitTask tabListUpdaterTask;

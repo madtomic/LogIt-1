@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.persistence;
 
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,7 +33,7 @@ import org.bukkit.entity.Player;
 /**
  * Provides a centralized persistence serialization platform.
  */
-public final class PersistenceManager extends LogItCoreObject
+public final class PersistenceManager extends BukkitLogItCoreObject
 {
 	public PersistenceManager()
 	{

@@ -14,28 +14,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package io.github.lucaseasedup.logit.channels;
+package io.github.lucaseasedup.logit.bukkit.events;
 
-import java.util.UUID;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
+import io.github.lucaseasedup.logit.common.CancellableEvent;
 
-public class ConnectedServer
+import org.bukkit.event.HandlerList;
+
+public final class LogItCoreStartEvent extends CancellableEvent
 {
-	public ConnectedServer(UUID uuid, String bungeeInstanceName)
+	/* package */
+	public LogItCoreStartEvent(BukkitLogItCore core)
 	{
-		this.uuid = uuid;
-		this.bungeeInstanceName = bungeeInstanceName;
+		if (core == null)
+			throw new IllegalArgumentException();
+
+		this.core = core;
 	}
-	
-	public UUID getUuid()
+
+	public BukkitLogItCore getCore()
 	{
-		return uuid;
+		return core;
 	}
-	
-	public String getBungeeInstanceName()
+
+	@Override
+	public HandlerList getHandlers()
 	{
-		return bungeeInstanceName;
+		return handlers;
 	}
-	
-	private String bungeeInstanceName;
-	private UUID uuid;
+
+	public static HandlerList getHandlerList()
+	{
+		return handlers;
+	}
+
+	private static final HandlerList handlers = new HandlerList();
+
+	private final BukkitLogItCore core;
 }

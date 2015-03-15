@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
 import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
 
@@ -429,7 +429,7 @@ public final class H2Storage extends Storage
 
 	private ResultSet executeQuery(String sql) throws SQLException
 	{
-		LogItCore.getInstance().log(CustomLevel.INTERNAL, "(Q) " + sql);
+		BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(Q) " + sql);
 
 		return statement.executeQuery(sql);
 	}
@@ -438,7 +438,7 @@ public final class H2Storage extends Storage
 	{
 		if (!isAutobatchEnabled())
 		{
-			LogItCore.getInstance().log(CustomLevel.INTERNAL, "(S) " + sql);
+			BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(S) " + sql);
 
 			return statement.execute(sql);
 		}
@@ -450,7 +450,7 @@ public final class H2Storage extends Storage
 
 	private void addBatch(String sql) throws SQLException
 	{
-		LogItCore.getInstance().log(CustomLevel.INTERNAL, "(BS) " + sql);
+		BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(BS) " + sql);
 
 		statement.addBatch(sql);
 	}

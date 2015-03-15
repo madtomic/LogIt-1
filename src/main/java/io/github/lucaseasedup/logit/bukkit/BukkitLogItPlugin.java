@@ -19,9 +19,10 @@ package io.github.lucaseasedup.logit.bukkit;
 import io.github.lucaseasedup.logit.IPlugin;
 import io.github.lucaseasedup.logit.Plugin;
 import io.github.lucaseasedup.logit.command.DisabledCommandExecutor;
-import io.github.lucaseasedup.logit.command.LogItCommand;
+import io.github.lucaseasedup.logit.command.BukkitLogItCommand;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.config.LocationSerializable;
+import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.util.ExceptionHandler;
 import io.github.lucaseasedup.logit.util.com.comphenix.tinyprotocol.Reflection;
 import multiengine.org.bukkit.configuration.InvalidConfigurationException;
@@ -29,6 +30,7 @@ import multiengine.org.bukkit.configuration.file.YamlConfiguration;
 import multiengine.org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.util.MissingResourceException;
@@ -37,7 +39,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 
-public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implements IPlugin
+public class BukkitLogItPlugin extends JavaPlugin implements IPlugin
 {
 	/**
 	 * Internal method. Do not call directly.
@@ -45,7 +47,10 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 	@Override
 	public void onLoad()
 	{
+		instance = this;
+		Plugin.setPlugin(instance);
 		ConfigurationSerialization.registerClass(LocationSerializable.class);
+		AutoInHook.registerPlugin();
 	}
 	
 	/**
@@ -54,8 +59,6 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 	@Override
 	public void onEnable()
 	{
-		instance = this;
-		Plugin.setPlugin(instance);
 		ExceptionHandler.logitVersion = instance.getDescription().getVersion();
 		ExceptionHandler.serverVersion = Reflection.getVersion();
 		
@@ -73,7 +76,7 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 			getLogger().log(Level.WARNING, "Could not load messages.", ex);
 		}
 
-		core = LogItCore.getInstance();
+		core = BukkitLogItCore.getInstance();
 
 		try
 		{
@@ -84,7 +87,7 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 			disable();
 		}
 		
-		getCommand("logit").setExecutor(new LogItCommand());
+		getCommand("logit").setExecutor(new BukkitLogItCommand());
 	}
 
 	/**
@@ -254,7 +257,7 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 	{
 		message = message
 				.replace("%bukkit_version%", Bukkit.getBukkitVersion());
-		message = message.replace("%logit_version%", LogItPlugin.getInstance()
+		message = message.replace("%logit_version%", BukkitLogItPlugin.getInstance()
 				.getDescription().getVersion());
 		message = message.replace("%server_id%", Bukkit.getServerId());
 		message = message.replace("%server_ip%", Bukkit.getIp());
@@ -264,7 +267,7 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 		return message;
 	}
 
-	/* package */static LogItPlugin getInstance()
+	/* package */static BukkitLogItPlugin getInstance()
 	{
 		return instance;
 	}
@@ -272,7 +275,7 @@ public class LogItPlugin extends io.github.lucaseasedup.logit.LogItPlugin implem
 	private PropertyResourceBundle messages;
 	private PropertyResourceBundle customGlobalMessages;
 	private PropertyResourceBundle customLocalMessages;
-	private static LogItPlugin instance;
-	private LogItCore core;
+	private static BukkitLogItPlugin instance;
+	private BukkitLogItCore core;
 	private YamlConfiguration config;
 }

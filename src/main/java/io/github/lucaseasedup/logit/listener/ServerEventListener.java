@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.listener;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
-public final class ServerEventListener extends LogItCoreObject implements
+public final class ServerEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.NORMAL)

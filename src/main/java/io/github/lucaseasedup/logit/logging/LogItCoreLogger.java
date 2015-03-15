@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.logging;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -32,7 +32,7 @@ import org.bukkit.ChatColor;
 
 public final class LogItCoreLogger
 {
-	public LogItCoreLogger(LogItCore core)
+	public LogItCoreLogger(BukkitLogItCore core)
 	{
 		if (core == null)
 			throw new IllegalArgumentException();
@@ -216,6 +216,6 @@ public final class LogItCoreLogger
 	private static final DateFormat LOG_DATE_FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
 
-	private final LogItCore core;
+	private final BukkitLogItCore core;
 	private FileWriter logFileWriter;
 }

@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.listener;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 
-public final class EntityEventListener extends LogItCoreObject implements
+public final class EntityEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

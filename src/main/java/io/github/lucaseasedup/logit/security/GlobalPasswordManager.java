@@ -16,14 +16,14 @@
  */
 package io.github.lucaseasedup.logit.security;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-public final class GlobalPasswordManager extends LogItCoreObject implements
+public final class GlobalPasswordManager extends BukkitLogItCoreObject implements
 		Runnable
 {
 	@Override

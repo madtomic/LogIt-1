@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.message;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 
 import org.bukkit.entity.Player;
 
@@ -29,7 +29,7 @@ public final class JoinMessageGenerator
 
 	public static String generate(Player player, boolean revealSpawnWorld)
 	{
-		LogItCore core = LogItCore.getInstance();
+		BukkitLogItCore core = BukkitLogItCore.getInstance();
 
 		assert core != null;
 

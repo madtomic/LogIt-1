@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.command.wizard;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -32,7 +32,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
-public abstract class Wizard extends LogItCoreObject implements Listener
+public abstract class Wizard extends BukkitLogItCoreObject implements Listener
 {
 	public Wizard(CommandSender sender, Object initStep)
 	{

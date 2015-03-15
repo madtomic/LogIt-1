@@ -18,12 +18,13 @@ package io.github.lucaseasedup.logit.bungee;
 
 import io.github.lucaseasedup.logit.Core;
 import io.github.lucaseasedup.logit.ICore;
-import io.github.lucaseasedup.logit.channels.ChannelServer;
+import io.github.lucaseasedup.logit.bungee.events.LogItCoreStartEvent;
 import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.FatalReportedException;
 import io.github.lucaseasedup.logit.config.ConfigurationManager;
 import io.github.lucaseasedup.logit.config.InvalidPropertyValueException;
 import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
+import io.github.lucaseasedup.logit.network.Server;
 import io.github.lucaseasedup.logit.util.ExceptionHandler;
 
 import java.io.File;
@@ -54,12 +55,17 @@ public final class BungeeLogItCore implements ICore
 			throw new IllegalStateException(
 					"The LogIt core has already been started.");
 
+		LogItCoreStartEvent event = new LogItCoreStartEvent(this);
+		getPlugin().getProxy().getPluginManager().callEvent(event);
+		if(event.isCancelled())
+			return CancelledState.CANCELLED;
+
 		firstRun = !getDataFolder().exists();
 		getDataFolder().mkdir();
 		
 		setUpConfiguration();
 		
-		channelManager = new ChannelServer();
+		channelManager = new Server();
 		
 		started = true;
 
@@ -167,7 +173,7 @@ public final class BungeeLogItCore implements ICore
 		return getPlugin().getDataFolder();
 	}
 	
-	public ChannelServer getChannelManager()
+	public Server getChannelManager()
 	{
 		return channelManager;
 	}
@@ -207,6 +213,12 @@ public final class BungeeLogItCore implements ICore
 		}
 	}
 
+	@Override
+	public String getVersion()
+	{
+		return getPlugin().getDescription().getVersion();
+	}
+
 	public boolean isFirstRun()
 	{
 		return firstRun;
@@ -235,7 +247,7 @@ public final class BungeeLogItCore implements ICore
 	private static volatile BungeeLogItCore instance = null;
 
 	private ConfigurationManager configurationManager;
-	private ChannelServer channelManager;
+	private Server channelManager;
 	private final BungeeLogItPlugin plugin;
 	
 	private boolean firstRun;

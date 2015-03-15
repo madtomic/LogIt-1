@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.account;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.common.QueuedMap;
 import io.github.lucaseasedup.logit.config.TimeUnit;
@@ -51,7 +51,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public final class AccountManager extends LogItCoreObject implements Runnable
+public final class AccountManager extends BukkitLogItCoreObject implements Runnable
 {
 	/**
 	 * Constructs a new {@code AccountManager}.

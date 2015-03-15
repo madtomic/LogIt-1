@@ -19,7 +19,7 @@ package io.github.lucaseasedup.logit.command;
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.storage.Infix;
 import io.github.lucaseasedup.logit.storage.SelectorCondition;
@@ -34,7 +34,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-public final class ChangeEmailCommand extends LogItCoreObject implements
+public final class ChangeEmailCommand extends BukkitLogItCoreObject implements
 		TabExecutor
 {
 	@Override

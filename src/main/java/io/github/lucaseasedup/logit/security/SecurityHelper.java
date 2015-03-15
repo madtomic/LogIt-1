@@ -16,13 +16,13 @@
  */
 package io.github.lucaseasedup.logit.security;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
-public final class SecurityHelper extends LogItCoreObject
+public final class SecurityHelper extends BukkitLogItCoreObject
 {
 	/**
 	 * Checks if a password is equal, after hashing, to {@code hashedPassword}.

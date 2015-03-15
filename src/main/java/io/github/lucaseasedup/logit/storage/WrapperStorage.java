@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
 import io.github.lucaseasedup.logit.util.CollectionUtils;
 
@@ -726,21 +726,21 @@ public final class WrapperStorage extends Storage
 
 	private void log(Level level, String message)
 	{
-		LogItCore logItCore = LogItCore.getInstance();
+		BukkitLogItCore bukkitLogItCore = BukkitLogItCore.getInstance();
 
-		if (logItCore != null)
+		if (bukkitLogItCore != null)
 		{
-			logItCore.log(level, message);
+			bukkitLogItCore.log(level, message);
 		}
 	}
 
 	private void log(Level level, Throwable throwable)
 	{
-		LogItCore logItCore = LogItCore.getInstance();
+		BukkitLogItCore bukkitLogItCore = BukkitLogItCore.getInstance();
 
-		if (logItCore != null)
+		if (bukkitLogItCore != null)
 		{
-			logItCore.log(level, throwable);
+			bukkitLogItCore.log(level, throwable);
 		}
 	}
 

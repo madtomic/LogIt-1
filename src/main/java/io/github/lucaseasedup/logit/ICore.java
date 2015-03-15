@@ -34,6 +34,7 @@ public interface ICore
 	public void log(Level level, Throwable throwable);
 	public File getDataFolder();
 	public File getDataFile(String path);
+	public String getVersion();
 	public boolean isFirstRun();
 	public boolean isStarted();
 	public ConfigurationManager getConfigurationManager();

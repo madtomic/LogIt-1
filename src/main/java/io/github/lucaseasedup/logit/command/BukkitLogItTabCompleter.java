@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.command;
 
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.storage.Infix;
 import io.github.lucaseasedup.logit.storage.SelectorCondition;
 
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public final class LogItTabCompleter extends LogItCoreObject
+public final class BukkitLogItTabCompleter extends BukkitLogItCoreObject
 {
 	public List<String> completeUsername(String username)
 	{

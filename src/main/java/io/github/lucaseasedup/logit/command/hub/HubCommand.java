@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.command.hub;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.command.CommandAccess;
 import io.github.lucaseasedup.logit.command.CommandHelpLine;
 
@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 
-public abstract class HubCommand extends LogItCoreObject
+public abstract class HubCommand extends BukkitLogItCoreObject
 {
 	public HubCommand(String subcommand, String[] params,
 			CommandAccess commandAccess, CommandHelpLine helpLine)

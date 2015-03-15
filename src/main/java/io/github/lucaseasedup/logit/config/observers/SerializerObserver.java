@@ -17,7 +17,7 @@
 package io.github.lucaseasedup.logit.config.observers;
 
 import io.github.lucaseasedup.logit.Core;
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.account.Account;
 import io.github.lucaseasedup.logit.account.AccountKeys;
 import io.github.lucaseasedup.logit.account.AccountManager;
@@ -40,9 +40,9 @@ import org.bukkit.entity.Player;
 
 public final class SerializerObserver extends PropertyObserver
 {
-	private LogItCore getBukkitCore()
+	private BukkitLogItCore getBukkitCore()
 	{
-		return ((LogItCore)Core.getCore());
+		return ((BukkitLogItCore)Core.getCore());
 	}
 	
 	private AccountManager getAccountManager()

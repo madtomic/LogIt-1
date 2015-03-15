@@ -43,4 +43,11 @@ public final class AutoInHook
 
 		return com.gmail.bartlomiejkmazur.autoin.api.APICore.getAPI().getPremiumStatus(player.getName()).isPremium();
 	}
+
+	public static void registerPlugin()
+	{
+		if (Bukkit.getPluginManager().getPlugin("AutoIn") == null)
+			return;
+		com.gmail.bartlomiejkmazur.autoin.api.APICore.getAPI().addLoginPlugin("LogIt", new AutoInPlugin());
+	}
 }

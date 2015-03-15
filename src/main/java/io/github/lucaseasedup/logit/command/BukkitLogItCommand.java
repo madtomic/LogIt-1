@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.command;
 
 import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.command.hub.HubCommand;
 import io.github.lucaseasedup.logit.command.hub.HubCommands;
 
@@ -31,7 +31,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
-public final class LogItCommand extends LogItCoreObject implements TabExecutor
+public final class BukkitLogItCommand extends BukkitLogItCoreObject implements TabExecutor
 {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,

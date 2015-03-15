@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.config.PredefinedConfiguration;
 
 import java.io.File;
@@ -31,7 +31,7 @@ public final class StorageFactory
 
 	public Storage produceStorage(StorageType type)
 	{
-		LogItCore core = LogItCore.getInstance();
+		BukkitLogItCore core = BukkitLogItCore.getInstance();
 
 		switch (type)
 		{

@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.cooldown;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public final class CooldownManager extends LogItCoreObject implements Listener
+public final class CooldownManager extends BukkitLogItCoreObject implements Listener
 {
 	@Override
 	public void dispose()

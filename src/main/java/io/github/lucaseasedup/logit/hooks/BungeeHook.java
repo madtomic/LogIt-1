@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.hooks;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public final class BungeeHook
 		  out.writeUTF("Connect");
 		  out.writeUTF(server);
 		  
-		  player.sendPluginMessage(LogItCore.getInstance().getPlugin(), "BungeeCord", out.toByteArray());
+		  player.sendPluginMessage(BukkitLogItCore.getInstance().getPlugin(), "BungeeCord", out.toByteArray());
 		  out = null;
 	}
 

@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.account;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.security.HashingAlgorithm;
 import io.github.lucaseasedup.logit.security.SecurityHelper;
 import io.github.lucaseasedup.logit.storage.Storage;
@@ -110,7 +110,7 @@ import io.github.lucaseasedup.logit.util.org.apache.commons.lang3.StringUtils;
  * </tr>
  * </table>
  */
-public final class Account extends LogItCoreObject
+public final class Account extends BukkitLogItCoreObject
 {
 	/**
 	 * Creates a new {@code Account} object, with all entry keys filled with

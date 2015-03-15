@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.cooldown;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 
 import org.bukkit.entity.Player;
@@ -32,36 +32,36 @@ public final class LogItCooldowns
 		if (player == null || cooldown == null)
 			throw new IllegalArgumentException();
 
-		LogItCore logItCore = LogItCore.getInstance();
+		BukkitLogItCore bukkitLogItCore = BukkitLogItCore.getInstance();
 
-		if (logItCore == null)
+		if (bukkitLogItCore == null)
 			throw new IllegalStateException();
 
 		long cooldownTime;
 
 		if (cooldown == REGISTER)
 		{
-			cooldownTime = logItCore.getConfig("config.yml").getTime(
+			cooldownTime = bukkitLogItCore.getConfig("config.yml").getTime(
 					"cooldowns.register", TimeUnit.MILLISECONDS);
 		}
 		else if (cooldown == UNREGISTER)
 		{
-			cooldownTime = logItCore.getConfig("config.yml").getTime(
+			cooldownTime = bukkitLogItCore.getConfig("config.yml").getTime(
 					"cooldowns.unregister", TimeUnit.MILLISECONDS);
 		}
 		else if (cooldown == CHANGEPASS)
 		{
-			cooldownTime = logItCore.getConfig("config.yml").getTime(
+			cooldownTime = bukkitLogItCore.getConfig("config.yml").getTime(
 					"cooldowns.changepass", TimeUnit.MILLISECONDS);
 		}
 		else if (cooldown == CHANGEEMAIL)
 		{
-			cooldownTime = logItCore.getConfig("config.yml").getTime(
+			cooldownTime = bukkitLogItCore.getConfig("config.yml").getTime(
 					"cooldowns.changeemail", TimeUnit.MILLISECONDS);
 		}
 		else if (cooldown == RECOVERPASS)
 		{
-			cooldownTime = logItCore.getConfig("config.yml").getTime(
+			cooldownTime = bukkitLogItCore.getConfig("config.yml").getTime(
 					"cooldowns.recoverpass", TimeUnit.MILLISECONDS);
 		}
 		else
@@ -70,7 +70,7 @@ public final class LogItCooldowns
 					+ cooldown.getName());
 		}
 
-		logItCore.getCooldownManager().activateCooldown(player,
+		bukkitLogItCore.getCooldownManager().activateCooldown(player,
 				LogItCooldowns.CHANGEPASS, cooldownTime);
 	}
 

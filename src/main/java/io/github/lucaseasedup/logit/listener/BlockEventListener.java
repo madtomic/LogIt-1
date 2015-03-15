@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.listener;
 
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 
-public final class BlockEventListener extends LogItCoreObject implements
+public final class BlockEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)

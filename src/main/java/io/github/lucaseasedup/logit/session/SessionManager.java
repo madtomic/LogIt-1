@@ -20,7 +20,7 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.CollectionUtils.containsIgnoreCase;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.common.CancelledState;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.BungeeHook;
@@ -46,7 +46,7 @@ import org.bukkit.entity.Player;
 /**
  * Provides a facility manage login sessions.
  */
-public final class SessionManager extends LogItCoreObject implements Runnable
+public final class SessionManager extends BukkitLogItCoreObject implements Runnable
 {
 	/**
 	 * Do not call directly.

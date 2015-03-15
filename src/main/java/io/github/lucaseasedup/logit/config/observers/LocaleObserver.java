@@ -18,7 +18,7 @@ package io.github.lucaseasedup.logit.config.observers;
 
 import io.github.lucaseasedup.logit.Core;
 import io.github.lucaseasedup.logit.Plugin;
-import io.github.lucaseasedup.logit.bukkit.LogItCore;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
 import io.github.lucaseasedup.logit.config.Property;
 import io.github.lucaseasedup.logit.config.PropertyObserver;
 
@@ -27,9 +27,9 @@ import java.util.logging.Level;
 
 public final class LocaleObserver extends PropertyObserver
 {
-	private LogItCore getBukkitCore()
+	private BukkitLogItCore getBukkitCore()
 	{
-		return ((LogItCore)Core.getCore());
+		return ((BukkitLogItCore)Core.getCore());
 	}
 	
 	@Override

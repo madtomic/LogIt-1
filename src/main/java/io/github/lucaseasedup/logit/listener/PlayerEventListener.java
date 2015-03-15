@@ -20,7 +20,7 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.sendMsg;
 import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.config.TimeUnit;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.hooks.VanishNoPacketHook;
@@ -73,7 +73,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
-public final class PlayerEventListener extends LogItCoreObject implements
+public final class PlayerEventListener extends BukkitLogItCoreObject implements
 		Listener
 {
 	@EventHandler(priority = EventPriority.NORMAL)

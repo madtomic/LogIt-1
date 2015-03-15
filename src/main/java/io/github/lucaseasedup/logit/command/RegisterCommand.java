@@ -21,7 +21,7 @@ import static io.github.lucaseasedup.logit.message.MessageHelper.t;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.getPlayerIp;
 import static io.github.lucaseasedup.logit.util.PlayerUtils.isPlayerOnline;
 import io.github.lucaseasedup.logit.account.Account;
-import io.github.lucaseasedup.logit.bukkit.LogItCoreObject;
+import io.github.lucaseasedup.logit.bukkit.BukkitLogItCoreObject;
 import io.github.lucaseasedup.logit.cooldown.LogItCooldowns;
 import io.github.lucaseasedup.logit.hooks.AutoInHook;
 import io.github.lucaseasedup.logit.storage.Infix;
@@ -38,7 +38,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public final class RegisterCommand extends LogItCoreObject implements
+public final class RegisterCommand extends BukkitLogItCoreObject implements
 		CommandExecutor
 {
 	@Override
