@@ -650,6 +650,34 @@ public final class Account extends BukkitLogItCoreObject
 	}
 
 	/**
+	 * Returns the facebook user ID
+	 * <p>
+	 * This method requires the following keys to exist in the underlying storage entry: <i>fbid</i>.
+	 *
+	 * @return Facebook user ID (integer)
+	 * @throws IllegalArgumentException
+	 *             If the underlying entry does not contain the required keys.
+	 */
+	public int getFbId()
+	{
+		if (!entry.containsKey(keys().last_active_date()))
+			throw new IllegalArgumentException(
+					"Missing entry key: fbid");
+
+		return Integer.parseInt(entry.get(keys().fbid()));
+	}
+
+	/**
+	 * Changes the Facebook user ID
+	 *
+	 * @param newFbId New ID
+	 */
+	public void setFbId(int newFbId)
+	{
+		entry.put(keys().fbid(), String.valueOf(newFbId));
+	}
+
+	/**
 	 * Returns the display name.
 	 * <p>
 	 * This method requires the following keys to exist in the underlying storage entry: <i>display_name</i>.
@@ -886,6 +914,11 @@ public final class Account extends BukkitLogItCoreObject
 		if (!entry.containsKey(keys().persistence()))
 		{
 			entry.put(keys().persistence(), "");
+		}
+
+		if (!entry.containsKey(keys().fbid()))
+		{
+			entry.put(keys().fbid(), "-1");
 		}
 	}
 

@@ -29,14 +29,14 @@ public final class AccountKeys extends LinkedHashtable<String, DataType>
 			String password, String hashing_algorithm, String ip,
 			String login_session, String email, String last_active_date,
 			String reg_date, String is_locked, String login_history,
-			String display_name, String persistence)
+			String display_name, String persistence, String fbid)
 	{
 		if (username == null || uuid == null || salt == null
 				|| password == null || hashing_algorithm == null || ip == null
 				|| login_session == null || email == null
 				|| last_active_date == null || reg_date == null
 				|| is_locked == null || login_history == null
-				|| display_name == null || persistence == null)
+				|| display_name == null || persistence == null || fbid == null)
 		{
 			throw new IllegalArgumentException();
 		}
@@ -55,11 +55,12 @@ public final class AccountKeys extends LinkedHashtable<String, DataType>
 		put(login_history, DataType.LONGTEXT);
 		put(display_name, DataType.TINYTEXT);
 		put(persistence, DataType.TEXT);
+		put(fbid, DataType.INTEGER);
 
 		this.names = new ImmutableList.Builder<String>().add(username, uuid,
 				salt, password, hashing_algorithm, ip, login_session, email,
 				last_active_date, reg_date, is_locked, login_history,
-				display_name, persistence).build();
+				display_name, persistence, fbid).build();
 
 		this.username = username;
 		this.uuid = uuid;
@@ -75,6 +76,7 @@ public final class AccountKeys extends LinkedHashtable<String, DataType>
 		this.login_history = login_history;
 		this.display_name = display_name;
 		this.persistence = persistence;
+		this.fbid = fbid;
 	}
 
 	public String username()
@@ -152,10 +154,15 @@ public final class AccountKeys extends LinkedHashtable<String, DataType>
 		return names;
 	}
 
+	public String fbid()
+	{
+		return fbid;
+	}
+
 	public static final AccountKeys DEFAULT = new AccountKeys("username",
 			"uuid", "salt", "password", "hashing_algorithm", "ip",
 			"login_session", "email", "last_active_date", "reg_date",
-			"is_locked", "login_history", "display_name", "persistence");
+			"is_locked", "login_history", "display_name", "persistence", "fbid");
 
 	private static final long serialVersionUID = 1L;
 
@@ -174,4 +181,5 @@ public final class AccountKeys extends LinkedHashtable<String, DataType>
 	private final String login_history;
 	private final String display_name;
 	private final String persistence;
+	private final String fbid;
 }

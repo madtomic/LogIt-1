@@ -347,30 +347,21 @@ public final class BukkitLogItCore implements ICore
 		String accountsUnit = getConfig("config.yml").getString(
 				"storage.accounts.leading.unit");
 		AccountKeys accountKeys = new AccountKeys(
-				getConfig("config.yml").getString(
-						"storage.accounts.keys.username"),
+				getConfig("config.yml").getString("storage.accounts.keys.username"),
 				getConfig("config.yml").getString("storage.accounts.keys.uuid"),
 				getConfig("config.yml").getString("storage.accounts.keys.salt"),
-				getConfig("config.yml").getString(
-						"storage.accounts.keys.password"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.hashing_algorithm"), getConfig(
-				"config.yml").getString("storage.accounts.keys.ip"),
-				getConfig("config.yml").getString(
-						"storage.accounts.keys.login_session"), getConfig(
-				"config.yml").getString("storage.accounts.keys.email"),
-				getConfig("config.yml").getString(
-						"storage.accounts.keys.last_active_date"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.reg_date"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.is_locked"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.login_history"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.display_name"), getConfig(
-				"config.yml").getString(
-				"storage.accounts.keys.persistence"));
+				getConfig("config.yml").getString("storage.accounts.keys.password"),
+				getConfig("config.yml").getString("storage.accounts.keys.hashing_algorithm"),
+				getConfig("config.yml").getString("storage.accounts.keys.ip"),
+				getConfig("config.yml").getString("storage.accounts.keys.login_session"),
+				getConfig("config.yml").getString("storage.accounts.keys.email"),
+				getConfig("config.yml").getString("storage.accounts.keys.last_active_date"),
+				getConfig("config.yml").getString("storage.accounts.keys.reg_date"),
+				getConfig("config.yml").getString("storage.accounts.keys.is_locked"),
+				getConfig("config.yml").getString("storage.accounts.keys.login_history"),
+				getConfig("config.yml").getString("storage.accounts.keys.display_name"),
+				getConfig("config.yml").getString("storage.accounts.keys.persistence"),
+				getConfig("config.yml").getString("storage.accounts.keys.fbid"));
 
 		Storage leadingAccountStorage = new StorageFactory(
 				getConfig("config.yml"), "storage.accounts.leading")
@@ -1086,16 +1077,19 @@ public final class BukkitLogItCore implements ICore
 	 *
 	 * @return {@code true} if the LogIt core is started; {@code false} otherwise.
 	 */
+	@Override
 	public boolean isStarted()
 	{
 		return started;
 	}
 
+	@Override
 	public ConfigurationManager getConfigurationManager()
 	{
 		return configurationManager;
 	}
 
+	@Override
 	public PredefinedConfiguration getConfig(String filename)
 	{
 		if (filename == null)

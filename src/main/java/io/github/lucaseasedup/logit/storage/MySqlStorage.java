@@ -16,7 +16,7 @@
  */
 package io.github.lucaseasedup.logit.storage;
 
-import io.github.lucaseasedup.logit.bukkit.BukkitLogItCore;
+import io.github.lucaseasedup.logit.Core;
 import io.github.lucaseasedup.logit.logging.CustomLevel;
 import io.github.lucaseasedup.logit.util.org.apache.tools.ant.util.LinkedHashtable;
 
@@ -439,7 +439,7 @@ public final class MySqlStorage extends Storage
 
 	private ResultSet executeQuery(String sql) throws SQLException
 	{
-		BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(Q) " + sql);
+		Core.getCore().log(CustomLevel.INTERNAL, "(Q) " + sql);
 
 		return statement.executeQuery(sql);
 	}
@@ -448,7 +448,7 @@ public final class MySqlStorage extends Storage
 	{
 		if (!isAutobatchEnabled())
 		{
-			BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(S) " + sql);
+			Core.getCore().log(CustomLevel.INTERNAL, "(S) " + sql);
 
 			return statement.execute(sql);
 		}
@@ -460,7 +460,7 @@ public final class MySqlStorage extends Storage
 
 	private void addBatch(String sql) throws SQLException
 	{
-		BukkitLogItCore.getInstance().log(CustomLevel.INTERNAL, "(BS) " + sql);
+		Core.getCore().log(CustomLevel.INTERNAL, "(BS) " + sql);
 
 		statement.addBatch(sql);
 	}
