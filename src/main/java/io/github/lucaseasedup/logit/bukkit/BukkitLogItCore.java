@@ -911,6 +911,12 @@ public final class BukkitLogItCore implements ICore
 	 */
 	public boolean isPlayerForcedToLogIn(Player player)
 	{
+		if(player == null)
+			return false; //Maybe better IllegalArgumentException? Hmmm
+
+		if(Bukkit.getPlayerExact(player.getName()) == null) //Fixes exception on modded servers (Cauldron etc.)
+			return false;
+
 		String playerWorldName = player.getWorld().getName();
 
 		boolean forcedLoginGlobal = getConfig("config.yml").getBoolean(
